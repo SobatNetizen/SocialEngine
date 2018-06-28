@@ -17,6 +17,7 @@ mongoose.connect(`mongodb://${admin}:${password}@ds217921.mlab.com:17921/sobat-s
 });
 
 const indexRouter = require('./routes/index');
+const scrapingRouter = require('./routes/scraping');
 // const usersRouter = require('./routes/users');
 
 const app = express();
@@ -33,6 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(cors())
 
 app.use('/', indexRouter);
+app.use('/scrape', scrapingRouter);
 // app.use('/users', usersRouter);
 
 // catch 404 and forward to error handler
