@@ -124,14 +124,24 @@ router.post('/queries', (req, res, next) => {
   .then((results) => {
     let data = JSON.parse(results)
     let rankedList = data.default.rankedList
-    let topList = rankedList[0]
-    let risingList = rankedList[1]
+    let topList = rankedList[0].rankedKeyword
+    let risingList = rankedList[1].rankedKeyword
+    let breakOutList = []
+
+    risingList.map((item, index) => {
+      if (item.formattedValue == "Breakout") {
+        breakOutList.push(item)
+      }
+    })
+
     let result = {
       topList,
-      risingList
+      risingList,
+      breakOutList
     }
-    console.log('top:', topList.rankedKeyword.length)
-    console.log('rising', risingList.rankedKeyword.length)
+
+    console.log('top:', topList.length)
+    console.log('rising', risingList.length)
 
     res.status(200).json({
       message: 'Google API relatedQueries successful',
@@ -164,14 +174,24 @@ router.post('/topics', (req, res, next) => {
   .then((results) => {
     let data = JSON.parse(results)
     let rankedList = data.default.rankedList
-    let topList = rankedList[0]
-    let risingList = rankedList[1]
+    let topList = rankedList[0].rankedKeyword
+    let risingList = rankedList[1].rankedKeyword
+    let breakOutList = []
+
+    risingList.map((item, index) => {
+      if (item.formattedValue == "Breakout") {
+        breakOutList.push(item)
+      }
+    })
+
     let result = {
       topList,
-      risingList
+      risingList,
+      breakOutList
     }
-    console.log('top:', topList.rankedKeyword.length)
-    console.log('rising', risingList.rankedKeyword.length)
+
+    console.log('top:', topList.length)
+    console.log('rising', risingList.length)
 
     res.status(200).json({
       message: 'Google API relatedTopics successful',
