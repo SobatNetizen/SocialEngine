@@ -26,3 +26,23 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+
+/* CSS sementara */
+.clear {
+  clear: both;
+}
+.googleTrendChart {
+  width: 990px;
+  height: 400px;
+  background: #fff;
+  margin-bottom: 100px;
+}
+.social-wrap {
+  width: 500px;
+  height: 200px;
+  /* background: red; */
+}
+.social-wrap > ul > li {
+  float: left;
+  list-style: none;
+}
