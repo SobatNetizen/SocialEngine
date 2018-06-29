@@ -24,6 +24,47 @@ function extractItems() {
   return items;
 }
 
+function extractTweetProfile() {
+  const extractedUsernames = document.querySelectorAll('div.stream-item-header > a > span.username.u-dir.u-textTruncate');
+  const extractedTweets = document.querySelectorAll('div.js-tweet-text-container > p');
+
+  const items = [];
+
+  for (let i = 0; i < extractedUsernames.length; i++) {
+    for (let j = 0; j < extractedTweets.length; j++) {
+      if (i == j) {
+        items.push({
+          username: extractedUsernames[i].innerText,
+          tweet: extractedTweets[j].innerText
+        })
+      }
+    }
+  }
+
+  return items;
+}
+
+function extractTweetProfileDetails() {
+  const location = document.querySelector('.ProfileHeaderCard-locationText');
+  const join_date = document.querySelector('.ProfileHeaderCard-joinDateText');
+
+  let data = {
+    location: 'Unknown',
+    join_date: 'Unknown'
+  }
+
+  if (location && location.innerText !== '\n              \n\n        ') {
+    data.location = location.innerText
+  }
+
+  if (join_date) {
+    data.join_date = join_date.innerText
+  }
+
+  return data;
+}
+
+
 function extractItemsFB() {
   const extractedElements = document.querySelectorAll('._5-jo');
   const items = [];
@@ -37,7 +78,7 @@ async function scrapeInfiniteScrollItems(
   page,
   extractItems,
   itemTargetCount,
-  scrollDelay = 1000,
+  scrollDelay = 10,
 ) {
   let items = [];
   try {
@@ -58,7 +99,7 @@ module.exports = {
   async tweetScrape (req, res, next) {
     // Set up browser and page.
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
@@ -78,10 +119,69 @@ module.exports = {
     })
   },
 
+  async tweetScrapeProfile (req, res, next) {
+
+    const browser = await puppeteer.launch({
+      headless: false,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const page = await browser.newPage();
+    
+    // page.setViewport({ width: 1280, height: 926 });
+    const wordToSearch = changeValue(req.body.keyword)
+
+    await page.goto(`https://twitter.com/search?l=&q=${wordToSearch}%20near%3A%22Indonesia%22%20within%3A15mi&src=typd`);
+
+    // obtain profile names including '@'
+    const profiles = await scrapeInfiniteScrollItems(page, extractTweetProfile, 2);
+    // console.log(profiles)
+    
+    // excluding '@' from profiles' name
+    let profilesClean = []
+    let empty = []
+    profiles.map((profile, index) => {
+      let newProfile = profile.username.slice(1, profile.length)
+      let tweet = profile.tweet
+      profilesClean.push({
+        newProfile,
+        tweet
+      })
+    })
+    console.log(empty.length)
+    
+    // obtaining user profile by looping each profiles
+    let allProfiles = []
+    for (let i = 0; i < profilesClean.length; i++) {
+      const userToSearch = changeValue(profilesClean[i].newProfile)
+
+      await page.goto(`https://twitter.com/${userToSearch}`);
+      // await page.screenshot({ path: `screenshots/tempo${i}.png` });
+
+      await page.waitForSelector('.ProfileHeaderCard-locationText')
+      await page.waitForSelector('.ProfileHeaderCard-joinDateText')
+
+      const profileDetail = await scrapeInfiniteScrollItems(page, extractTweetProfileDetails, 1);
+      // console.log('===??',profileDetail, profilesClean[i], userToSearch)
+
+      allProfiles.push({
+        username: profilesClean[i].newProfile,
+        tweet: profilesClean[i].tweet,
+        profileDetail
+      })
+    }
+
+    await browser.close();
+     
+    res.status(200).json({
+      data: allProfiles
+    })
+
+  },
+
   async fbScrape (req, res, next) {
     // Set up browser and page.
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
