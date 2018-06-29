@@ -1,9 +1,9 @@
 const jwt = require('jsonwebtoken');
-const ModelUser = require('../models/users.models');
+const ModelUser = require('../models/user.model');
 
 module.exports = {
   authentication: (req, res, next) => {
-    let token = req.headers.authkey;
+    let token = req.headers.token;
     if (!token) {
       let err = new Error('You are not authenticated yet, please login !')
       next(err)
