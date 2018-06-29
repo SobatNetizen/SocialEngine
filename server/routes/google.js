@@ -35,9 +35,9 @@ router.post('/time', (req, res, next) => {
   let { keyword } = req.body
   let now = new Date(Date.now())
   let now_year = now.getFullYear()
-  let now_month = now.getMonth()
+  let now_month = now.getMonth() + 1
   let now_day = now.getDate()
-  let last_year_date = `${now_year-1}-${now_month}-1`
+  let last_year_date = `${now_year-1}-${now_month}-${now_day}`
   // console.log(last_year_date)
 
   googleTrends.interestOverTime({
@@ -51,9 +51,139 @@ router.post('/time', (req, res, next) => {
       let timelineData = data.default.timelineData
       console.log(timelineData.length);
 
+      let objData = {}
+      objData['id'] = keyword
+      objData['color'] = 'blue'
+      objData['data'] = []
+      
+      let result = []
+      timelineData.map((data, index) => {
+        let x = data.formattedAxisTime
+        let y = data.value[0]
+        objData.data.push({
+          x,
+          y
+        })
+      })
+      result.push(objData)
+
       res.status(200).json({
         message: 'Google API interestOverTime successful',
-        timelineData
+        result
+      })
+    })
+    .catch(function(err){
+      console.error('ERROR: interestOverTime ==>', err);
+    });
+})
+
+
+router.post('/time/month', (req, res, next) => {
+  let { keyword } = req.body
+  let now = new Date(Date.now())
+  let now_year = now.getFullYear()
+  let now_month = now.getMonth() + 1
+  let now_day = now.getDate()
+  let last_year_date = `${now_year-1}-${now_month}-${now_day}`
+  // console.log(now.getDate(), now.getMonth(), now.getFullYear())
+  // console.log(new Date(last_year_date).getDate(), new Date(last_year_date).getMonth(), new Date(last_year_date).getFullYear())
+
+  googleTrends.interestOverTime({
+    keyword,
+    startTime: new Date(last_year_date),
+    endTime: now,
+    geo: 'ID'
+  })
+    .then(function(results){
+      let data = JSON.parse(results)
+      let timelineData = data.default.timelineData
+      console.log(timelineData.length);
+      
+      timelineData.map((data, index) => {
+        let dataValue = data.value[0]
+        let dataDate = new Date(data.formattedAxisTime)
+        let dataMonth = dataDate.getMonth()
+        let dataYear = dataDate.getFullYear()
+        data['month'] = dataMonth
+        data['year'] = dataYear
+      })
+
+      let resultByMonth = []
+
+      let dateMin = {
+        month: timelineData[0].month,
+        year: timelineData[0].year,
+      }
+
+      let dateMax = {
+        month: timelineData[timelineData.length-1].month,
+        year: timelineData[timelineData.length-1].year
+      }
+
+      let months = [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'  ]
+
+      for (let i = dateMin.month; i < 12; i++) {
+        let obj = {
+          month: i,
+          monthName: months[i],
+          year: dateMin.year,
+          values: []
+        }
+        resultByMonth.push(obj)
+      }
+
+      for (let i = 0; i < dateMax.month + 1; i++) {
+        let obj = {
+          month: i,
+          monthName: months[i],
+          year: dateMax.year,
+          values: []
+        }
+        resultByMonth.push(obj)
+      }
+      // console.log('==>',resultByMonth)
+      
+      timelineData.map((data, index) => {
+        resultByMonth.map((monthlyData, index) => {
+          if (data.month == monthlyData.month && data.year == monthlyData.year) {
+            monthlyData.values.push(data.value[0])
+          }
+        })
+      })
+      // console.log('==>?',resultByMonth)
+
+      resultByMonth.map((data, index) => {
+        data['max'] = Math.max(...data.values)
+        data['min'] = Math.min(...data.values)
+        data['total'] = 0
+        // console.log(data)
+        data.values.map((count, index) => {
+          data.total += Number(count)
+        })
+        data['average'] = data.total / data.values.length
+      })
+      // console.log('???>',resultByMonth)
+
+      let finalResult = []
+
+      let objData = {}
+      objData['id'] = keyword
+      objData['data'] = []
+
+      resultByMonth.map((data, index) => {
+        // console.log(data)
+        let obj = {
+          x: `${data.monthName} ${data.year}`,
+          y: data.average
+        }
+        objData.data.push(obj)
+      })
+
+      finalResult.push(objData)
+
+      res.status(200).json({
+        message: 'Google API interestOverTime successful',
+        finalResult
       })
     })
     .catch(function(err){
@@ -73,9 +203,9 @@ router.post('/region', (req, res, next) => {
   let { keyword, geocode } = req.body
   let now = new Date(Date.now())
   let now_year = now.getFullYear()
-  let now_month = now.getMonth()
+  let now_month = now.getMonth() + 1
   let now_day = now.getDate()
-  let last_year_date = `${now_year-1}-${now_month}-1`
+  let last_year_date = `${now_year-1}-${now_month}-${now_day}`
 
   googleTrends.interestByRegion({
     keyword, 
@@ -111,9 +241,9 @@ router.post('/queries', (req, res, next) => {
   let { keyword, geocode } = req.body
   let now = new Date(Date.now())
   let now_year = now.getFullYear()
-  let now_month = now.getMonth()
+  let now_month = now.getMonth() + 1
   let now_day = now.getDate()
-  let last_year_date = `${now_year-1}-${now_month}-1`
+  let last_year_date = `${now_year-1}-${now_month}-${now_day}`
 
   googleTrends.relatedQueries({
     keyword, 
@@ -161,10 +291,10 @@ router.post('/topics', (req, res, next) => {
   let { keyword, geocode } = req.body
   let now = new Date(Date.now())
   let now_year = now.getFullYear()
-  let now_month = now.getMonth()
+  let now_month = now.getMonth() + 1
   let now_day = now.getDate()
-  let last_year_date = `${now_year-1}-${now_month}-1`
-
+  let last_year_date = `${now_year-1}-${now_month}-${now_day}`
+  
   googleTrends.relatedTopics({
     keyword, 
     startTime: new Date(last_year_date), 
