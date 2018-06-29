@@ -35,7 +35,7 @@ router.post('/time', (req, res, next) => {
   let { keyword } = req.body
   let now = new Date(Date.now())
   let now_year = now.getFullYear()
-  let now_month = now.getMonth()
+  let now_month = now.getMonth() + 1
   let now_day = now.getDate()
   let last_year_date = `${now_year-1}-${now_month}-${now_day}`
   // console.log(last_year_date)
@@ -85,8 +85,8 @@ router.post('/time/month', (req, res, next) => {
   let now_month = now.getMonth() + 1
   let now_day = now.getDate()
   let last_year_date = `${now_year-1}-${now_month}-${now_day}`
-  console.log(now.getDate(), now.getMonth(), now.getFullYear())
-  console.log(new Date(last_year_date).getDate(), new Date(last_year_date).getMonth(), new Date(last_year_date).getFullYear())
+  // console.log(now.getDate(), now.getMonth(), now.getFullYear())
+  // console.log(new Date(last_year_date).getDate(), new Date(last_year_date).getMonth(), new Date(last_year_date).getFullYear())
 
   googleTrends.interestOverTime({
     keyword,
