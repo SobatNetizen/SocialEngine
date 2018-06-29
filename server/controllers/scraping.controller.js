@@ -133,7 +133,7 @@ module.exports = {
     await page.goto(`https://twitter.com/search?l=&q=${wordToSearch}%20near%3A%22Indonesia%22%20within%3A15mi&src=typd`);
 
     // obtain profile names including '@'
-    const profiles = await scrapeInfiniteScrollItems(page, extractTweetProfile, 2);
+    const profiles = await scrapeInfiniteScrollItems(page, extractTweetProfile, 100);
     // console.log(profiles)
     
     // excluding '@' from profiles' name
