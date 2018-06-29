@@ -12,7 +12,7 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 class SentimenChart extends Component {
     render() {
         return (
-            <PieChart width={800} height={90} onMouseEnter={this.onPieEnter}>
+            <PieChart width={350} height={100} onMouseEnter={this.onPieEnter}>
             <Pie
               data={dataSentimen} 
               cx={100} 
