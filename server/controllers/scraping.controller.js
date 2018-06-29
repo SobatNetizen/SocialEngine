@@ -67,14 +67,14 @@ module.exports = {
 
     await page.goto(`https://twitter.com/search?f=tweets&q=${wordToSearch}&src=typd`);
 
-    const items = await scrapeInfiniteScrollItems(page, extractItems, 50);
-    let joinItem = items.join('$%@')
-    //console.log(items)
+    const items = await scrapeInfiniteScrollItems(page, extractItems, 100);
+
+    console.log(items)
 
     await browser.close();
 
     res.status(200).json({
-      data: joinItem
+      data: items
     })
   },
 
@@ -98,8 +98,8 @@ module.exports = {
     await page.click(emailSelector);
     await page.keyboard.type(process.env.FBEMAIL);
   
-    // await page.click(passSelector);
-    // await page.keyboard.type(process.env.FBPASSWORD);
+    await page.click(passSelector);
+    await page.keyboard.type(process.env.FBPASSWORD);
   
     await page.click(buttonSelector);
   
@@ -119,15 +119,15 @@ module.exports = {
     await page.waitFor(2*1000);
   
     // Scroll and extract items from the page.
-    const items = await scrapeInfiniteScrollItems(page, extractItemsFB, 50);
-    let joinItem = items.join('$%@')
+    const items = await scrapeInfiniteScrollItems(page, extractItemsFB, 100);
+  
     // Save extracted items to a file.
-    //console.log(items)
+    console.log(items)
   
     // Close the browser.
     await browser.close();
     res.status(200).json({
-      data: joinItem
+      data: items
     })
   }
 

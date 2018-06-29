@@ -8,6 +8,6 @@ const {
     getAll
 } = require('../controllers/store.controller')
 
-router.post('/', getAll)
+router.post('/', cacheGoogleTrends, getAll)
 
 module.exports = router
