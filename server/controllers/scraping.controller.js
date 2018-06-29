@@ -129,7 +129,82 @@ module.exports = {
     res.status(200).json({
       data: joinItem
     })
+  },
+
+  async newsScrape (req, res, next) {
+    try {
+      const browser = await puppeteer.launch({
+        headless: false
+      });
+      const page = await browser.newPage();
+      await page.evaluate('navigator.userAgent');
+  
+  
+      wordToSearch = 'samsung'
+  
+      await page.goto(`https://www.cnnindonesia.com/search/?query=${wordToSearch}`);
+      await page.waitForSelector('.list');
+  
+      const CNNheadlines = await page.$$('.box_text')
+  
+      let CNNtitles = []
+  
+      for (let i = 0; i < CNNheadlines.length; i++) {
+        const CNNheadline = CNNheadlines[i]
+        let title = await CNNheadline.$('.title')
+        let titleText = await page.evaluate(title => title.innerText, title)
+        CNNtitles.push(titleText)
+        // console.log(titleText)
+      }
+      console.log(CNNtitles)
+  
+      await page.goto(`https://www.liputan6.com/`);
+      await page.waitForSelector('#search > button');
+  
+      const search_selector = '#q'
+      const search_button_selector = '#search > button'
+      await page.click(search_selector);
+      await page.keyboard.type(wordToSearch);
+  
+      await page.click(search_button_selector);
+  
+  
+      await page.waitForSelector('.articles--iridescent-list--text-item__title-link-text');
+  
+      const L6headlines = await page.$$('.articles--iridescent-list--text-item__title-link')
+  
+      let L6titles = []
+  
+      for (let i = 0; i < 10; i++) {
+        const L6headline = L6headlines[i]
+        let title = await L6headline.$('.articles--iridescent-list--text-item__title-link-text')
+        let titleText = await page.evaluate(title => title.innerText, title)
+        L6titles.push(titleText)
+      }
+  
+      console.log(L6titles)
+  
+      await page.goto(`https://www.detik.com/search/searchall?query=${wordToSearch}`)
+      await page.waitForSelector('.box_text');
+  
+      let titles = 'body > div.wrapper.full > div > div.list.media_rows.list-berita > article:nth-child(INDEX) > a > span.box_text > p'
+  
+      let detikTitiles = []
+  
+      for (let i = 1; i <= 11; i++) {
+        if (i !== 4 && i !== 8) {
+          let titleSelector = titles.replace("INDEX", i);
+  
+          let title = await page.$(titleSelector)
+          detikTitiles.push(await page.evaluate(title => title.innerText, title))
+        }
+      }
+  
+      console.log(detikTitiles)
+  
+      browser.close();
+    } catch (error) {
+      console.log(error)
+    }
   }
-
-
 }
