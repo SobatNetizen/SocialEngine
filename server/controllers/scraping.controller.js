@@ -127,7 +127,7 @@ module.exports = {
 
     await page.goto(`https://twitter.com/search?f=tweets&q=${wordToSearch}&src=typd`);
 
-    const items = await scrapeInfiniteScrollItems(page, extractItems, 5);
+    const items = await scrapeInfiniteScrollItems(page, extractItems, 50);
     let joinItem = items.join('$%@')
     //console.log(items)
 
@@ -310,7 +310,7 @@ module.exports = {
     await page.waitFor(2*1000);
   
     // Scroll and extract items from the page.
-    const items = await scrapeInfiniteScrollItems(page, extractItemsFB, 5);
+    const items = await scrapeInfiniteScrollItems(page, extractItemsFB, 50);
     let joinItem = items.join('$%@')
     // Save extracted items to a file.
     //console.log(items)

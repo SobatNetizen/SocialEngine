@@ -2,9 +2,6 @@ require('dotenv').config()
 const cron = require('cron');
 const axios = require('axios');
 
-const keyword = 'samsung'
-const idUser = '5b3630f4246d7238974c0e31'
-
 const mongoose = require('mongoose');
 let admin = process.env.DBUSER;
 let password = process.env.DBPASSWORD;
@@ -55,22 +52,3 @@ var scrapeTwitter = new cron.CronJob({
 scrapeTwitter.start(); // job 1 started
  
 console.log('scrapeTwitter status', scrapeTwitter.running); // job1 status true
-
-
-// axios.post('http://localhost:3001/scrape/tweet',{ idUser, keyword })
-    // .then(response => {
-    //     console.log(response)
-    //     // ID++
-    //     // if ( ID < userKeyword.length){
-    //     //     checkKeyword(userKeyword[ID])
-    //     // }
-    //     // else{
-    //     //     res.status(200).json({
-    //     //         info: 'done running scrape tweet',
-    //     //         keyword: newKeyword
-    //     //     })
-    //     // }
-    // })
-    // .catch(err => {
-    //     console.log(err)
-    // })
