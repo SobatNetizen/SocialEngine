@@ -207,7 +207,7 @@ module.exports = {
   async tweetScrapeProfile (req, res, next) {
 
     const browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
