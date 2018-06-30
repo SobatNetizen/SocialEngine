@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const bcrypt = require('bcryptjs')
-
+const Schema = mongoose.Schema
 const email_regex = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
 const password_regex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
 
@@ -23,7 +23,17 @@ const userSchema = mongoose.Schema({
 
     keywords: {
         type: Array
-    }
+    },
+
+    twitter: [{
+        type: Schema.Types.ObjectId,
+        ref: "Twitter"      
+    }],
+
+    facebook: [{
+        type: Schema.Types.ObjectId,
+        ref: "Facebook"      
+    }]
 }, {
     timestamps: true
 })

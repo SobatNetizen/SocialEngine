@@ -32,10 +32,8 @@
   clear: both;
 }
 .googleTrendChart {
-  width: 990px;
-  height: 400px;
+  height: 350px;
   background: #fff;
-  margin-bottom: 100px;
 }
 .social-wrap {
   width: 500px;
@@ -45,4 +43,16 @@
 .social-wrap > ul > li {
   float: left;
   list-style: none;
+}
+
+#footer {
+  bottom: 0;
+  width: 100%;
+  position: fixed;
+  height: 40px;
+  background-color: #222;
+}
+.footer-block {
+  margin: 10px 0;
+  color: white;
 }
