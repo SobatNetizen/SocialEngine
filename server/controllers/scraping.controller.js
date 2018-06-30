@@ -40,16 +40,20 @@ function extractItems() {
 function extractTweetProfile() {
   const extractedUsernames = document.querySelectorAll('div.stream-item-header > a > span.username.u-dir.u-textTruncate');
   const extractedTweets = document.querySelectorAll('div.js-tweet-text-container > p');
+  const extractedTweetUrls = document.querySelectorAll('.js-stream-item');
 
   const items = [];
 
   for (let i = 0; i < extractedUsernames.length; i++) {
     for (let j = 0; j < extractedTweets.length; j++) {
-      if (i == j) {
-        items.push({
-          username: extractedUsernames[i].innerText,
-          tweet: extractedTweets[j].innerText
-        })
+      for (let k = 0; k < extractedTweetUrls.length; k++) {
+        if (i == j && i == k && j == k) {
+          items.push({
+            username: extractedUsernames[i].innerText,
+            tweet: extractedTweets[j].innerText,
+            link: extractedTweetUrls[k].getAttribute('data-item-id')
+          })
+        }
       }
     }
   }
@@ -87,6 +91,59 @@ function extractItemsFB() {
   return items;
 }
 
+
+function extractItemsFBProfile() {
+  const extractedUrls = document.querySelectorAll('div._lic > a:nth-child(2)');
+  const extractedOpinions = document.querySelectorAll('._5-jo');
+  const extractedOpinionUrls = document.querySelectorAll('div._lie > a');
+  // #u_ps_0_3_h > div:nth-child(2) > div._lid.fsm.fwn.fcg > div._lie > a
+
+  const items = [];
+
+  for (let i = 0; i < extractedUrls.length; i++) {
+    for (let j = 0; j < extractedOpinions.length; j++) {
+      for (let k = 0; k < extractedOpinionUrls.length; k++) {
+        if (i == j && i == k && j == k) {
+          items.push({
+            url: extractedUrls[i].href,
+            opinion: extractedOpinions[j].innerText,
+            link: extractedOpinionUrls[k].href
+          })
+        }
+      }
+    }
+  }
+
+  return items;
+}
+
+
+function extractFbProfileName() {
+  const extractedName = document.querySelector('._2nlw');
+  return extractedName.innerText
+}
+
+
+function extractFbProfileGender() {
+  const extractedGender = document.querySelector('#pagelet_basic > div > ul > li._3pw9._2pi4._2ge8._3ms8 > div > div._4bl7._pt5 > div > div > span');
+  let gender = 'Unknown'
+  if (extractedGender) {
+    gender = extractedGender.innerText
+  }
+  return gender
+}
+
+
+function extractFbProfileBirth() {
+  const extractedBirthday = document.querySelector('#pagelet_basic > div > ul > li._3pw9._2pi4._2ge8._4vs2 > div > div._4bl7._pt5 > div > div > span'); 
+  let birth = 'Unknown'
+  if (extractedBirthday) {
+    birth = extractedBirthday.innerText
+  }
+  return birth
+}
+
+
 async function scrapeInfiniteScrollItems(
   page,
   extractItems,
@@ -118,7 +175,7 @@ module.exports = {
 
     // Set up browser and page.
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
@@ -207,7 +264,7 @@ module.exports = {
   async tweetScrapeProfile (req, res, next) {
 
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
@@ -227,9 +284,11 @@ module.exports = {
     profiles.map((profile, index) => {
       let newProfile = profile.username.slice(1, profile.length)
       let tweet = profile.tweet
+      let link = profile.link
       profilesClean.push({
         newProfile,
-        tweet
+        tweet,
+        link
       })
     })
     console.log(empty.length)
@@ -251,6 +310,7 @@ module.exports = {
       allProfiles.push({
         username: profilesClean[i].newProfile,
         tweet: profilesClean[i].tweet,
+        tweetLink: `https://twitter.com/${profilesClean[i].newProfile}/status/${profilesClean[i].link}`,
         profileDetail
       })
     }
@@ -272,7 +332,7 @@ module.exports = {
 
     // Set up browser and page.
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
@@ -387,6 +447,181 @@ module.exports = {
             })
         }
     })
+  },
+
+  async fbScrapeProfile (req, res, next) {
+  
+    // Set up browser and page.
+    const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const page = await browser.newPage();
+    // page.setViewport({ width: 1280, height: 926 });
+  
+    // Navigate to the demo page.
+    await page.goto('https://facebook.com');
+  
+    const emailSelector = '#email'
+    const passSelector = '#pass'
+  
+    const buttonSelector = '#loginbutton'
+  
+    await page.click(emailSelector);
+    await page.keyboard.type(process.env.FBEMAIL);
+  
+    // await page.click(passSelector);
+    // await page.keyboard.type(process.env.FBPASSWORD);
+  
+    await page.click(buttonSelector);
+  
+    await page.waitForNavigation();
+  
+    await page.click(passSelector);
+    await page.keyboard.type(process.env.FBPASSWORD);
+  
+    await page.click(buttonSelector);
+  
+    await page.waitForNavigation();
+    
+    const wordToSearch = changeValue(req.body.keyword)
+    const searchUrl = `https://www.facebook.com/search/str/${wordToSearch}/stories-keyword/stories-opinion`;
+  
+    await page.goto(searchUrl);
+    // await page.screenshot({ path: 'screenshots/check.png' });
+  
+    // Scroll and extract items from the page.
+    const opinions = await scrapeInfiniteScrollItems(page, extractItemsFBProfile, 100);
+
+    // Go to each profile url to obtain their information
+    let allProfiles = []
+    for (let i = 0; i < opinions.length; i++) {
+      const url = opinions[i].url
+
+      await page.goto(url);
+
+      await page.waitForSelector('._2nlw')
+
+      const profileName = await scrapeInfiniteScrollItems(page, extractFbProfileName, 1);
+
+      const aboutUrl = url.replace('?fref=search', '/about?section=contact-info')
+
+      await page.goto(aboutUrl);
+
+      const profileGender = await scrapeInfiniteScrollItems(page, extractFbProfileGender, 1);
+      // console.log(profileOther)
+
+      const profileBirth = await scrapeInfiniteScrollItems(page, extractFbProfileBirth, 1);
+      let nowYear = new Date(Date.now()).getFullYear()
+      let birthYear = new Date(profileBirth).getFullYear()
+      let age = 'Unknown'
+      if (profileBirth !== 'Unknown') {
+        if (birthYear == 2001 && profileBirth.search(2001) !== -1) {
+          age = nowYear - birthYear
+        } else if (birthYear == 2001 && profileBirth.search(2001) == -1) {
+          age = 'Unknown'
+        } else {
+          age = nowYear - birthYear
+        }
+      }
+
+      allProfiles.push({
+        profileUrl: opinions[i].url,
+        profileName,
+        gender: profileGender,
+        birthday: profileBirth,
+        age,
+        opinionUrl: opinions[i].link,
+        opinion: opinions[i].opinion,
+      })
+    }
+
+    let genderData = {
+      male: {
+        below20: 0, // 1- 19
+        below30: 0, // 20 - 29
+        below40: 0, // 30 - 39
+        below50: 0, // 40 - 49
+        above50: 0, // >= 50
+        unknown: 0,
+      },
+      female: {
+        below20: 0, // 1- 19
+        below30: 0, // 20 - 29
+        below40: 0, // 30 - 39
+        below50: 0, // 40 - 49
+        above50: 0, // >= 50
+        unknown: 0
+      },
+      unknown: {
+        below20: 0, // 1- 19
+        below30: 0, // 20 - 29
+        below40: 0, // 30 - 39
+        below50: 0, // 40 - 49
+        above50: 0, // >= 50
+        unknown: 0,
+      }
+    }
+
+    for (let i = 0; i < allProfiles.length; i++) {
+      if (allProfiles[i].gender == 'Male') {
+        if (allProfiles[i].age < 20) {
+          genderData.male.below20++
+        } else if (allProfiles[i].age >= 20 && allProfiles[i].age < 30) {
+          genderData.male.below30++
+        } else if (allProfiles[i].age >= 30 && allProfiles[i].age < 40) {
+          genderData.male.below40++
+        } else if (allProfiles[i].age >= 40 && allProfiles[i].age < 50) {
+          genderData.male.below50++
+        } else if (allProfiles[i].age >= 50) {
+          genderData.male.above50++
+        } else {
+          genderData.male.unknown++
+        }
+      } else if (allProfiles[i].gender == 'Female') {
+        if (allProfiles[i].age < 20) {
+          genderData.female.below20++
+        } else if (allProfiles[i].age >= 20 && allProfiles[i].age < 30) {
+          genderData.female.below30++
+        } else if (allProfiles[i].age >= 30 && allProfiles[i].age < 40) {
+          genderData.female.below40++
+        } else if (allProfiles[i].age >= 40 && allProfiles[i].age < 50) {
+          genderData.female.below50++
+        } else if (allProfiles[i].age >= 50) {
+          genderData.female.above50++
+        } else {
+          genderData.female.unknown++
+        }
+      } else {
+        if (allProfiles[i].age < 20) {
+          genderData.unknown.below20++
+        } else if (allProfiles[i].age >= 20 && allProfiles[i].age < 30) {
+          genderData.unknown.below30++
+        } else if (allProfiles[i].age >= 30 && allProfiles[i].age < 40) {
+          genderData.unknown.below40++
+        } else if (allProfiles[i].age >= 40 && allProfiles[i].age < 50) {
+          genderData.unknown.below50++
+        } else if (allProfiles[i].age >= 50) {
+          genderData.unknown.above50++
+        } else {
+          genderData.unknown.unknown++
+        }
+      }
+
+    }
+
+    // console.log(items)
+    // let joinItem = items.join('$%@')
+    // Save extracted items to a file.
+  
+    // Close the browser.
+    await browser.close();
+
+    res.status(200).json({
+      data: allProfiles,
+      genderData
+    })
+  
   },
 
   async newsScrape (req, res, next) {
