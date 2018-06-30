@@ -36,8 +36,8 @@
   background: #fff;
 }
 .social-wrap {
-  width: 500px;
-  height: 200px;
+  /* width: 500px;
+  height: 200px; */
   /* background: red; */
 }
 .social-wrap > ul > li {

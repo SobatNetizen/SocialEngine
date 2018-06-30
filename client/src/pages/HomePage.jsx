@@ -8,13 +8,16 @@ import NavbarBoot from '../components/NavbarBoot';
 import ChartGoogleTrend from '../components/ChartGoogleTrend';
 import SocialChart from '../components/SentimentAnalysist';
 import SentimenChart from '../components/socialsource/SentimenChart';
+import RegionChart from '../components/RegionChart';
+import TagChart from '../components/TagChart';
+import TagCharts from '../components/TagChart';
 
 class HomePage extends Component {
     render() {
         return (
             <Container fluid style={{ marginTop: 15, marginBottom: 60 }}>
                 <Row style={{ marginBottom: 15 }}>
-                    <Col sm="8">
+                    <Col sm="6">
                         <Card>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
@@ -25,7 +28,7 @@ class HomePage extends Component {
                                         fontSize: 12,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
-                                        NUMBER OF MENTION</CardTitle>
+                                        Google Trends</CardTitle>
                                     <CardTitle style={{ 
                                         textAlign: 'right', 
                                         width: '50%',
@@ -35,89 +38,11 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
-                                <SocialChart />
+                                {/* <SocialChart /> */}
+                                <ChartGoogleTrend />
                             </CardBody>
                         </Card>
                     </Col>
-                    <Col sm="4">
-                        <Card>
-                            <Row>
-                                <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
-                                        style={{ 
-                                        textAlign: 'left',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'left',
-                                        fontWeight: 'bold' }}>
-                                        NUMBER OF MENTION</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
-                                </Col>
-                            </Row>
-                            <CardBody style={{ paddingTop: 0 }}>
-                                <SentimenChart />
-                            </CardBody>
-                        </Card>
-                    </Col>
-                </Row>
-                
-                <Row>
-                    <Col sm="3">
-                        <Card>
-                            <Row>
-                                <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
-                                        style={{ 
-                                        textAlign: 'left',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'left',
-                                        fontWeight: 'bold' }}>
-                                        NUMBER OF MENTION</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
-                                </Col>
-                            </Row>
-                            <CardBody style={{ paddingTop: 0 }}>
-                                
-                            </CardBody>
-                        </Card>
-                    </Col>
-                    <Col sm="3">
-                        <Card>
-                            <Row>
-                                <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
-                                        style={{ 
-                                        textAlign: 'left',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'left',
-                                        fontWeight: 'bold' }}>
-                                        NUMBER OF MENTION</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
-                                </Col>
-                            </Row>
-                            <CardBody style={{ paddingTop: 0 }}>
-                                
-                            </CardBody>
-                        </Card>
-                    </Col>
-
                     <Col sm="6">
                         <Card>
                             <Row>
@@ -139,7 +64,88 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
-                                <ChartGoogleTrend />
+                                <SentimenChart />
+                                <SocialChart />
+                            </CardBody>
+                        </Card>
+                    </Col>
+                </Row>
+                
+                <Row>
+                    <Col sm="6">
+                        <Card>
+                            <Row>
+                                <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
+                                    <CardTitle 
+                                        style={{ 
+                                        textAlign: 'left',
+                                        width: '50%',
+                                        fontSize: 12,
+                                        float: 'left',
+                                        fontWeight: 'bold' }}>
+                                        NUMBER OF MENTION</CardTitle>
+                                    <CardTitle style={{ 
+                                        textAlign: 'right', 
+                                        width: '50%',
+                                        fontSize: 12,
+                                        float: 'right',
+                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                </Col>
+                            </Row>
+                            <CardBody style={{ paddingTop: 0 }}>
+                                <TagChart/>
+                                {/* <TagCharts /> */}
+                            </CardBody>
+                        </Card>
+                    </Col>
+                    {/* <Col sm="3">
+                        <Card>
+                            <Row>
+                                <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
+                                    <CardTitle 
+                                        style={{ 
+                                        textAlign: 'left',
+                                        width: '50%',
+                                        fontSize: 12,
+                                        float: 'left',
+                                        fontWeight: 'bold' }}>
+                                        NUMBER OF MENTION</CardTitle>
+                                    <CardTitle style={{ 
+                                        textAlign: 'right', 
+                                        width: '50%',
+                                        fontSize: 12,
+                                        float: 'right',
+                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                </Col>
+                            </Row>
+                            <CardBody style={{ paddingTop: 0 }}>
+                                
+                            </CardBody>
+                        </Card>
+                    </Col> */}
+
+                    <Col sm="6">
+                        <Card>
+                            <Row>
+                                <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
+                                    <CardTitle 
+                                        style={{ 
+                                        textAlign: 'left',
+                                        width: '50%',
+                                        fontSize: 12,
+                                        float: 'left',
+                                        fontWeight: 'bold' }}>
+                                        Region Chart</CardTitle>
+                                    <CardTitle style={{ 
+                                        textAlign: 'right', 
+                                        width: '50%',
+                                        fontSize: 12,
+                                        float: 'right',
+                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                </Col>
+                            </Row>
+                            <CardBody style={{ paddingTop: 0 }}>
+                                <RegionChart />
                             </CardBody>
                         </Card>
                     </Col>

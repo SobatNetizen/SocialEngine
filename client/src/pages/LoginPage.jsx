@@ -18,7 +18,7 @@ class LoginPage extends Component {
 
                             <FormGroup style={{ 
                                 textAlign: 'left',
-                                fontWeight: 'bold' 
+                                fontWeight: 'bold'
                             }}>
                                 <Label>Username or Email :</Label>
                                 <Input type="email" name="email" placeholder="input email" />

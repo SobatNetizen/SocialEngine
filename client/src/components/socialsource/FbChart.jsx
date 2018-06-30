@@ -3,6 +3,7 @@ import { PieChart, Pie, Cell } from 'recharts';
 
 const dataFB = [
     {name: 'Positif', value: 453},
+    {name: 'Neutral', value: 100},
     {name: 'Negatif', value: 250}
 ];
 const COLORS = ['#3D59B3', '#254196'];
@@ -23,7 +24,7 @@ class FbChart extends Component {
     render() {
         return (
             <div>
-                <PieChart width={150} height={200} onMouseEnter={this.onPieEnter}>
+                <PieChart width={120} height={200} onMouseEnter={this.onPieEnter}>
                     <Pie
                     data={dataFB} 
                     cx={50} 
