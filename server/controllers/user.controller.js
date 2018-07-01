@@ -118,6 +118,7 @@ module.exports = {
     
     addKeyword (req, res, next) {
         let { id } = req.decoded
+        // console.log('oi', req.decoded, req.body)
 
         User.findByIdAndUpdate(id, {
             $push: { keywords: req.body.keyword}
