@@ -1,4 +1,4 @@
-export const getHistory = () => {
+export const getHistory = (historyId) => {
   return dispatch => {
     dispatch(getDataLoading())
     fetch('https://rickandmortyapi.com/api/character' /* tinggal tunggu endpoint*/)
