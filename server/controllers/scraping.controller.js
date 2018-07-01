@@ -6,6 +6,7 @@ const CODE = require('./URLCode');
 const axios = require('axios')
 const Twitter = require('../models/twitter.model')
 const Facebook = require('../models/facebook.model')
+const News = require('../models/news.model')
 
 const NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js')
 const natural_language_understanding = new NaturalLanguageUnderstandingV1({
@@ -168,11 +169,6 @@ module.exports = {
 
   async tweetScrape (req, res, next) {
 
-    const {
-      idUser,
-      keyword
-    } = req.body
-
     // Set up browser and page.
     const browser = await puppeteer.launch({
       headless: true,
@@ -189,79 +185,14 @@ module.exports = {
     //console.log(items)
 
     await browser.close();
-
-    Translate.translate(`${joinItem}`, { from: 'id', to: 'en' }, (err, translate) => {
-        let resultTranslate = translate.text[0]
-
-        let splitTranslate = resultTranslate.split('$%@')
-
-        const resultNegative = []
-        const resultPositive = []
-        const resultNeutral = []
-
-        let ID = 0 
-        if (ID < splitTranslate.length) {
-            checksentiment(splitTranslate[ID])
-        }else{ 
-            //console.log(result)
-        }
-        function checksentiment(params) {
-
-            const parameters = {
-                'text': `${params}`,
-                'features': {
-                    'sentiment': {
-                        'document': true
-                    }
-                }
-            }
-
-            natural_language_understanding.analyze(parameters, ( err, response ) => {
-                if(response!=null){
-                    if (response.sentiment.document.label=='negative') {
-                        let sent = response.sentiment.document
-                        sent["detail"] = params
-                        resultNegative.push(sent)
-                    }else if(response.sentiment.document.label=='positive'){
-                        let sent = response.sentiment.document
-                        sent["detail"] = params
-                        resultPositive.push(sent)
-                    }else{
-                        let sent = response.sentiment.document
-                        sent["detail"] = params
-                        resultNeutral.push(sent)
-                    }
-                }
-                ID++
-                if ( ID < splitTranslate.length){
-                    checksentiment(splitTranslate[ID])
-                }
-                else{
-                    let saveTwitter = new Twitter({ 
-                        negative: resultNegative,
-                        positive: resultPositive,
-                        neutral: resultNeutral
-                    })
-                    saveTwitter.save(function(err, response) {
-                        User.findByIdAndUpdate(idUser, {
-                            $push: { twitter: response._id}
-                        }, {new: true, runValidators: true})
-                        .then(user => {
-                          res.status(200).json({
-                              info: 'done save Twitter data to Database'
-                          })
-                        })
-                        .catch(err => {
-                          console.log(err)
-                        })
-                    })
-                }
-            })
-        }
-    })
   },
 
   async tweetScrapeProfile (req, res, next) {
+
+    const {
+      idUser,
+      keyword
+    } = req.body
 
     const browser = await puppeteer.launch({
       headless: true,
@@ -270,7 +201,7 @@ module.exports = {
     const page = await browser.newPage();
     
     // page.setViewport({ width: 1280, height: 926 });
-    const wordToSearch = changeValue(req.body.keyword)
+    const wordToSearch = changeValue(keyword)
 
     await page.goto(`https://twitter.com/search?l=&q=${wordToSearch}%20near%3A%22Indonesia%22%20within%3A15mi&src=typd`);
 
@@ -316,10 +247,166 @@ module.exports = {
     }
 
     await browser.close();
-     
-    res.status(200).json({
-      data: allProfiles
-    })
+
+    let resultTranslate = []
+
+    let ID = 0 
+    if (ID < allProfiles.length) {
+        doCall(allProfiles[ID])
+    }else{ 
+        //console.log(result)
+    }
+    function doCall(params) {
+
+        Translate.translate(`${params.tweet}`, { from: 'id', to: 'en' }, (err, translate) => {
+            if (translate!=null) {
+                let oldTwitter = params
+                oldTwitter["translate"] = translate.text
+                resultTranslate.push(oldTwitter)
+            }
+            ID++
+            if ( ID < allProfiles.length){
+                doCall(allProfiles[ID])
+            }
+            else{ 
+                const negative = []
+                const positive = []
+                const neutral = []
+
+                let ID = 0 
+                if (ID < resultTranslate.length) {
+                    checksentiment(resultTranslate[ID])
+                }else{ 
+                    //console.log(result)
+                }
+                function checksentiment(params) {
+
+                    const parameters = {
+                        'text': `${params.tweet}`,
+                        'features': {
+                            'sentiment': {
+                                'document': true
+                            }
+                        }
+                    }
+
+                    natural_language_understanding.analyze(parameters, ( err, response ) => {
+                        if(response!=null){
+                            if (response.sentiment.document.label=='negative') {
+                                let sent = response.sentiment.document
+                                sent["detail"] = params
+                                negative.push(sent)
+                            }else if(response.sentiment.document.label=='positive'){
+                                let sent = response.sentiment.document
+                                sent["detail"] = params
+                                positive.push(sent)
+                            }else{
+                                let sent = response.sentiment.document
+                                sent["detail"] = params
+                                neutral.push(sent)
+                            }
+                        }
+                        ID++
+                        if ( ID < resultTranslate.length){
+                            checksentiment(resultTranslate[ID])
+                        }
+                        else{
+                          let saveTwitter = new Twitter({ 
+                              negative,
+                              positive,
+                              neutral,
+                              keyword
+                          })
+                          saveTwitter.save(function(err, response) {
+                              User.findByIdAndUpdate(idUser, {
+                                  $push: { twitter: response._id}
+                              }, {new: true, runValidators: true})
+                              .then(user => {
+                                res.status(200).json({
+                                    info: 'done save Twitter data to Database'
+                                })
+                              })
+                              .catch(err => {
+                                console.log(err)
+                              })
+                          })
+                        }
+                    })
+                }
+            }
+        })
+    }
+
+    // Translate.translate(`${joinItem}`, { from: 'id', to: 'en' }, (err, translate) => {
+    //     let resultTranslate = translate.text[0]
+
+    //     let splitTranslate = resultTranslate.split('$%@')
+
+    //     const resultNegative = []
+    //     const resultPositive = []
+    //     const resultNeutral = []
+
+    //     let ID = 0 
+    //     if (ID < splitTranslate.length) {
+    //         checksentiment(splitTranslate[ID])
+    //     }else{ 
+    //         //console.log(result)
+    //     }
+    //     function checksentiment(params) {
+
+    //         const parameters = {
+    //             'text': `${params}`,
+    //             'features': {
+    //                 'sentiment': {
+    //                     'document': true
+    //                 }
+    //             }
+    //         }
+
+    //         natural_language_understanding.analyze(parameters, ( err, response ) => {
+    //             if(response!=null){
+    //                 if (response.sentiment.document.label=='negative') {
+    //                     let sent = response.sentiment.document
+    //                     sent["detail"] = params
+    //                     resultNegative.push(sent)
+    //                 }else if(response.sentiment.document.label=='positive'){
+    //                     let sent = response.sentiment.document
+    //                     sent["detail"] = params
+    //                     resultPositive.push(sent)
+    //                 }else{
+    //                     let sent = response.sentiment.document
+    //                     sent["detail"] = params
+    //                     resultNeutral.push(sent)
+    //                 }
+    //             }
+    //             ID++
+    //             if ( ID < splitTranslate.length){
+    //                 checksentiment(splitTranslate[ID])
+    //             }
+    //             else{
+    //                 let saveTwitter = new Twitter({ 
+    //                     negative: resultNegative,
+    //                     positive: resultPositive,
+    //                     neutral: resultNeutral,
+    //                     keyword
+    //                 })
+    //                 saveTwitter.save(function(err, response) {
+    //                     User.findByIdAndUpdate(idUser, {
+    //                         $push: { twitter: response._id}
+    //                     }, {new: true, runValidators: true})
+    //                     .then(user => {
+    //                       res.status(200).json({
+    //                           info: 'done save Twitter data to Database'
+    //                       })
+    //                     })
+    //                     .catch(err => {
+    //                       console.log(err)
+    //                     })
+    //                 })
+    //             }
+    //         })
+    //     }
+    // })
 
   },
 
@@ -377,7 +464,7 @@ module.exports = {
   
     // Close the browser.
     await browser.close();
-    
+
     Translate.translate(`${joinItem}`, { from: 'id', to: 'en' }, (err, translate) => {
         let resultTranslate = translate.text[0]
 
@@ -428,7 +515,8 @@ module.exports = {
                     let saveFacebook = new Facebook({ 
                         negative: resultNegative,
                         positive: resultPositive,
-                        neutral: resultNeutral
+                        neutral: resultNeutral,
+                        keyword
                     })
                     saveFacebook.save(function(err, response) {
                         User.findByIdAndUpdate(idUser, {
@@ -626,38 +714,48 @@ module.exports = {
 
   async newsScrape (req, res, next) {
     try {
+
+      const {
+        idUser,
+        keyword
+      } = req.body
+
       const browser = await puppeteer.launch({
-        headless: true
+        headless: false
       });
       const page = await browser.newPage();
       await page.evaluate('navigator.userAgent');
   
   
-      wordToSearch = 'samsung'
+      wordToSearch = changeValue(keyword)
   
       await page.goto(`https://www.cnnindonesia.com/search/?query=${wordToSearch}`);
       await page.waitForSelector('.list');
   
       const CNNheadlines = await page.$$('.box_text')
   
-      let CNNtitles = []
-  
+      //let CNNtitles = []
+      
+      let allNews = []
+
       for (let i = 0; i < CNNheadlines.length; i++) {
         const CNNheadline = CNNheadlines[i]
         let title = await CNNheadline.$('.title')
         let titleText = await page.evaluate(title => title.innerText, title)
-        CNNtitles.push(titleText)
+        allNews.push(titleText)
         // console.log(titleText)
       }
-      console.log(CNNtitles)
+      //console.log(CNNtitles)
   
-      await page.goto(`https://www.liputan6.com/`);
-      await page.waitForSelector('#search > button');
+      await page.goto(`https://www.liputan6.com`);
+      //await page.waitForSelector('#search > button');
+      await page.waitForSelector('#q');
+      // await page.waitForNavigation()
   
       const search_selector = '#q'
       const search_button_selector = '#search > button'
       await page.click(search_selector);
-      await page.keyboard.type(wordToSearch);
+      await page.keyboard.type(keyword);
   
       await page.click(search_button_selector);
   
@@ -666,34 +764,111 @@ module.exports = {
   
       const L6headlines = await page.$$('.articles--iridescent-list--text-item__title-link')
   
-      let L6titles = []
+      //let L6titles = []
   
       for (let i = 0; i < 10; i++) {
         const L6headline = L6headlines[i]
         let title = await L6headline.$('.articles--iridescent-list--text-item__title-link-text')
         let titleText = await page.evaluate(title => title.innerText, title)
-        L6titles.push(titleText)
+        allNews.push(titleText)
       }
   
-      console.log(L6titles)
+      //console.log(L6titles)
   
       await page.goto(`https://www.detik.com/search/searchall?query=${wordToSearch}`)
       await page.waitForSelector('.box_text');
   
       let titles = 'body > div.wrapper.full > div > div.list.media_rows.list-berita > article:nth-child(INDEX) > a > span.box_text > p'
-  
-      let detikTitiles = []
-  
-      for (let i = 1; i <= 11; i++) {
-        if (i !== 4 && i !== 8) {
-          let titleSelector = titles.replace("INDEX", i);
-  
-          let title = await page.$(titleSelector)
-          detikTitiles.push(await page.evaluate(title => title.innerText, title))
+      
+      let titleSelector = titles.replace("INDEX", 4)
+      let title = await page.$(titleSelector)
+
+      for (let i = 1; i <= 15; i++) {
+        let titleSelector = titles.replace("INDEX", i);
+
+        let title = await page.$(titleSelector)
+        
+        if (title === null) {
+          i += 1
+        } else {
+          allNews.push(await page.evaluate(title => title.innerText, title))
         }
       }
+
+      //let detikTitiles = []
   
-      console.log(detikTitiles)
+      let joinItem = allNews.join('$%@')
+
+      Translate.translate(`${joinItem}`, { from: 'id', to: 'en' }, (err, translate) => {
+        let resultTranslate = translate.text[0]
+
+        let splitTranslate = resultTranslate.split('$%@')
+
+        const resultNegative = []
+        const resultPositive = []
+        const resultNeutral = []
+
+        let ID = 0 
+        if (ID < splitTranslate.length) {
+            checksentiment(splitTranslate[ID])
+        }else{ 
+            //console.log(result)
+        }
+        function checksentiment(params) {
+
+            const parameters = {
+                'text': `${params}`,
+                'features': {
+                    'sentiment': {
+                        'document': true
+                    }
+                }
+            }
+
+            natural_language_understanding.analyze(parameters, ( err, response ) => {
+                if(response!=null){
+                    if (response.sentiment.document.label=='negative') {
+                        let sent = response.sentiment.document
+                        sent["detail"] = params
+                        resultNegative.push(sent)
+                    }else if(response.sentiment.document.label=='positive'){
+                        let sent = response.sentiment.document
+                        sent["detail"] = params
+                        resultPositive.push(sent)
+                    }else{
+                        let sent = response.sentiment.document
+                        sent["detail"] = params
+                        resultNeutral.push(sent)
+                    }
+                }
+                ID++
+                if ( ID < splitTranslate.length){
+                    checksentiment(splitTranslate[ID])
+                }
+                else{
+                    let saveNews = new News({ 
+                        negative: resultNegative,
+                        positive: resultPositive,
+                        neutral: resultNeutral,
+                        keyword
+                    })
+                    saveNews.save(function(err, response) {
+                        User.findByIdAndUpdate(idUser, {
+                            $push: { news: response._id}
+                        }, {new: true, runValidators: true})
+                        .then(user => {
+                          res.status(200).json({
+                              info: 'done save News data to Database'
+                          })
+                        })
+                        .catch(err => {
+                          console.log(err)
+                        })
+                    })
+                }
+            })
+        }
+    })
   
       browser.close();
     } catch (error) {

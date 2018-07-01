@@ -33,6 +33,11 @@ const userSchema = mongoose.Schema({
     facebook: [{
         type: Schema.Types.ObjectId,
         ref: "Facebook"      
+    }],
+
+    news: [{
+        type: Schema.Types.ObjectId,
+        ref: "News"      
     }]
 }, {
     timestamps: true

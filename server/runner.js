@@ -14,32 +14,35 @@ const User = require('./models/user.model')
 
 var scrapeTwitter = new cron.CronJob({
   cronTime: '* * * * *',
-  onTick: async function() {
+  onTick: function() {
 
     User.find()
-    .then(userKeyword => {
-        console.log('sedang get data')
+    .then(response => {
+        let userKeyword = response
+
         for(let i=0; i < userKeyword.length; i++){
             let idUser = userKeyword[i]._id
-            userKeyword[i].keywords.forEach(keyword => {
-                axios.post('http://localhost:3001/scrape/tweet',{ idUser , keyword })
-                .then(result => {
-                    console.log(result.data.info)
+            if(userKeyword[i].keywords.length!=0){
+                userKeyword[i].keywords.forEach(keyword => {
+                    axios.post('http://localhost:3001/scrape/tweet/profile',{ idUser , keyword })
+                    // let news = await axios.post('http://localhost:3001/scrape/news',{ idUser , keyword })
+                    // console.log(news.data.info)
+                    .then(result => {
+                        console.log(result.data.info)
+                    })
+                    .catch(err => {
+                        console.log(err)
+                    })
+                    // axios.post('http://localhost:3001/scrape/news',{ idUser , keyword })
+                    // .then(result => {
+                    //     console.log(result.data.info)
+                    // })
+                    // .catch(err => {
+                    //     console.log(err)
+                    // })
                 })
-                .catch(err => {
-                    console.log(err)
-                })
-
-                axios.post('http://localhost:3001/scrape/fb',{ idUser , keyword })
-                .then(result => {
-                    console.log(result.data.info)
-                })
-                .catch(err => {
-                    console.log(err)
-                })
-            })
+            }
         }
-
     })
     .catch(err =>{
         console.log(err)
