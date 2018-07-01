@@ -8,6 +8,7 @@ import SocialChart from '../components/SentimentAnalysist';
 import SentimenChart from '../components/socialsource/SentimenChart';
 import RegionChart from '../components/RegionChart';
 import TagChart from '../components/TagChart';
+import GenderChart from '../components/GenderChart';
 
 class HomePage extends Component {
     render() {
@@ -95,11 +96,10 @@ class HomePage extends Component {
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
                                 <TagChart/>
-                                {/* <TagCharts /> */}
                             </CardBody>
                         </Card>
                     </Col>
-                    {/* <Col sm="3">
+                    <Col sm="6">
                         <Card>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
@@ -120,17 +120,16 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
-                                
+                                <GenderChart/>
                             </CardBody>
                         </Card>
-                    </Col> */}
-
+                    </Col>
                     <Col sm="6">
                         <Card>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
                                     <CardTitle 
-                                        style={{ 
+                                        style={{
                                         textAlign: 'left',
                                         width: '50%',
                                         fontSize: 12,
