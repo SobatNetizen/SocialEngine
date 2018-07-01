@@ -1,11 +1,13 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
 
-import rnmreducer from './history/history.reducer'
+import historyreducer from './history/history.reducer'
+import userreducer from './user/user.reducer'
 // import dotaReducer from './dota/dota.reducer';
 
 const rootReducer = combineReducers({
-  history: rnmreducer
+  history: historyreducer,
+  user: userreducer
 })
 
 const store = createStore(
