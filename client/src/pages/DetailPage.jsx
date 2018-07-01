@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col, Table } from 'reactstrap';
+import { Container, Row, Table } from 'reactstrap';
 
 class DetailPage extends Component {
     render() {
