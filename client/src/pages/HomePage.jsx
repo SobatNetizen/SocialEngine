@@ -1,19 +1,20 @@
 import React, { Component } from 'react';
 import { Container, Row, Col,
-    Card, CardImg, CardText, CardBody,
-    CardTitle, CardSubtitle, Button
+    Card, CardBody, CardTitle
 } from 'reactstrap';
 
-import NavbarBoot from '../components/NavbarBoot';
 import ChartGoogleTrend from '../components/ChartGoogleTrend';
 import SocialChart from '../components/SentimentAnalysist';
 import SentimenChart from '../components/socialsource/SentimenChart';
 import RegionChart from '../components/RegionChart';
 import TagChart from '../components/TagChart';
-import TagCharts from '../components/TagChart';
 
 class HomePage extends Component {
     render() {
+        const token = localStorage.getItem('token')
+        if(token==null){
+            this.props.history.push({ pathname: '/' })
+        }
         return (
             <Container fluid style={{ marginTop: 15, marginBottom: 60 }}>
                 <Row style={{ marginBottom: 15 }}>

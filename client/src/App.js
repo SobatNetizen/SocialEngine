@@ -3,8 +3,8 @@ import './App.css';
 import {
   BrowserRouter as Router,
   Route,
-  Link,
-  Switch
+  Switch,
+  withRouter
 } from 'react-router-dom';
 import NavbarBoot from './components/NavbarBoot';
 
@@ -17,15 +17,20 @@ import StoryPage from './pages/StoryPage';
 import DetailPage from './pages/DetailPage';
 import NotFound from './pages/NotFound';
 
+const AuthButton = withRouter(
+  ({ history }) =>
+      <NavbarBoot buttonLogout={ history }/>
+)
+
 class App extends Component {
   render() {
     return (
       <Router>
         <div className="App">
-          <NavbarBoot />
+          <AuthButton />
           <Switch>
-            <Route exact path="/" component={HomePage} />
-            <Route path="/login" component={LoginPage} />
+            <Route exact path="/" component={LoginPage} />
+            <Route path="/home" component={HomePage} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/profile" component={ProfilePage} />
             <Route path="/analytic" component={AnalyticPage} />
