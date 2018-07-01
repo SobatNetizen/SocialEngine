@@ -48,8 +48,10 @@ module.exports = {
                 res.status(200).json({
                     message: 'Berhasil masuk',
                     user: {
+                        id: user._id,
                         companyname: user.companyname,
-                        email: user.email
+                        email: user.email,
+                        keywords: user.keywords
                     }
                 })
             }
