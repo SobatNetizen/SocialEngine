@@ -15,6 +15,7 @@ import ProfilePage from './pages/ProfilePage';
 import AnalyticPage from './pages/AnalyticPage';
 import StoryPage from './pages/StoryPage';
 import DetailPage from './pages/DetailPage';
+import Dasboard from './pages/Dashboard';
 import NotFound from './pages/NotFound';
 
 const AuthButton = withRouter(
@@ -36,6 +37,7 @@ class App extends Component {
             <Route path="/analytic" component={AnalyticPage} />
             <Route path="/story" component={StoryPage} />
             <Route path="/detail" component={DetailPage} />
+            <Route path="/dashboard" component={Dasboard} />
             <Route path="*" component={ NotFound } />
           </Switch>
           <div id="footer">
