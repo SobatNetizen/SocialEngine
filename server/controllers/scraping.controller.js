@@ -248,6 +248,127 @@ module.exports = {
 
     // Set up browser and page.
     const browser = await puppeteer.launch({
+      headless: true,
+      args: ['--no-sandbox', '--disable-setuid-sandbox'],
+    });
+    const page = await browser.newPage();
+    // page.setViewport({ width: 1280, height: 926 });
+  
+    // Navigate to the demo page.
+    await page.goto('https://facebook.com');
+  
+    const emailSelector = '#email'
+    const passSelector = '#pass'
+  
+    const buttonSelector = '#loginbutton'
+  
+    await page.click(emailSelector);
+    await page.keyboard.type(process.env.FBEMAIL);
+  
+    // await page.click(passSelector);
+    // await page.keyboard.type(process.env.FBPASSWORD);
+  
+    await page.click(buttonSelector);
+  
+    await page.waitForNavigation();
+  
+    await page.click(passSelector);
+    await page.keyboard.type(process.env.FBPASSWORD);
+  
+    await page.click(buttonSelector);
+  
+    await page.waitForNavigation();
+  
+    const wordToSearch = changeValue(keyword)
+    const searchUrl = `https://www.facebook.com/search/str/${wordToSearch}/stories-keyword/stories-public`;
+  
+    await page.goto(searchUrl);
+    await page.waitFor(2*1000);
+  
+    // Scroll and extract items from the page.
+    const items = await scrapeInfiniteScrollItems(page, extractItemsFB, 50);
+    let joinItem = items.join('$%@')
+    // Save extracted items to a file.
+    //console.log(items)
+  
+    // Close the browser.
+    await browser.close();
+    
+    Translate.translate(`${joinItem}`, { from: 'id', to: 'en' }, (err, translate) => {
+        let resultTranslate = translate.text[0]
+
+        let splitTranslate = resultTranslate.split('$%@')
+
+        const resultNegative = []
+        const resultPositive = []
+        const resultNeutral = []
+
+        let ID = 0 
+        if (ID < splitTranslate.length) {
+            checksentiment(splitTranslate[ID])
+        }else{ 
+            //console.log(result)
+        }
+        function checksentiment(params) {
+
+            const parameters = {
+                'text': `${params}`,
+                'features': {
+                    'sentiment': {
+                        'document': true
+                    }
+                }
+            }
+
+            natural_language_understanding.analyze(parameters, ( err, response ) => {
+                if(response!=null){
+                    if (response.sentiment.document.label=='negative') {
+                        let sent = response.sentiment.document
+                        sent["detail"] = params
+                        resultNegative.push(sent)
+                    }else if(response.sentiment.document.label=='positive'){
+                        let sent = response.sentiment.document
+                        sent["detail"] = params
+                        resultPositive.push(sent)
+                    }else{
+                        let sent = response.sentiment.document
+                        sent["detail"] = params
+                        resultNeutral.push(sent)
+                    }
+                }
+                ID++
+                if ( ID < splitTranslate.length){
+                    checksentiment(splitTranslate[ID])
+                }
+                else{
+                    let saveFacebook = new Facebook({ 
+                        negative: resultNegative,
+                        positive: resultPositive,
+                        neutral: resultNeutral
+                    })
+                    saveFacebook.save(function(err, response) {
+                        User.findByIdAndUpdate(idUser, {
+                            $push: { facebook: response._id}
+                        }, {new: true, runValidators: true})
+                        .then(user => {
+                          res.status(200).json({
+                              info: 'done save facebook data to Database'
+                          })
+                        })
+                        .catch(err => {
+                          console.log(err)
+                        })
+                    })
+                }
+            })
+        }
+    })
+  },
+
+  async fbScrapeProfile (req, res, next) {
+  
+    // Set up browser and page.
+    const browser = await puppeteer.launch({
       headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
