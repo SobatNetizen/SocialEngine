@@ -96,6 +96,71 @@
   float: left;
 }
 
-.bg1 { width: 100%; height: 100%; background: red; }
-.bg2 { width: 100%; height: 100%; background: green; }
-.bg3 { width: 100%; height: 100%; background: blue; }
+.bg1, .positifColor { width: 100%; height: 100%; background: #6cb4ce; }
+.bg2, .neutralColor { width: 100%; height: 100%; background: #a5a5a5; }
+.bg3, .negatifColor { width: 100%; height: 100%; background: #c45d5d; }
+
+.sentimenWrap {
+  width: 100%;
+  height: 400px;
+  background: #efefef;
+}
+.sentimenWrap > ul {
+  margin: 15px;
+  padding: 0;
+}
+.sentimenWrap > ul > li {
+  list-style: none;
+  width: 160px;
+  height: 160px;
+  /* background: yellow; */
+  float: left;
+  margin-right: 10px;
+  position: relative;
+}
+.sentimenWrap > ul > li:last-child {
+  margin-right: 0;
+}
+.detailSentimen {
+  bottom: -160px;
+  position: absolute;
+  width: 100%;
+  height: 160px;
+  background: white;
+  -webkit-box-shadow: 1px 1px 3px 1px #B5B5B5;
+  box-shadow: 1px 1px 3px 1px #B5B5B5;
+}
+.detailSentimen > p {
+  font-size: 16px;
+  padding: 10px;
+  background: #9d3862;
+  color: white;
+}
+
+.detailSentimen > h1 {
+  font-size: 40px;
+  color: rgb(110, 62, 62);
+}
+.marginRightLogo {
+  margin-right: 10px;
+}
+.legend {
+  margin: 0 auto;
+  width: 90%;
+  height: 10px;
+  margin-top: 10px;
+}
+.legend > ul > li {
+  width: 100px;
+  float: left;
+  list-style: none;
+  padding: 5px;
+  margin: 5px;
+  padding: 0;
+}
+.boxsmall {
+  width: 25px;
+  height: 10px;
+  float: left;
+  margin-top: 5px;
+}
