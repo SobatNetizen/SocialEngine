@@ -48,8 +48,10 @@ module.exports = {
                 res.status(200).json({
                     message: 'Berhasil masuk',
                     user: {
+                        id: user._id,
                         companyname: user.companyname,
-                        email: user.email
+                        email: user.email,
+                        keywords: user.keywords
                     }
                 })
             }
@@ -75,6 +77,23 @@ module.exports = {
             })
         }).catch(next)
 
+    },
+
+    getUser (req, res, next) {
+        let { id } = req.decoded
+
+        User.findById(id)
+            .then(user => {
+                res.status(200).json({
+                    message: 'Berhasil masuk',
+                    user: {
+                        id: user._id,
+                        companyname: user.companyname,
+                        email: user.email,
+                        keywords: user.keywords
+                    }
+                })
+            }).catch(next)
     },
 
     changePassword (req, res, next) {
@@ -116,6 +135,7 @@ module.exports = {
     
     addKeyword (req, res, next) {
         let { id } = req.decoded
+        // console.log('oi', req.decoded, req.body)
 
         User.findByIdAndUpdate(id, {
             $push: { keywords: req.body.keyword}
