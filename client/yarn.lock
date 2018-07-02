@@ -2,6 +2,28 @@
 # yarn lockfile v1
 
 
+"@nivo/bar@^0.42.1":
+  version "0.42.1"
+  resolved "https://registry.yarnpkg.com/@nivo/bar/-/bar-0.42.1.tgz#18b1b258adfd7399e69a70bfd608e4aaab301efd"
+  dependencies:
+    "@nivo/core" "0.42.1"
+    "@nivo/legends" "0.42.0"
+    d3-scale "^1.0.6"
+    d3-shape "^1.2.0"
+    lodash "^4.17.4"
+    react-motion "^0.5.2"
+    recompose "^0.26.0"
+
+"@nivo/circle-packing@^0.42.1":
+  version "0.42.1"
+  resolved "https://registry.yarnpkg.com/@nivo/circle-packing/-/circle-packing-0.42.1.tgz#fa8c34654d1cacd755bfc74e7d827412485b2f10"
+  dependencies:
+    "@nivo/core" "0.42.1"
+    d3-hierarchy "^1.1.5"
+    lodash "^4.17.4"
+    react-motion "^0.5.2"
+    recompose "^0.26.0"
+
 "@nivo/core@0.42.1":
   version "0.42.1"
   resolved "https://registry.yarnpkg.com/@nivo/core/-/core-0.42.1.tgz#bf3074b4c72d9cb49c86724ed8a2ce43cfb0cd19"
@@ -5880,7 +5902,7 @@ promise@^7.1.1:
   dependencies:
     asap "~2.0.3"
 
-prop-types@^15.5.10, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
+prop-types@^15.5.10, prop-types@^15.5.6, prop-types@^15.5.8, prop-types@^15.6.0, prop-types@^15.6.1, prop-types@^15.6.2:
   version "15.6.2"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.2.tgz#05d5ca77b4453e985d60fc7ff8c859094a497102"
   dependencies:
@@ -6093,6 +6115,12 @@ react-faux-dom@^2.1.0, react-faux-dom@^2.3.0:
   dependencies:
     query-selector "^1.0.9"
     style-attr "^1.0.1"
+
+react-fontawesome@^1.6.1:
+  version "1.6.1"
+  resolved "https://registry.yarnpkg.com/react-fontawesome/-/react-fontawesome-1.6.1.tgz#eddce17e7dc731aa09fd4a186688a61793a16c5c"
+  dependencies:
+    prop-types "^15.5.6"
 
 react-google-charts@^1.6.6:
   version "1.6.6"
