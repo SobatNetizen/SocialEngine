@@ -30,10 +30,35 @@ const userSchema = mongoose.Schema({
         ref: "Twitter"      
     }],
 
+    scrapetwitter: [{
+        type: Schema.Types.ObjectId,
+        ref: "ScrapeTwitter"      
+    }],
+
     facebook: [{
         type: Schema.Types.ObjectId,
         ref: "Facebook"      
-    }]
+    }],
+
+    scrapefacebook: [{
+        type: Schema.Types.ObjectId,
+        ref: "ScrapeFacebook"      
+    }],
+
+    news: [{
+        type: Schema.Types.ObjectId,
+        ref: "News"      
+    }],
+
+    scrapenews: [{
+        type: Schema.Types.ObjectId,
+        ref: "ScrapeNews"      
+    }],
+
+    google: [{
+        type: Schema.Types.ObjectId,
+        ref: "Google"      
+    }],
 }, {
     timestamps: true
 })

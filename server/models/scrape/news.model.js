@@ -1,15 +1,9 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const facebookSchema = mongoose.Schema({
-    negative: Array,
-
-    positive: Array,
-
-    neutral: Array,
-
+const scrapeNewsSchema = mongoose.Schema({
+    profile: Array,
     keyword: String,
-
     userId: {
         type: Schema.Types.ObjectId,
         ref: "User"
@@ -18,6 +12,6 @@ const facebookSchema = mongoose.Schema({
     timestamps: true
 })
 
-const Facebook = mongoose.model('Facebook', facebookSchema)
+const NewsScrape = mongoose.model('ScrapeNews', scrapeNewsSchema)
 
-module.exports = Facebook
+module.exports = NewsScrape

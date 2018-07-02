@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const facebookSchema = mongoose.Schema({
+const newsSchema = mongoose.Schema({
     negative: Array,
 
     positive: Array,
@@ -18,6 +18,6 @@ const facebookSchema = mongoose.Schema({
     timestamps: true
 })
 
-const Facebook = mongoose.model('Facebook', facebookSchema)
+const News = mongoose.model('News', newsSchema)
 
-module.exports = Facebook
+module.exports = News

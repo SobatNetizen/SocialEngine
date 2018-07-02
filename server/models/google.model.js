@@ -1,12 +1,14 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 
-const facebookSchema = mongoose.Schema({
-    negative: Array,
+const googleSchema = mongoose.Schema({
+    time: Array,
 
-    positive: Array,
+    region: Array,
 
-    neutral: Array,
+    queries: Array,
+
+    topics: Array,
 
     keyword: String,
 
@@ -18,6 +20,6 @@ const facebookSchema = mongoose.Schema({
     timestamps: true
 })
 
-const Facebook = mongoose.model('Facebook', facebookSchema)
+const Google = mongoose.model('Google', googleSchema)
 
-module.exports = Facebook
+module.exports = Google
