@@ -60,6 +60,13 @@ class HomePanel extends Component {
     }
 
     handleKeyPress = (event) => {
+      if(event.key == 'Enter'){
+        console.log('enter press here! ')
+        this.postToServer()
+      }
+    }
+
+    postToServer () {
       let token = localStorage.getItem('token')
 
       let config = {
@@ -70,16 +77,13 @@ class HomePanel extends Component {
         keyword: this.state.inputKeyword
       }
 
-      if(event.key == 'Enter'){
-        console.log('enter press here! ')
-        axios.put('http://localhost:3001/users/keyword', input, config)
-        .then(response => {
-          console.log(response)
-        })
-        .catch(err => {
-          console.log('ERROR: dashboard add keyword')
-        })
-      }
+      axios.put('http://localhost:3001/users/keyword', input, config)
+      .then(response => {
+        console.log(response)
+      })
+      .catch(err => {
+        console.log('ERROR: dashboard add keyword')
+      })
     }
 
     handleChanges (e) {
