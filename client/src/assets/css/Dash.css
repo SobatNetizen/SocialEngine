@@ -39,6 +39,22 @@ ul {
   border-radius: 50%;
 }
 
+.add-icon:hover {
+  /* opacity: 0.5; */
+  background-color: black;
+  color: white;
+}
+
+.loading-icon {
+  margin-left: 10px;
+  margin-top: 20px;
+}
+
+.loading-text {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
 .text-result-heading {
   font-size: 25px;
 }
@@ -64,3 +80,67 @@ ul {
   padding-right: 0px !important;
 }
 
+
+/* NAVBAR */
+
+.nav-settings {
+  border: 2px solid darkgrey;
+  border-radius: 20px;
+  margin: 5px;
+}
+
+.nav-settings:hover {
+  border: 2px solid #9D3862;
+  border-radius: 20px;
+  margin: 5px;
+  background-color: white;
+}
+
+.nav-dropdown {
+  border-radius: 20px;
+}
+
+.nav-link:hover {
+  color: #9D3862 !important;
+
+}
+
+/* INDEX */
+.one-row {
+  /* border: 1px solid black; */
+  /* background-color: white; */
+  height: 500px;
+  padding: 0px !important;
+}
+
+.two-row {
+  /* border: 1px solid red; */
+  /* background-color: white; */
+  height: 500px;
+  padding: 0px !important;
+}
+
+.img {
+  width: 100%;
+  height: 100%;
+}
+
+.img-top {
+  height: 250px;
+}
+
+.index-head {
+  border: 1px solid black;
+}
+
+.index-one {
+  border: 1px solid green;
+}
+
+.index-two {
+  border: 1px solid red;
+}
+
+.index-three {
+  border: 1px solid blue;
+}

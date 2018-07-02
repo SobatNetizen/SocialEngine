@@ -17,6 +17,8 @@ import { Link,
     // Redirect 
 } from 'react-router-dom';
 
+import '../assets/css/Dash.css';
+
 class NavbarBoot extends Component {
 
     constructor(props) {
@@ -51,7 +53,14 @@ class NavbarBoot extends Component {
                             token ?
                             <Nav navbar>
                                 <NavItem>
-                                    <Link to="/detail" className="nav-link">Detail Page</Link>
+                                    <div className="nav-settings">
+                                        <Link to="/detail" className="nav-link">Detail Page</Link>
+                                    </div>                                
+                                </NavItem>
+                                <NavItem>
+                                    <div className="nav-settings">
+                                        <Link to="/dashboard" className="nav-link" >Dashboard</Link>
+                                    </div>
                                 </NavItem>
                             </Nav>
                             :
@@ -67,19 +76,21 @@ class NavbarBoot extends Component {
                         <Nav className="ml-auto" navbar>
                             {
                                 token ?
-                                <UncontrolledDropdown nav inNavbar>
-                                    <DropdownToggle nav caret>
-                                        Users
-                                    </DropdownToggle>
-                                    <DropdownMenu right>
-                                        <DropdownItem>
-                                            <Link to="/profile" className="nav-link">Profile</Link>
-                                        </DropdownItem>
-                                        <DropdownItem>
-                                            <NavLink onClick={ this.handleLogout }>Log Out</NavLink>
-                                        </DropdownItem>
-                                    </DropdownMenu>
-                                </UncontrolledDropdown>
+                                <div className="nav-settings">
+                                    <UncontrolledDropdown nav inNavbar>
+                                        <DropdownToggle nav caret>
+                                        Settings
+                                        </DropdownToggle>
+                                        <DropdownMenu right>
+                                            <DropdownItem>
+                                                <Link to="/profile" className="nav-link">Profile</Link>
+                                            </DropdownItem>
+                                            <DropdownItem>
+                                                <NavLink onClick={ this.handleLogout }>Log Out</NavLink>
+                                            </DropdownItem>
+                                        </DropdownMenu>
+                                    </UncontrolledDropdown>
+                                </div>
                                 :
                                 ''
                             }

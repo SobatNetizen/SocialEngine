@@ -16,6 +16,7 @@ import AnalyticPage from './pages/AnalyticPage';
 import StoryPage from './pages/StoryPage';
 import DetailPage from './pages/DetailPage';
 import Dasboard from './pages/Dashboard';
+import IndexPage from './pages/IndexPage';
 import NotFound from './pages/NotFound';
 
 const AuthButton = withRouter(
@@ -31,6 +32,7 @@ class App extends Component {
           <AuthButton />
           <Switch>
             <Route exact path="/" component={LoginPage} />
+            <Route path="/index" component={IndexPage} />
             <Route path="/home" component={HomePage} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/profile" component={ProfilePage} />
