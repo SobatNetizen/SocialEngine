@@ -82,19 +82,29 @@
 .BarChart {
   width: 100%;
   /* height: 250px; */
-  max-height: 350px;
-  background: #efefef;
+  max-height: 400px;
+  background: #f4f4f4;
 }
 
 .BarChart > ul > li {
   list-style: none;
-  border-radius: 150px;
-  width: 150px;
+  /* border-radius: 150px; */
+  width: 31%;
   height: 150px;
   /* background: red; */
   margin: 10px;
   float: left;
 }
+
+.imgGender > img {
+  height: 100px;
+  float: left;
+  margin-top: 20px;
+}
+
+.bga { background: #c4e5ed; }
+.bgb { background: #efb8b8; }
+.bgc { background: #b9b9aa; }
 
 .bg1, .positifColor { width: 100%; height: 100%; background: #6cb4ce; }
 .bg2, .neutralColor { width: 100%; height: 100%; background: #a5a5a5; }
@@ -103,7 +113,7 @@
 .sentimenWrap {
   width: 100%;
   height: 400px;
-  background: #efefef;
+  background: #f4f4f4;
 }
 .sentimenWrap > ul {
   margin: 15px;
