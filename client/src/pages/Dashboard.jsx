@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-import { Container, Row, Col,
-  Card, CardBody, CardTitle
-} from 'reactstrap';
+import { Row, Col } from 'reactstrap';
 import axios from 'axios';
 
 import '../assets/css/Dash.css';
@@ -10,7 +8,7 @@ class HomePanel extends Component {
     constructor() {
       super()
       this.state = {
-        status: 'initial',
+        status: 'keywords',
         statusKeyword: 'disabled',
         keywordToShow: '',
         keywords: [{
@@ -60,10 +58,14 @@ class HomePanel extends Component {
     }
 
     handleKeyPress = (event) => {
-      if(event.key == 'Enter'){
+      if(event.key === 'Enter'){
         console.log('enter press here! ')
         this.postToServer()
       }
+    }
+
+    addButton () {
+      this.postToServer()
     }
 
     postToServer () {
@@ -122,7 +124,7 @@ class HomePanel extends Component {
                           {
                             this.state.keywords.map((keyword, index) => (
                               <li 
-                                className="cursor"
+                                className="cursor animated fadeInDown"
                                 onClick={() => this.setKeywordToShow(keyword.keyword) }
                                 key={index+keyword}
                               >{keyword.keyword}</li>
@@ -134,7 +136,7 @@ class HomePanel extends Component {
                       <div></div>
                     }
                   </div>
-                  <div 
+                  {/* <div 
                     className="sidenav-panel"
                     onClick={ () => this.getHistory()}
                   >
@@ -143,7 +145,7 @@ class HomePanel extends Component {
                   <div
                     className="sidenav-bottom"
                   >
-                  </div>
+                  </div> */}
                 </div>
               </Col>
               <Col sm="10" className="no-padding-left-right">
@@ -159,22 +161,33 @@ class HomePanel extends Component {
                 {
                   this.state.status === 'keywords' ?
                   <div>
-                    Keywords
+                    Add Keywords
                     <div>
-                      <input 
-                        className="keyword" 
-                        name="inputKeyword" 
-                        type="text" 
-                        onChange={ (e) => this.handleChanges(e) }
-                        onKeyPress={this.handleKeyPress}
-                      />
-                      <button>ADD</button>
+                      <Row
+                        className="row"
+                      >
+                        <input 
+                          className="input-keyword" 
+                          name="inputKeyword" 
+                          type="text" 
+                          onChange={ (e) => this.handleChanges(e) }
+                          onKeyPress={this.handleKeyPress}
+                        />
+                        <i 
+                          className="medium material-icons cursor add-icon"
+                          onClick={ () => this.addButton() }
+                        >add_circle_outline
+                        </i>
+                      </Row>
                     </div>
                     {
                       this.state.keywords.map((keyword, index) => (
                         this.state.keywordToShow === keyword.keyword ?
-                        <div key={index} >
-                          <div>Result:</div>
+                        <div key={index} className="animated fadeIn">
+                          <hr />
+                          <div
+                            className="text-result-heading"
+                          >Social Engine Result For <b>'{keyword.keyword}'</b></div>
                           <ul>
                             {
                               keyword.results.map((result, index) => (

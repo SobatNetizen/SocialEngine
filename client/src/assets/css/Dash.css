@@ -13,9 +13,34 @@
   cursor: pointer;
 }
 
+ul {
+  list-style-type: none;
+  padding-left: 0px;
+}
+
 .sidenav-bottom {
   padding-bottom: 20px;
   border-bottom: 1px solid gainsboro;
+}
+
+.row {
+  align-items: center
+}
+
+.input-keyword {
+  margin-left: 10px;
+  border-radius: 5px;
+  width: 400px;
+}
+
+.add-icon {
+  font-size: 40px;
+  background-color: white;
+  border-radius: 50%;
+}
+
+.text-result-heading {
+  font-size: 25px;
 }
 
 .cursor {

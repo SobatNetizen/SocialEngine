@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Container, Row, Col, 
-    Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+    Button, Form, FormGroup, Label, Input,  } from 'reactstrap';
 
 import axios from 'axios';
 import swal from 'sweetalert';
@@ -35,7 +35,7 @@ class RegisterPage extends Component {
         })
         .catch(err =>{
             swal('info', 
-            err.message=='Request failed with status code 400' ?
+            err.message==='Request failed with status code 400' ?
             'Tolong isi kolom perusahaan, email dan password' : err.message
             , 'info')
         })

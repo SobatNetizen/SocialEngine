@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
     Collapse,
-    Form,
-    Button,
+    // Form,
+    // Button,
     Navbar,
     NavbarToggler,
     Nav,
@@ -13,7 +13,9 @@ import {
     DropdownMenu,
     DropdownItem } from 'reactstrap';
 
-import { Link, Redirect } from 'react-router-dom';
+import { Link, 
+    // Redirect 
+} from 'react-router-dom';
 
 class NavbarBoot extends Component {
 
@@ -42,7 +44,7 @@ class NavbarBoot extends Component {
         return (
             <div>
                 <Navbar color="light" light expand="md">
-                    <Link to="/home" className="navbar-brand">SobatNetizen</Link>
+                    <Link to="/home" className="navbar-brand">Radar Social</Link>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         {
