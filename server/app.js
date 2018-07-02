@@ -20,6 +20,7 @@ const indexRouter = require('./routes/index');
 const scrapingRouter = require('./routes/scraping');
 const usersRouter = require('./routes/users');
 const googleRouter = require('./routes/google');
+const translateRouter = require('./routes/translate');
 
 const app = express();
 
@@ -38,6 +39,7 @@ app.use('/', indexRouter);
 app.use('/scrape', scrapingRouter);
 app.use('/users', usersRouter);
 app.use('/google', googleRouter);
+app.use('/translate', translateRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

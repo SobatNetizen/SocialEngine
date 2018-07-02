@@ -5,17 +5,11 @@ const CODE = require('./URLCode');
 
 const axios = require('axios')
 const Twitter = require('../models/twitter.model')
+const TwitterScrape = require('../models/scrape/twitter.model')
 const Facebook = require('../models/facebook.model')
+const FacebookScrape = require('../models/scrape/facebook.model')
 const News = require('../models/news.model')
-
-const NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js')
-const natural_language_understanding = new NaturalLanguageUnderstandingV1({
-  'username': process.env.USERNAMEWATSON,
-  'password': process.env.PASSWORDWATSON,
-  'version': '2018-03-16'
-})
-
-const Translate = require('yandex-translate-api')(process.env.APITRANSLATE)
+const NewsScrape = require('../models/scrape/news.model')
 
 function changeValue(value) {
   let newValue = '';
@@ -144,12 +138,11 @@ function extractFbProfileBirth() {
   return birth
 }
 
-
 async function scrapeInfiniteScrollItems(
   page,
   extractItems,
   itemTargetCount,
-  scrollDelay = 10,
+  scrollDelay = 5000,
 ) {
   let items = [];
   try {
@@ -166,26 +159,6 @@ async function scrapeInfiniteScrollItems(
 }
 
 module.exports = {
-
-  async tweetScrape (req, res, next) {
-
-    // Set up browser and page.
-    const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-    const page = await browser.newPage();
-    // page.setViewport({ width: 1280, height: 926 });
-    const wordToSearch = changeValue(keyword)
-
-    await page.goto(`https://twitter.com/search?f=tweets&q=${wordToSearch}&src=typd`);
-
-    const items = await scrapeInfiniteScrollItems(page, extractItems, 50);
-    let joinItem = items.join('$%@')
-    //console.log(items)
-
-    await browser.close();
-  },
 
   async tweetScrapeProfile (req, res, next) {
 
@@ -248,170 +221,26 @@ module.exports = {
 
     await browser.close();
 
-    let resultTranslate = []
-
-    let ID = 0 
-    if (ID < allProfiles.length) {
-        doCall(allProfiles[ID])
-    }else{ 
-        //console.log(result)
-    }
-    function doCall(params) {
-
-        Translate.translate(`${params.tweet}`, { from: 'id', to: 'en' }, (err, translate) => {
-            if (translate!=null) {
-                let oldTwitter = params
-                oldTwitter["translate"] = translate.text
-                resultTranslate.push(oldTwitter)
-            }
-            ID++
-            if ( ID < allProfiles.length){
-                doCall(allProfiles[ID])
-            }
-            else{ 
-                const negative = []
-                const positive = []
-                const neutral = []
-
-                let ID = 0 
-                if (ID < resultTranslate.length) {
-                    checksentiment(resultTranslate[ID])
-                }else{ 
-                    //console.log(result)
-                }
-                function checksentiment(params) {
-
-                    const parameters = {
-                        'text': `${params.tweet}`,
-                        'features': {
-                            'sentiment': {
-                                'document': true
-                            }
-                        }
-                    }
-
-                    natural_language_understanding.analyze(parameters, ( err, response ) => {
-                        if(response!=null){
-                            if (response.sentiment.document.label=='negative') {
-                                let sent = response.sentiment.document
-                                sent["detail"] = params
-                                negative.push(sent)
-                            }else if(response.sentiment.document.label=='positive'){
-                                let sent = response.sentiment.document
-                                sent["detail"] = params
-                                positive.push(sent)
-                            }else{
-                                let sent = response.sentiment.document
-                                sent["detail"] = params
-                                neutral.push(sent)
-                            }
-                        }
-                        ID++
-                        if ( ID < resultTranslate.length){
-                            checksentiment(resultTranslate[ID])
-                        }
-                        else{
-                          let saveTwitter = new Twitter({ 
-                              negative,
-                              positive,
-                              neutral,
-                              keyword
-                          })
-                          saveTwitter.save(function(err, response) {
-                              User.findByIdAndUpdate(idUser, {
-                                  $push: { twitter: response._id}
-                              }, {new: true, runValidators: true})
-                              .then(user => {
-                                res.status(200).json({
-                                    info: 'done save Twitter data to Database'
-                                })
-                              })
-                              .catch(err => {
-                                console.log(err)
-                              })
-                          })
-                        }
-                    })
-                }
-            }
+    let saveTwitter = new TwitterScrape({ 
+      profile: allProfiles,
+      keyword,
+      idUser: userId
+    })
+    saveTwitter.save(function(err, response) {
+        User.findByIdAndUpdate(idUser, {
+            $push: { scrapetwitter: response._id}
+        }, {new: true, runValidators: true})
+        .then(() => {
+            console.log('done save Twitter data to Database')
         })
-    }
-
-    // Translate.translate(`${joinItem}`, { from: 'id', to: 'en' }, (err, translate) => {
-    //     let resultTranslate = translate.text[0]
-
-    //     let splitTranslate = resultTranslate.split('$%@')
-
-    //     const resultNegative = []
-    //     const resultPositive = []
-    //     const resultNeutral = []
-
-    //     let ID = 0 
-    //     if (ID < splitTranslate.length) {
-    //         checksentiment(splitTranslate[ID])
-    //     }else{ 
-    //         //console.log(result)
-    //     }
-    //     function checksentiment(params) {
-
-    //         const parameters = {
-    //             'text': `${params}`,
-    //             'features': {
-    //                 'sentiment': {
-    //                     'document': true
-    //                 }
-    //             }
-    //         }
-
-    //         natural_language_understanding.analyze(parameters, ( err, response ) => {
-    //             if(response!=null){
-    //                 if (response.sentiment.document.label=='negative') {
-    //                     let sent = response.sentiment.document
-    //                     sent["detail"] = params
-    //                     resultNegative.push(sent)
-    //                 }else if(response.sentiment.document.label=='positive'){
-    //                     let sent = response.sentiment.document
-    //                     sent["detail"] = params
-    //                     resultPositive.push(sent)
-    //                 }else{
-    //                     let sent = response.sentiment.document
-    //                     sent["detail"] = params
-    //                     resultNeutral.push(sent)
-    //                 }
-    //             }
-    //             ID++
-    //             if ( ID < splitTranslate.length){
-    //                 checksentiment(splitTranslate[ID])
-    //             }
-    //             else{
-    //                 let saveTwitter = new Twitter({ 
-    //                     negative: resultNegative,
-    //                     positive: resultPositive,
-    //                     neutral: resultNeutral,
-    //                     keyword
-    //                 })
-    //                 saveTwitter.save(function(err, response) {
-    //                     User.findByIdAndUpdate(idUser, {
-    //                         $push: { twitter: response._id}
-    //                     }, {new: true, runValidators: true})
-    //                     .then(user => {
-    //                       res.status(200).json({
-    //                           info: 'done save Twitter data to Database'
-    //                       })
-    //                     })
-    //                     .catch(err => {
-    //                       console.log(err)
-    //                     })
-    //                 })
-    //             }
-    //         })
-    //     }
-    // })
-
+        .catch(err => {
+          console.log(err)
+        })
+    })
   },
 
-  async fbScrape (req, res, next) {
-
+  async fbScrapeProfile (req, res, next) {
+    
     const {
       idUser,
       keyword
@@ -419,129 +248,7 @@ module.exports = {
 
     // Set up browser and page.
     const browser = await puppeteer.launch({
-      headless: true,
-      args: ['--no-sandbox', '--disable-setuid-sandbox'],
-    });
-    const page = await browser.newPage();
-    // page.setViewport({ width: 1280, height: 926 });
-  
-    // Navigate to the demo page.
-    await page.goto('https://facebook.com');
-  
-    const emailSelector = '#email'
-    const passSelector = '#pass'
-  
-    const buttonSelector = '#loginbutton'
-  
-    await page.click(emailSelector);
-    await page.keyboard.type(process.env.FBEMAIL);
-  
-    // await page.click(passSelector);
-    // await page.keyboard.type(process.env.FBPASSWORD);
-  
-    await page.click(buttonSelector);
-  
-    await page.waitForNavigation();
-  
-    await page.click(passSelector);
-    await page.keyboard.type(process.env.FBPASSWORD);
-  
-    await page.click(buttonSelector);
-  
-    await page.waitForNavigation();
-  
-    const wordToSearch = changeValue(keyword)
-    const searchUrl = `https://www.facebook.com/search/str/${wordToSearch}/stories-keyword/stories-public`;
-  
-    await page.goto(searchUrl);
-    await page.waitFor(2*1000);
-  
-    // Scroll and extract items from the page.
-    const items = await scrapeInfiniteScrollItems(page, extractItemsFB, 50);
-    let joinItem = items.join('$%@')
-    // Save extracted items to a file.
-    //console.log(items)
-  
-    // Close the browser.
-    await browser.close();
-
-    Translate.translate(`${joinItem}`, { from: 'id', to: 'en' }, (err, translate) => {
-        let resultTranslate = translate.text[0]
-
-        let splitTranslate = resultTranslate.split('$%@')
-
-        const resultNegative = []
-        const resultPositive = []
-        const resultNeutral = []
-
-        let ID = 0 
-        if (ID < splitTranslate.length) {
-            checksentiment(splitTranslate[ID])
-        }else{ 
-            //console.log(result)
-        }
-        function checksentiment(params) {
-
-            const parameters = {
-                'text': `${params}`,
-                'features': {
-                    'sentiment': {
-                        'document': true
-                    }
-                }
-            }
-
-            natural_language_understanding.analyze(parameters, ( err, response ) => {
-                if(response!=null){
-                    if (response.sentiment.document.label=='negative') {
-                        let sent = response.sentiment.document
-                        sent["detail"] = params
-                        resultNegative.push(sent)
-                    }else if(response.sentiment.document.label=='positive'){
-                        let sent = response.sentiment.document
-                        sent["detail"] = params
-                        resultPositive.push(sent)
-                    }else{
-                        let sent = response.sentiment.document
-                        sent["detail"] = params
-                        resultNeutral.push(sent)
-                    }
-                }
-                ID++
-                if ( ID < splitTranslate.length){
-                    checksentiment(splitTranslate[ID])
-                }
-                else{
-                    let saveFacebook = new Facebook({ 
-                        negative: resultNegative,
-                        positive: resultPositive,
-                        neutral: resultNeutral,
-                        keyword
-                    })
-                    saveFacebook.save(function(err, response) {
-                        User.findByIdAndUpdate(idUser, {
-                            $push: { facebook: response._id}
-                        }, {new: true, runValidators: true})
-                        .then(user => {
-                          res.status(200).json({
-                              info: 'done save facebook data to Database'
-                          })
-                        })
-                        .catch(err => {
-                          console.log(err)
-                        })
-                    })
-                }
-            })
-        }
-    })
-  },
-
-  async fbScrapeProfile (req, res, next) {
-  
-    // Set up browser and page.
-    const browser = await puppeteer.launch({
-      headless: true,
+      headless: false,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
@@ -572,14 +279,14 @@ module.exports = {
   
     await page.waitForNavigation();
     
-    const wordToSearch = changeValue(req.body.keyword)
+    const wordToSearch = changeValue(keyword)
     const searchUrl = `https://www.facebook.com/search/str/${wordToSearch}/stories-keyword/stories-opinion`;
   
     await page.goto(searchUrl);
     // await page.screenshot({ path: 'screenshots/check.png' });
   
     // Scroll and extract items from the page.
-    const opinions = await scrapeInfiniteScrollItems(page, extractItemsFBProfile, 100);
+    const opinions = await scrapeInfiniteScrollItems(page, extractItemsFBProfile, 20);
 
     // Go to each profile url to obtain their information
     let allProfiles = []
@@ -624,92 +331,154 @@ module.exports = {
       })
     }
 
-    let genderData = {
-      male: {
-        below20: 0, // 1- 19
-        below30: 0, // 20 - 29
-        below40: 0, // 30 - 39
-        below50: 0, // 40 - 49
-        above50: 0, // >= 50
-        unknown: 0,
-      },
-      female: {
-        below20: 0, // 1- 19
-        below30: 0, // 20 - 29
-        below40: 0, // 30 - 39
-        below50: 0, // 40 - 49
-        above50: 0, // >= 50
-        unknown: 0
-      },
-      unknown: {
-        below20: 0, // 1- 19
-        below30: 0, // 20 - 29
-        below40: 0, // 30 - 39
-        below50: 0, // 40 - 49
-        above50: 0, // >= 50
-        unknown: 0,
-      }
-    }
+    // let genderData = {
+    //   male: {
+    //     below20: 0, // 1- 19
+    //     below30: 0, // 20 - 29
+    //     below40: 0, // 30 - 39
+    //     below50: 0, // 40 - 49
+    //     above50: 0, // >= 50
+    //     unknown: 0,
+    //   },
+    //   female: {
+    //     below20: 0, // 1- 19
+    //     below30: 0, // 20 - 29
+    //     below40: 0, // 30 - 39
+    //     below50: 0, // 40 - 49
+    //     above50: 0, // >= 50
+    //     unknown: 0
+    //   },
+    //   unknown: {
+    //     below20: 0, // 1- 19
+    //     below30: 0, // 20 - 29
+    //     below40: 0, // 30 - 39
+    //     below50: 0, // 40 - 49
+    //     above50: 0, // >= 50
+    //     unknown: 0,
+    //   }
+    // }
+
+    // for (let i = 0; i < allProfiles.length; i++) {
+    //   if (allProfiles[i].gender == 'Male') {
+    //     if (allProfiles[i].age < 20) {
+    //       genderData.male.below20++
+    //     } else if (allProfiles[i].age >= 20 && allProfiles[i].age < 30) {
+    //       genderData.male.below30++
+    //     } else if (allProfiles[i].age >= 30 && allProfiles[i].age < 40) {
+    //       genderData.male.below40++
+    //     } else if (allProfiles[i].age >= 40 && allProfiles[i].age < 50) {
+    //       genderData.male.below50++
+    //     } else if (allProfiles[i].age >= 50) {
+    //       genderData.male.above50++
+    //     } else {
+    //       genderData.male.unknown++
+    //     }
+    //   } else if (allProfiles[i].gender == 'Female') {
+    //     if (allProfiles[i].age < 20) {
+    //       genderData.female.below20++
+    //     } else if (allProfiles[i].age >= 20 && allProfiles[i].age < 30) {
+    //       genderData.female.below30++
+    //     } else if (allProfiles[i].age >= 30 && allProfiles[i].age < 40) {
+    //       genderData.female.below40++
+    //     } else if (allProfiles[i].age >= 40 && allProfiles[i].age < 50) {
+    //       genderData.female.below50++
+    //     } else if (allProfiles[i].age >= 50) {
+    //       genderData.female.above50++
+    //     } else {
+    //       genderData.female.unknown++
+    //     }
+    //   } else {
+    //     if (allProfiles[i].age < 20) {
+    //       genderData.unknown.below20++
+    //     } else if (allProfiles[i].age >= 20 && allProfiles[i].age < 30) {
+    //       genderData.unknown.below30++
+    //     } else if (allProfiles[i].age >= 30 && allProfiles[i].age < 40) {
+    //       genderData.unknown.below40++
+    //     } else if (allProfiles[i].age >= 40 && allProfiles[i].age < 50) {
+    //       genderData.unknown.below50++
+    //     } else if (allProfiles[i].age >= 50) {
+    //       genderData.unknown.above50++
+    //     } else {
+    //       genderData.unknown.unknown++
+    //     }
+    //   }
+    // }
+
+    let genderData = [
+      {name: '< 20', Male: 0, Female: 0, Unknown: 0},
+      {name: '20-29', Male: 0, Female: 0, Unknown: 0},
+      {name: '30-39', Male: 0, Female: 0, Unknown: 0},
+      {name: '40-49', Male: 0, Female: 0, Unknown: 0},
+      {name: '>= 50', Male: 0, Female: 0, Unknown: 0},
+      {name: 'Unknown', Male: 0, Female: 0, Unknown: 0},
+    ]
 
     for (let i = 0; i < allProfiles.length; i++) {
       if (allProfiles[i].gender == 'Male') {
         if (allProfiles[i].age < 20) {
-          genderData.male.below20++
+          genderData[0].Male++
         } else if (allProfiles[i].age >= 20 && allProfiles[i].age < 30) {
-          genderData.male.below30++
+          genderData[1].Male++
         } else if (allProfiles[i].age >= 30 && allProfiles[i].age < 40) {
-          genderData.male.below40++
+          genderData[2].Male++
         } else if (allProfiles[i].age >= 40 && allProfiles[i].age < 50) {
-          genderData.male.below50++
+          genderData[3].Male++
         } else if (allProfiles[i].age >= 50) {
-          genderData.male.above50++
+          genderData[4].Male++
         } else {
-          genderData.male.unknown++
+          genderData[5].Male++
         }
       } else if (allProfiles[i].gender == 'Female') {
         if (allProfiles[i].age < 20) {
-          genderData.female.below20++
+          genderData[0].Female++
         } else if (allProfiles[i].age >= 20 && allProfiles[i].age < 30) {
-          genderData.female.below30++
+          genderData[1].Female++
         } else if (allProfiles[i].age >= 30 && allProfiles[i].age < 40) {
-          genderData.female.below40++
+          genderData[2].Female++
         } else if (allProfiles[i].age >= 40 && allProfiles[i].age < 50) {
-          genderData.female.below50++
+          genderData[3].Female++
         } else if (allProfiles[i].age >= 50) {
-          genderData.female.above50++
+          genderData[4].Female++
         } else {
-          genderData.female.unknown++
+          genderData[5].Female++
         }
       } else {
         if (allProfiles[i].age < 20) {
-          genderData.unknown.below20++
+          genderData[0].Unknown++
         } else if (allProfiles[i].age >= 20 && allProfiles[i].age < 30) {
-          genderData.unknown.below30++
+          genderData[1].Unknown++
         } else if (allProfiles[i].age >= 30 && allProfiles[i].age < 40) {
-          genderData.unknown.below40++
+          genderData[2].Unknown++
         } else if (allProfiles[i].age >= 40 && allProfiles[i].age < 50) {
-          genderData.unknown.below50++
+          genderData[3].Unknown++
         } else if (allProfiles[i].age >= 50) {
-          genderData.unknown.above50++
+          genderData[4].Unknown++
         } else {
-          genderData.unknown.unknown++
+          genderData[5].Unknown++
         }
       }
-
     }
 
-    // console.log(items)
-    // let joinItem = items.join('$%@')
-    // Save extracted items to a file.
-  
     // Close the browser.
     await browser.close();
-
-    res.status(200).json({
-      data: allProfiles,
-      genderData
+    let saveFacebook = new FacebookScrape({ 
+      profile: allProfiles,
+      genderData,
+      keyword,
+      userId: idUser
     })
-  
+    saveFacebook.save(function(err, response) {
+        User.findByIdAndUpdate(idUser, {
+            $push: { scrapefacebook: response._id}
+        }, {new: true, runValidators: true})
+        .then(() => {
+            console.log('done save Facebook data to Database')
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    })
+
   },
 
   async newsScrape (req, res, next) {
@@ -796,81 +565,26 @@ module.exports = {
       }
 
       //let detikTitiles = []
-  
-      let joinItem = allNews.join('$%@')
+      await browser.close();
 
-      Translate.translate(`${joinItem}`, { from: 'id', to: 'en' }, (err, translate) => {
-        let resultTranslate = translate.text[0]
+      let saveNews = new NewsScrape({ 
+        profile: allNews,
+        keyword,
+        userId: idUser
+      })
+      saveNews.save(function(err, response) {
+          User.findByIdAndUpdate(idUser, {
+              $push: { scrapenews: response._id}
+          }, {new: true, runValidators: true})
+          .then(() => {
+              console.log('done save news data to Database')
+          })
+          .catch(err => {
+            console.log(err)
+          })
+      })
 
-        let splitTranslate = resultTranslate.split('$%@')
 
-        const resultNegative = []
-        const resultPositive = []
-        const resultNeutral = []
-
-        let ID = 0 
-        if (ID < splitTranslate.length) {
-            checksentiment(splitTranslate[ID])
-        }else{ 
-            //console.log(result)
-        }
-        function checksentiment(params) {
-
-            const parameters = {
-                'text': `${params}`,
-                'features': {
-                    'sentiment': {
-                        'document': true
-                    }
-                }
-            }
-
-            natural_language_understanding.analyze(parameters, ( err, response ) => {
-                if(response!=null){
-                    if (response.sentiment.document.label=='negative') {
-                        let sent = response.sentiment.document
-                        sent["detail"] = params
-                        resultNegative.push(sent)
-                    }else if(response.sentiment.document.label=='positive'){
-                        let sent = response.sentiment.document
-                        sent["detail"] = params
-                        resultPositive.push(sent)
-                    }else{
-                        let sent = response.sentiment.document
-                        sent["detail"] = params
-                        resultNeutral.push(sent)
-                    }
-                }
-                ID++
-                if ( ID < splitTranslate.length){
-                    checksentiment(splitTranslate[ID])
-                }
-                else{
-                    let saveNews = new News({ 
-                        negative: resultNegative,
-                        positive: resultPositive,
-                        neutral: resultNeutral,
-                        keyword
-                    })
-                    saveNews.save(function(err, response) {
-                        User.findByIdAndUpdate(idUser, {
-                            $push: { news: response._id}
-                        }, {new: true, runValidators: true})
-                        .then(user => {
-                          res.status(200).json({
-                              info: 'done save News data to Database'
-                          })
-                        })
-                        .catch(err => {
-                          console.log(err)
-                        })
-                    })
-                }
-            })
-        }
-    })
-  
-      browser.close();
     } catch (error) {
       console.log(error)
     }
