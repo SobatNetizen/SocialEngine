@@ -1,0 +1,84 @@
+.border-check {
+  border: 1px solid red;
+  height: 90vh;
+}
+
+.border-good {
+  border: 2px solid green;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.border-bad {
+  border: 2px solid red;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.border-neutral {
+  border: 2px solid darkgrey;
+  padding: 10px;
+  border-radius: 10px;
+  margin-left: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.border-facebook {
+  border: 2px solid rgb(0, 36, 128);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.name {
+  font-weight: bold;
+}
+
+.post {
+  padding-left: 10px;
+  padding-right: 10px;
+  text-align: justify;
+  font-size: 14px;
+}
+
+.source {
+  margin-top: 5px;
+  font-size: 12px;
+  font-style: italic;
+}
+
+.color-facebook {
+  color: rgb(0, 36, 128);
+  text-align: right;
+  font-weight: bold;
+}
+
+.border-twitter {
+  border: 2px solid rgb(41, 169, 238);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.color-twitter {
+  color: rgb(41, 169, 238);
+  text-align: right;
+  font-weight: bold;
+}
+
+.border-news {
+  border: 2px solid rgb(255, 238, 0);
+  border-radius: 8px;
+  padding: 10px;
+}
+
+.color-news {
+  color: rgb(255, 238, 0);
+  text-align: right;
+  font-weight: bold;
+}

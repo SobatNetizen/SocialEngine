@@ -107,10 +107,11 @@ class HomePanel extends Component {
     render() {
         const token = localStorage.getItem('token')
         if(token==null){
-            this.props.history.push({ pathname: '/' })
+            this.props.history.push({ pathname: '/index' })
         }
         return (
           <div>
+            <Row style={{ paddingTop: 70, backgroundColor: 'white' }} />
             <Row>
               <Col sm="2" className="no-padding-left-right">
                 <div className="sidenav">
