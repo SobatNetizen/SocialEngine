@@ -33,8 +33,9 @@ module.exports = {
         let { email, password } = req.body
 
         try {
-            let user = await User.findOne({email})   
-                                   
+            let user = await User.findOne({email})
+                        .populate('twitter').populate('facebook').populate('news').populate('google')   
+                    
             if (!user || !bcrypt.compareSync(password, user.password)) {
 
                 throw ({status: 400, message: 'Email/password salah'})
@@ -51,7 +52,11 @@ module.exports = {
                         id: user._id,
                         companyname: user.companyname,
                         email: user.email,
-                        keywords: user.keywords
+                        keywords: user.keywords,
+                        twitter: user.twitter,              
+                        facebook: user.facebook,                            
+                        news: user.news,
+                        google: user.google
                     }
                 })
             }
