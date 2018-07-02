@@ -4,7 +4,6 @@ import { Container, Row, Col,
 } from 'reactstrap';
 
 import ChartGoogleTrend from '../components/ChartGoogleTrend';
-import SocialChart from '../components/SentimentAnalysist';
 import SentimenChart from '../components/socialsource/SentimenChart';
 import RegionChart from '../components/RegionChart';
 import TagChart from '../components/TagChart';
@@ -22,7 +21,7 @@ import GenderChart from '../components/demography/GenderChart';
 class HomePage extends Component {
     render() {
         const token = localStorage.getItem('token')
-        if(token==null){
+        if(token===null){
             this.props.history.push({ pathname: '/' })
         }
         return (
