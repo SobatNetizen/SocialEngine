@@ -27,6 +27,11 @@ class HomePage extends Component {
     componentDidMount () {
         this.props.getUser()
     }
+    
+    // componentDidMount () {
+    //     this.props.getHistory()
+    //     console.log('did')
+    // }
 
     render() {
         const token = localStorage.getItem('token')

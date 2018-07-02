@@ -1,5 +1,6 @@
 const initialState = {
   user: {},
+  history: [],
   loading: false,
   error: {
     status: false,
@@ -19,6 +20,11 @@ const userreducer = (state={ ...initialState }, action) => {
       return ({
         ...state,
         loading: true
+      })
+    case 'LOAD_HISTORY':
+      return ({
+        ...state,
+        history: action.payload
       })
     case 'LOAD_USER_FAILED':
       return ({
