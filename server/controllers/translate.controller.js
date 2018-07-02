@@ -127,7 +127,110 @@ module.exports = {
 
     },
     facebook: async ( req , res ) => {
-    
+        const {
+            id,
+            userId,
+            keyword
+        } = req.body
+
+        FacebookScrape.findById(id)
+        .then(result => {
+
+            let profile = result.profile
+            let resultTranslate = []
+
+            let ID = 0 
+            if (ID < profile.length) {
+                doCall(profile[ID])
+            }else{ 
+                //console.log(result)
+            }
+            function doCall(params) {
+
+                Translate.translate(`${params.opinion}`, { from: 'id', to: 'en' }, (err, translate) => {
+                    if (translate!=null) {
+                        let oldTwitter = params
+                        oldTwitter["translate"] = translate.text
+                        resultTranslate.push(oldTwitter)
+                    }
+                    ID++
+                    if ( ID < profile.length){
+                        doCall(profile[ID])
+                    }
+                    else{ 
+                        const negative = []
+                        const positive = []
+                        const neutral = []
+
+                        let ID = 0 
+                        if (ID < resultTranslate.length) {
+                            checksentiment(resultTranslate[ID])
+                        }else{ 
+                            //console.log(result)
+                        }
+                        function checksentiment(params) {
+
+                            const parameters = {
+                                'text': `${params.opinion}`,
+                                'features': {
+                                    'sentiment': {
+                                        'document': true
+                                    }
+                                }
+                            }
+
+                            natural_language_understanding.analyze(parameters, ( err, response ) => {
+                                if(response!=null){
+                                    if (response.sentiment.document.label=='negative') {
+                                        let sent = response.sentiment.document
+                                        sent["detail"] = params
+                                        negative.push(sent)
+                                    }else if(response.sentiment.document.label=='positive'){
+                                        let sent = response.sentiment.document
+                                        sent["detail"] = params
+                                        positive.push(sent)
+                                    }else{
+                                        let sent = response.sentiment.document
+                                        sent["detail"] = params
+                                        neutral.push(sent)
+                                    }
+                                }
+                                ID++
+                                if ( ID < resultTranslate.length){
+                                    checksentiment(resultTranslate[ID])
+                                }
+                                else{
+                                    let saveFacebook = new Facebook({ 
+                                        negative,
+                                        positive,
+                                        neutral,
+                                        keyword,
+                                        userId
+                                    })
+                                    saveFacebook.save(function(err, response) {
+                                        User.findByIdAndUpdate(userId, {
+                                            $push: { facebook: response._id}
+                                        }, {new: true, runValidators: true})
+                                        .then(user => {
+                                            res.status(200).json({
+                                                info: 'done save Facebook data to Database'
+                                            })
+                                        })
+                                        .catch(err => {
+                                            console.log(err)
+                                        })
+                                    })
+                                }
+                            })
+                        }
+                    }
+                })
+            }
+
+        })
+        .catch(err => {
+            console.log(err)
+        })
     },
     news: async ( req , res ) => {
 
