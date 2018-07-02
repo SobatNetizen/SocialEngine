@@ -24,7 +24,7 @@ import GenderChart from '../components/GenderChart';
 
 class HomePage extends Component {
     componentDidMount () {
-        this.props.getUser()
+        // this.props.getUser()
     }
     
     // componentDidMount () {
@@ -38,7 +38,7 @@ class HomePage extends Component {
             this.props.history.push({ pathname: '/' })
         }
         return (
-            <Container fluid style={{ marginTop: 15, marginBottom: 60 }}>
+            <Container fluid style={{ marginTop: 70, marginBottom: 60 }}>
                 <Row style={{ marginBottom: 15 }}>
                     <Col sm="12">
                         <Card>

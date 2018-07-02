@@ -33,6 +33,12 @@ ul {
   width: 400px;
 }
 
+.input-password {
+  margin-left: 10px;
+  border-radius: 5px;
+  width: 85%;
+}
+
 .add-icon {
   font-size: 40px;
   background-color: white;
@@ -82,18 +88,39 @@ ul {
 
 
 /* NAVBAR */
+@import url('https://fonts.googleapis.com/css?family=Montserrat:900|Poiret+One|Questrial|Raleway:700|Righteous');
+
+.navbar {
+  /* background-color: #9D3862 !important; */
+  padding-left: 50px !important;
+  padding-right: 50px !important;
+  height: 70px;
+}
 
 .nav-settings {
   border: 2px solid darkgrey;
   border-radius: 20px;
   margin: 5px;
+  padding-left: 20px !important;
+  padding-right: 20px !important;
+}
+
+.navbar-brand {
+  /* font-family: 'Questrial', sans-serif; */
+  /* font-family: 'Righteous', cursive; */
+  /* font-family: 'Poiret One', cursive; */
+  font-family: 'Raleway', sans-serif;
+  /* font-family: 'Montserrat', sans-serif; */
+  color: #9D3862 !important;
+  font-size: 40px !important;
+  padding-right: 10px !important;
 }
 
 .nav-settings:hover {
   border: 2px solid #9D3862;
   border-radius: 20px;
   margin: 5px;
-  background-color: white;
+  /* background-color: white; */
 }
 
 .nav-dropdown {
@@ -108,14 +135,14 @@ ul {
 /* INDEX */
 .one-row {
   /* border: 1px solid black; */
-  /* background-color: white; */
+  background-color: #FAFAFA;
   height: 500px;
   padding: 0px !important;
 }
 
 .two-row {
   /* border: 1px solid red; */
-  /* background-color: white; */
+  background-color: #FAFAFA;
   height: 500px;
   padding: 0px !important;
 }
@@ -130,17 +157,62 @@ ul {
 }
 
 .index-head {
-  border: 1px solid black;
+  /* border: 1px solid black; */
+  margin-top: 20%;
+  text-align: left;
 }
 
 .index-one {
-  border: 1px solid green;
+  /* border: 1px solid green; */
+  font-size: 20px;
+  height: 20px;
 }
 
 .index-two {
-  border: 1px solid red;
+  /* border: 1px solid red; */
+  font-size: 40px;
+  height: 40px;
+  padding-bottom: 5px;
+  color: #9D3862;
+  font-weight: bold;
 }
 
 .index-three {
-  border: 1px solid blue;
+  /* border: 1px solid blue; */
+  font-size: 14px;
+  padding-top: 10px;
+}
+
+.margin-bottom-10 {
+  margin-bottom: 40px;
+}
+
+.label-auth {
+  margin-bottom: 0px;
+}
+
+.color-maroon {
+  color: #9D3862; 
+}
+
+.small-auth {
+  margin-top: 40px !important;
+}
+
+.h3-margin-0 {
+  margin-bottom: 0px !important;
+}
+
+.img-logo-radar {
+  width: 100%;
+  padding-right: 40px;
+  padding-left: 10px;
+  border-right: 1px solid #9D3862;
+}
+
+
+/* Profile Page */
+
+.text-left {
+  text-align: left !important;
 }

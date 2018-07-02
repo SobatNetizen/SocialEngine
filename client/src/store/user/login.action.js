@@ -7,16 +7,16 @@ export const login = (email, password, history) => {
     axios.post('http://localhost:3001/users/login',{ email, password })
     .then(result => {
         localStorage.setItem('token', result.headers.token)
-        swal('success', result.data.message, 'success')
-        // this.props.history.push({ pathname: '/home' })
+        swal('Success', result.data.message, 'success')
+        // this.props.history.push({ pathname: '/dashboard' })
         dispatch(loginSuccess(result.data.user))
-        history.push({ pathname: '/home' })
+        history.push({ pathname: '/dashboard' })
     })
     .catch(err =>{
         dispatch(loginFailed())
-        swal('info', 
+        swal('Info', 
         err.message=='Request failed with status code 400' ?
-        'Tolong isi kolom email dan password' : err.message
+        'Please input with correct email and password' : err.message
         , 'info')
     })
   }

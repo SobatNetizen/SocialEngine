@@ -1,7 +1,7 @@
 import { createStore, applyMiddleware, combineReducers } from 'redux'
 import thunk from 'redux-thunk'
 
-import historyreducer from './history/history.reducer'
+// import historyreducer from './history/history.reducer'
 import userreducer from './user/user.reducer'
 import dashreducer from './dashboard/dashboard.reducer'
 // import dotaReducer from './dota/dota.reducer';
