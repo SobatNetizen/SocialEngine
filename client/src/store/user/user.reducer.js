@@ -9,18 +9,18 @@ const initialState = {
 
 const userreducer = (state={ ...initialState }, action) => {
   switch (action.type) {
-    case 'LOAD_LOGIN_SUCCESS':
+    case 'LOAD_USER_SUCCESS':
       return ({
         ...state,
         user: action.payload,
         loading: false
       })
-    case 'LOAD_LOGIN_LOADING':
+    case 'LOAD_USER_LOADING':
       return ({
         ...state,
         loading: true
       })
-    case 'LOAD_LOGIN_FAILED':
+    case 'LOAD_USER_FAILED':
       return ({
         ...state,
         error: {

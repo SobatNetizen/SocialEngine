@@ -6,7 +6,8 @@ const {
   updateUser,
   deleteUser,
   changePassword,
-  addKeyword
+  addKeyword,
+  getUser
 } = require('../controllers/user.controller')
 const { 
   authentication,
@@ -15,6 +16,7 @@ const {
 
 router.post('/register', registerUser)
 router.post('/login', loginUser)
+router.get('/getuser', authentication, authorisation, getUser)
 router.put('/', updateUser)
 router.put('/keyword', authentication, authorisation, addKeyword)
 router.put('/pass', changePassword)
