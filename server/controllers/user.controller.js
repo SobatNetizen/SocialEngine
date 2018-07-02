@@ -1,10 +1,28 @@
 const User = require('../models/user.model')
+const History = require('../models/history.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
 const secret = process.env.SECRET
 
 module.exports = {
+    
+    async history (req , res ){
+        const {
+            keyword
+        } = req.body
+
+        try{
+            let history = await History.find({keyword})
+            res.status(200).json({
+                history
+            })
+        }   
+        catch(err){
+            console.log(err)
+        }
+    },
+
     async registerUser (req, res, next) {        
         try {
             let user = await User.create(req.body)        
