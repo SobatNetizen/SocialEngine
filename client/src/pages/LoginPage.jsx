@@ -26,6 +26,21 @@ class LoginPage extends Component {
     handleSubmit = ( event ) => {
         event.preventDefault()
         this.props.login( this.state.email, this.state.password, this.props.history )
+        let self = this
+        let email = self.state.email
+        let password = self.state.password
+        axios.post('http://localhost:3001/users/login',{ email, password })
+        .then(result => {
+            localStorage.setItem('token', result.headers.token)
+            swal('success', result.data.message, 'success')
+            this.props.history.push({ pathname: '/home' })
+        })
+        .catch(err =>{
+            swal('info', 
+            err.message==='Request failed with status code 400' ?
+            'Tolong isi kolom email dan password' : err.message
+            , 'info')
+        })
     }
 
     render() {
