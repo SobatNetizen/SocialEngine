@@ -10,6 +10,7 @@ class HomePanel extends Component {
       this.state = {
         status: 'keywords',
         statusKeyword: 'disabled',
+        statusSent: false,
         keywordToShow: '',
         keywords: [{
           keyword: 'samsung',
@@ -27,6 +28,7 @@ class HomePanel extends Component {
     getKeywords() {
       this.setState({
         status: 'keywords',
+        statusSent: false
       })
       if (this.state.statusKeyword === 'disabled') {
         this.setState({
@@ -82,6 +84,10 @@ class HomePanel extends Component {
       axios.put('http://localhost:3001/users/keyword', input, config)
       .then(response => {
         console.log(response)
+        this.setState({
+          statusSent: true
+        })
+  
       })
       .catch(err => {
         console.log('ERROR: dashboard add keyword')
@@ -112,7 +118,7 @@ class HomePanel extends Component {
                     className="sidenav-panel"
                     onClick={ () => this.getKeywords()}
                   >
-                    Keywords
+                    Saved Keywords
                   </div>
                   <div
                     className="sidenav-bottom"
@@ -159,7 +165,7 @@ class HomePanel extends Component {
                   <div></div>
                 }
                 {
-                  this.state.status === 'keywords' ?
+                  this.state.status === 'keywords' && this.state.statusSent === false ?
                   <div>
                     Add Keywords
                     <div>
@@ -202,7 +208,23 @@ class HomePanel extends Component {
                       }
                   </div>
                   :
-                  <div></div>
+                  <div className="loading-icon animated fadeIn">
+                    <div
+                      className="loading-text"
+                    >
+                      <img src={require('../assets/image/loading_icon.gif')} />
+                    </div>
+                    <div
+                      className="loading-text"
+                    >
+                      Your keyword has been saved and is being processed by our Social Engine.
+                    </div>
+                    <div
+                      className="loading-text"
+                    >
+                      We'll notify you via email when your result is finished.
+                    </div>
+                  </div>
                 }
                 {
                   this.state.status === 'history' ?
