@@ -7,7 +7,6 @@ import dashreducer from './dashboard/dashboard.reducer'
 // import dotaReducer from './dota/dota.reducer';
 
 const rootReducer = combineReducers({
-  history: historyreducer,
   user: userreducer,
   dashboard: dashreducer
 })
