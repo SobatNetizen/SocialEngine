@@ -11,6 +11,8 @@ const News = require('../models/news.model')
 const NewsScrape = require('../models/scrape/news.model')
 const Google = require('../models/google.model')
 
+const History = require('../models/history.model')
+
 const NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js')
 const natural_language_understanding = new NaturalLanguageUnderstandingV1({
   'username': process.env.USERNAMEWATSON,
@@ -93,25 +95,25 @@ module.exports = {
                                     checksentiment(resultTranslate[ID])
                                 }
                                 else{
-                                    let saveTwitter = new Twitter({ 
-                                        negative,
-                                        positive,
-                                        neutral,
+                                    History.create({
                                         keyword,
-                                        userId
+                                        result: [{
+                                            'twitter': [
+                                                negative,
+                                                positive,
+                                                neutral,
+                                                keyword,
+                                                userId
+                                            ]
+                                        }]
                                     })
-                                    saveTwitter.save(function(err, response) {
-                                        User.findByIdAndUpdate(userId, {
-                                            $push: { twitter: response._id}
-                                        }, {new: true, runValidators: true})
-                                        .then(user => {
-                                            res.status(200).json({
-                                                info: 'done save Twitter data to Database'
-                                            })
+                                    .then( result => {
+                                        res.status(200).json({
+                                            info: 'done save Twitter data to Database'
                                         })
-                                        .catch(err => {
-                                            console.log(err)
-                                        })
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
                                     })
                                 }
                             })
@@ -200,26 +202,45 @@ module.exports = {
                                     checksentiment(resultTranslate[ID])
                                 }
                                 else{
-                                    let saveFacebook = new Facebook({ 
-                                        negative,
-                                        positive,
-                                        neutral,
-                                        keyword,
-                                        userId
+                                    History.findOneAndUpdate({keyword},
+                                        { $push: { result: {
+                                            'facebook': [
+                                                negative,
+                                                positive,
+                                                neutral,
+                                                keyword,
+                                                userId
+                                            ]
+                                        }}
                                     })
-                                    saveFacebook.save(function(err, response) {
-                                        User.findByIdAndUpdate(userId, {
-                                            $push: { facebook: response._id}
-                                        }, {new: true, runValidators: true})
-                                        .then(user => {
-                                            res.status(200).json({
-                                                info: 'done save Facebook data to Database'
-                                            })
-                                        })
-                                        .catch(err => {
-                                            console.log(err)
+                                    .then( result => {
+                                        res.status(200).json({
+                                            info: 'done save facebook data to Database'
                                         })
                                     })
+                                    .catch(err => {
+                                        console.log(err)
+                                    })
+                                    // let saveFacebook = new Facebook({ 
+                                    //     negative,
+                                    //     positive,
+                                    //     neutral,
+                                    //     keyword,
+                                    //     userId
+                                    // })
+                                    // saveFacebook.save(function(err, response) {
+                                    //     User.findByIdAndUpdate(userId, {
+                                    //         $push: { facebook: response._id}
+                                    //     }, {new: true, runValidators: true})
+                                    //     .then(user => {
+                                    //         res.status(200).json({
+                                    //             info: 'done save Facebook data to Database'
+                                    //         })
+                                    //     })
+                                    //     .catch(err => {
+                                    //         console.log(err)
+                                    //     })
+                                    // })
                                 }
                             })
                         }
@@ -305,25 +326,24 @@ module.exports = {
                                     checksentiment(resultTranslate[ID])
                                 }
                                 else{
-                                    let saveNews = new News({ 
-                                        negative,
-                                        positive,
-                                        neutral,
-                                        keyword,
-                                        userId
+                                    History.findOneAndUpdate({keyword},
+                                        { $push: { result: {
+                                            'news': [
+                                                negative,
+                                                positive,
+                                                neutral,
+                                                keyword,
+                                                userId
+                                            ]
+                                        }}
                                     })
-                                    saveNews.save(function(err, response) {
-                                        User.findByIdAndUpdate(userId, {
-                                            $push: { news: response._id}
-                                        }, {new: true, runValidators: true})
-                                        .then(user => {
-                                            res.status(200).json({
-                                                info: 'done save News data to Database'
-                                            })
+                                    .then( result => {
+                                        res.status(200).json({
+                                            info: 'done save News data to Database'
                                         })
-                                        .catch(err => {
-                                            console.log(err)
-                                        })
+                                    })
+                                    .catch(err => {
+                                        console.log(err)
                                     })
                                 }
                             })
@@ -349,27 +369,47 @@ module.exports = {
             let queries = await axios.post('http://localhost:3001/google/queries', { keyword, geocode })
             let topics = await axios.post('http://localhost:3001/google/topics', { keyword, geocode })
             
-            let saveGoogle = await new Google({ 
-                time: time.data.result,
-                region: region.data.regionData,
-                queries: queries.data.result,
-                topics: topics.data.result,
-                keyword,
-                userId
+            History.findOneAndUpdate({keyword},
+                { $push: { result: {
+                    'google': [
+                        time.data.result,
+                        region.data.regionData,
+                        queries.data.result,
+                        topics.data.result,
+                        keyword,
+                        userId
+                    ]
+                }}
             })
-            saveGoogle.save(function(err, response) {
-                User.findByIdAndUpdate(userId, {
-                    $push: { google: response._id}
-                }, {new: true, runValidators: true})
-                .then(user => {
-                    res.status(200).json({
-                        info: 'done save Google data to Database'
-                    })
-                })
-                .catch(err => {
-                    console.log(err)
+            .then( result => {
+                res.status(200).json({
+                    info: 'done save google data to Database'
                 })
             })
+            .catch(err => {
+                console.log(err)
+            })
+            // let saveGoogle = await new Google({ 
+            //     time: time.data.result,
+            //     region: region.data.regionData,
+            //     queries: queries.data.result,
+            //     topics: topics.data.result,
+            //     keyword,
+            //     userId
+            // })
+            // saveGoogle.save(function(err, response) {
+            //     User.findByIdAndUpdate(userId, {
+            //         $push: { google: response._id}
+            //     }, {new: true, runValidators: true})
+            //     .then(user => {
+            //         res.status(200).json({
+            //             info: 'done save Google data to Database'
+            //         })
+            //     })
+            //     .catch(err => {
+            //         console.log(err)
+            //     })
+            // })
         }
         catch (err) {
             console.log(err)

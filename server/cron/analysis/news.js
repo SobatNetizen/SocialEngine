@@ -8,6 +8,7 @@ var analysisNews = new cron.CronJob({
 
     let id = '5b39ace3f8a81632c7aade10'
     let userId = '5b34aa41b31c366a122df79f'
+    let idHistory = '5b3a0903bb417d046e6dbc0c'
     let keyword = 'samsung'
 
     // let id = '5b39ad57f8a81632c7aade11'
