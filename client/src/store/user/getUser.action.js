@@ -1,11 +1,11 @@
 import axios from 'axios'
 import swal from 'sweetalert';
 
-export const login = (email, password) => {
+export const getUser = () => {
   return dispatch => {
     let token = localStorage.getItem('token')
     dispatch(getUserLoading())
-    axios.get('http://localhost:3001/users/getuser', {} , { headers: { token }})
+    axios.get('http://localhost:3001/users/getuser', { headers: { token }})
     .then(result => {
         // localStorage.setItem('token', result.headers.token)
         // this.props.history.push({ pathname: '/home' })
