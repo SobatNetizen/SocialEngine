@@ -1,7 +1,7 @@
 import axios from 'axios'
 import swal from 'sweetalert';
 
-export const login = (email, password) => {
+export const login = (email, password, history) => {
   return dispatch => {
     dispatch(loginLoading())
     axios.post('http://localhost:3001/users/login',{ email, password })
@@ -10,6 +10,7 @@ export const login = (email, password) => {
         swal('success', result.data.message, 'success')
         // this.props.history.push({ pathname: '/home' })
         dispatch(loginSuccess(result.data.user))
+        history.push({ pathname: '/home' })
     })
     .catch(err =>{
         dispatch(loginFailed())

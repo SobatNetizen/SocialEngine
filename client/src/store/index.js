@@ -3,11 +3,13 @@ import thunk from 'redux-thunk'
 
 import historyreducer from './history/history.reducer'
 import userreducer from './user/user.reducer'
+import dashreducer from './dashboard/dashboard.reducer'
 // import dotaReducer from './dota/dota.reducer';
 
 const rootReducer = combineReducers({
   history: historyreducer,
-  user: userreducer
+  user: userreducer,
+  dashboard: dashreducer
 })
 
 const store = createStore(

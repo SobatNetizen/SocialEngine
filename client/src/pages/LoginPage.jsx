@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { Container, Row, Col, 
     Button, Form, FormGroup, Label, Input } from 'reactstrap';
 
-import axios from 'axios';
-import swal from 'sweetalert';
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { login } from '../store/user/login.action'
 
 class LoginPage extends Component {
 
@@ -19,24 +20,10 @@ class LoginPage extends Component {
         event.preventDefault()
         this.setState({[event.target.name]: event.target.value})
     }
-
-    handleSubmit = (event) => {
+    
+    handleSubmit = ( event ) => {
         event.preventDefault()
-        let self = this
-        let email = self.state.email
-        let password = self.state.password
-        axios.post('http://localhost:3001/users/login',{ email, password })
-        .then(result => {
-            localStorage.setItem('token', result.headers.token)
-            swal('success', result.data.message, 'success')
-            this.props.history.push({ pathname: '/home' })
-        })
-        .catch(err =>{
-            swal('info', 
-            err.message=='Request failed with status code 400' ?
-            'Tolong isi kolom email dan password' : err.message
-            , 'info')
-        })
+        this.props.login( this.state.email, this.state.password, this.props.history )
     }
 
     render() {
@@ -80,4 +67,8 @@ class LoginPage extends Component {
     }
 }
 
-export default LoginPage;
+const mapDispatchToProps = ( dispatch ) => {
+    return bindActionCreators({ login }, dispatch)
+}
+
+export default connect( null, mapDispatchToProps )( LoginPage )

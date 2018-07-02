@@ -1,17 +1,21 @@
-export const getHistory = (historyId) => {
-  return dispatch => {
+export const getHistory = () => {
+  return (dispatch, getState) => {
     dispatch(getDataLoading())
-    fetch('https://rickandmortyapi.com/api/character' /* tinggal tunggu endpoint*/)
-      .then(function(response) {
-        return response.json()
-      })
-      .then(function(result) {
-        // self.setState({pemains: result.results})
-        dispatch(getDataSuccess(result.results /* atur payloadnya*/))
-      })
-      .catch(err => {
-        dispatch(getDataFailed())
-      })
+
+    let history = getState().user.user.keywords
+
+    console.log('ini loh ------------------------------------->>>>>>>>>>>>>> ',history)
+    // fetch('https://rickandmortyapi.com/api/character' /* tinggal tunggu endpoint*/)
+    //   .then(function(response) {
+    //     return response.json()
+    //   })
+    //   .then(function(result) {
+    //     // self.setState({pemains: result.results})
+    //     dispatch(getDataSuccess(result.results /* atur payloadnya*/))
+    //   })
+    //   .catch(err => {
+    //     dispatch(getDataFailed())
+    //   })
   }
 }
 

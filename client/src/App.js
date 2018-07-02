@@ -42,7 +42,7 @@ class App extends Component {
           </Switch>
           <div id="footer">
               <div className="container text-center">
-                <p className="footer-block">© 2018 SobatNetizen. All Rights Reserved.</p>
+                <p className="footer-block">© 2018 Radar Social. All Rights Reserved.</p>
               </div>
           </div>
         </div>

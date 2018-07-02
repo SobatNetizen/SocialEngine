@@ -1,10 +1,28 @@
 const User = require('../models/user.model')
+const History = require('../models/history.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
 
 const secret = process.env.SECRET
 
 module.exports = {
+    
+    async history (req , res ){
+        const {
+            keyword
+        } = req.body
+
+        try{
+            let history = await History.find({keyword})
+            res.status(200).json({
+                history
+            })
+        }   
+        catch(err){
+            console.log(err)
+        }
+    },
+
     async registerUser (req, res, next) {        
         try {
             let user = await User.create(req.body)        
@@ -33,8 +51,9 @@ module.exports = {
         let { email, password } = req.body
 
         try {
-            let user = await User.findOne({email})   
-                                   
+            let user = await User.findOne({email})
+                        .populate('twitter').populate('facebook').populate('news').populate('google')   
+                    
             if (!user || !bcrypt.compareSync(password, user.password)) {
 
                 throw ({status: 400, message: 'Email/password salah'})
@@ -51,7 +70,11 @@ module.exports = {
                         id: user._id,
                         companyname: user.companyname,
                         email: user.email,
-                        keywords: user.keywords
+                        keywords: user.keywords,
+                        twitter: user.twitter,              
+                        facebook: user.facebook,                            
+                        news: user.news,
+                        google: user.google
                     }
                 })
             }

@@ -3,8 +3,13 @@ import { Container, Row, Col,
     Card, CardBody, CardTitle
 } from 'reactstrap';
 
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { getUser } from '../store/user/getUser.action'
+
 import ChartGoogleTrend from '../components/ChartGoogleTrend';
 import SocialChart from '../components/SentimentAnalysist';
+import SentimenChart from '../components/socialsource/SentimenChart';
 import RegionChart from '../components/RegionChart';
 import TagChart from '../components/TagChart';
 import QueryChart from '../components/QueryChart';
@@ -19,9 +24,13 @@ import AgeChart from '../components/demography/AgeChart';
 import GenderChart from '../components/demography/GenderChart';
 
 class HomePage extends Component {
+    componentDidMount () {
+        this.props.getUser()
+    }
+
     render() {
         const token = localStorage.getItem('token')
-        if(token==null){
+        if(token===null){
             this.props.history.push({ pathname: '/' })
         }
         return (
@@ -240,4 +249,8 @@ class HomePage extends Component {
     }
 }
 
-export default HomePage;
+const mapDispatchToProps = ( dispatch ) => {
+    return bindActionCreators({ getUser }, dispatch)
+}
+
+export default connect( null, mapDispatchToProps )( HomePage )
