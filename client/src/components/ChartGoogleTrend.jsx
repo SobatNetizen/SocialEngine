@@ -9,9 +9,9 @@ class ChartGoogleTrend extends Component {
                 <ResponsiveLine
                     data={dataJSON}
                     margin={{
-                        "top": 50,
+                        "top": 20,
                         "right": 10,
-                        "bottom": 100,
+                        "bottom": 80,
                         "left": 60
                     }}
                     minY="auto"
@@ -20,9 +20,9 @@ class ChartGoogleTrend extends Component {
                         "orient": "bottom",
                         "tickSize": 5,
                         "tickPadding": 5,
-                        "tickRotation": -90,
-                        "legend": "country code",
-                        "legendOffset": 100,
+                        "tickRotation": -35,
+                        "legend": "DATE",
+                        "legendOffset": 80,
                         "legendPosition": "center"
                     }}
                     axisLeft={{
@@ -30,7 +30,7 @@ class ChartGoogleTrend extends Component {
                         "tickSize": 5,
                         "tickPadding": 5,
                         "tickRotation": 0,
-                        "legend": "count",
+                        "legend": "VALUE",
                         "legendOffset": -40,
                         "legendPosition": "center"
                     }}

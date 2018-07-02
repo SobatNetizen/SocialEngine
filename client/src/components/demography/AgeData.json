@@ -1,0 +1,47 @@
+[
+  {
+    "country": "<20",
+    "positif": 85,
+    "positifColor": "green",
+    "neutral": 99,
+    "neutralColor": "grey",
+    "negatif": 30,
+    "negatifColor": "blue"
+  },
+  {
+    "country": "<30",
+    "positif": 85,
+    "positifColor": "green",
+    "neutral": 99,
+    "neutralColor": "grey",
+    "negatif": 30,
+    "negatifColor": "blue"
+  },
+  {
+    "country": "<40",
+    "positif": 85,
+    "positifColor": "green",
+    "neutral": 99,
+    "neutralColor": "grey",
+    "negatif": 30,
+    "negatifColor": "blue"
+  },
+  {
+    "country": "<50",
+    "positif": 85,
+    "positifColor": "green",
+    "neutral": 99,
+    "neutralColor": "grey",
+    "negatif": 30,
+    "negatifColor": "blue"
+  },
+  {
+    "country": ">50",
+    "positif": 85,
+    "positifColor": "green",
+    "neutral": 99,
+    "neutralColor": "grey",
+    "negatif": 30,
+    "negatifColor": "blue"
+  }
+]

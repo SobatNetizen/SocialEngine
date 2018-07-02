@@ -6,7 +6,7 @@ const dataFB = [
     {name: 'Neutral', value: 150},
     {name: 'Negatif', value: 75}
 ];
-const COLORS = ['#3D59B3', '#254196'];
+const COLORS = ['blue', 'grey', 'green'];
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({cx, cy, midAngle, innerRadius, outerRadius, percent, index}) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -24,14 +24,14 @@ class NewsChart extends Component {
     render() {
         return (
             <div>
-                <PieChart width={120} height={200} onMouseEnter={this.onPieEnter}>
+                <PieChart width={150} height={180} onMouseEnter={this.onPieEnter}>
                     <Pie
-                    data={dataFB} 
-                    cx={50} 
-                    cy={100} 
+                    data={dataFB}
+                    cx={80} 
+                    cy={83} 
                     labelLine={false}
                     label={renderCustomizedLabel}
-                    outerRadius={50} 
+                    outerRadius={60} 
                     fill="#8884d8"
                     >
                         {

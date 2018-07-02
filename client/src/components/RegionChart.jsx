@@ -12,8 +12,10 @@ class RegionChart extends Component {
                 displayMode: 'markers',
                 colorAxis: { colors: ['orange', 'red'] },
                 enableRegionInteractivity: 'true',
-                backgroundColor: '#2a61b2',
-                backgroundColorStroke: 'green'
+                backgroundColor: '#BBD1DF',
+                datalessRegionColor: '#93bf6e',
+                backgroundColorStroke: 'green',
+                sizeAxis: {minValue: 5, maxSzie: 40},
             },
             data: [
                 ['North Kalimantan',      2761477],
@@ -44,7 +46,7 @@ class RegionChart extends Component {
         return (
             <Chart chartType="GeoChart"
                 width={"100%"}
-                height={"500px"}
+                height={430}
                 rows={this.state.data}
                 columns={columns}
                 options={this.state.option}
