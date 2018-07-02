@@ -28,7 +28,7 @@ class cloudChart extends Component {
         { value: "MongoDBk", count: 18 },
         { value: "Kuntilanak", count: 20 },
         { value: "Pocong", count: 43},
-        { value: "Nodejsx", count: 32 },
+        { value: "Nodejsxg", count: 32 },
         { value: "Jokoko", count: 15 },
         { value: "kasjaks", count: 60 },
         { value: "aghjsgkahsj", count: 40 }

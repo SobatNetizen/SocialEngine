@@ -18,16 +18,16 @@ class AgeChart extends Component {
 	render () {
   	return (
         <div className="BarChart">
-            <BarChart width={700} height={300} data={this.state.data}
-                margin={{top: 5, right: 30, left: 20, bottom: 5}}>
+            <BarChart width={680} height={400} data={this.state.data}
+                margin={{top: 10, right: 30, left: 10, bottom: 5}}>
                 <CartesianGrid strokeDasharray="3 3"/>
                 <XAxis dataKey="name"/>
                 <YAxis/>
                 <Tooltip/>
                 <Legend />
-                <Bar dataKey="Male" fill="blue" />
-                <Bar dataKey="Female" fill="red" />
-                <Bar dataKey="Unknown" fill="grey" />
+                <Bar dataKey="Male" fill="#6cb4ce" />
+                <Bar dataKey="Female" fill="#c45d5d" />
+                <Bar dataKey="Unknown" fill="#a5a5a5" />
             </BarChart>
         </div>
     );

@@ -9,7 +9,6 @@ import { getUser } from '../store/user/getUser.action'
 
 import ChartGoogleTrend from '../components/ChartGoogleTrend';
 import SocialChart from '../components/SentimentAnalysist';
-import SentimenChart from '../components/socialsource/SentimenChart';
 import RegionChart from '../components/RegionChart';
 import TagChart from '../components/TagChart';
 import QueryChart from '../components/QueryChart';
@@ -20,8 +19,8 @@ import TwitterChart from '../components/socialsource/TwitterChart';
 import NewsChart from '../components/socialsource/NewsChart';
 
 // demography
-import AgeChart from '../components/demography/AgeChart';
-import GenderChart from '../components/demography/GenderChart';
+import AgeChart from '../components/AgeChart';
+import GenderChart from '../components/GenderChart';
 
 class HomePage extends Component {
     componentDidMount () {
@@ -118,8 +117,8 @@ class HomePage extends Component {
                             </CardBody>
                         </Card>
                     </Col>
-                    <Col sm="7" style={{ marginLeft: -15, paddingRight: 0, maxHeight: 450, minHeight: 450 }}>
-                        <Card style={{ marginBottom: 15 }}>
+                    <Col sm="7" style={{ marginLeft: -15, marginTop: -50, paddingRight: 0, maxHeight: 450, minHeight: 450 }}>
+                        <Card>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
                                     <CardTitle 
@@ -200,7 +199,7 @@ class HomePage extends Component {
                             </CardBody>
                         </Card>
                     </Col>
-                    <Col sm="7"  style={{ marginLeft: -15, paddingRight: 0, maxHeight: 450, minHeight: 450 }}>
+                    <Col sm="7"  style={{ marginLeft: -15, marginTop: -30, paddingRight: 0, maxHeight: 450, minHeight: 450 }}>
                         <Card style={{ marginBottom: 15 }}>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
@@ -224,6 +223,10 @@ class HomePage extends Component {
                                 <AgeChart />
                             </CardBody>
                         </Card>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
                         <Card>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
