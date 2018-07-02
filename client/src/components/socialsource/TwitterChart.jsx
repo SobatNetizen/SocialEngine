@@ -6,7 +6,7 @@ const dataFB = [
     {name: 'Neutral', value: 85},
     {name: 'Negatif', value: 75}
 ];
-const COLORS = ['blue', 'grey', 'green'];
+const COLORS = ['#6cb4ce', '#a5a5a5', '#c45d5d'];
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({cx, cy, midAngle, innerRadius, outerRadius, percent, index}) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -25,24 +25,27 @@ class FbChart extends Component {
         return (
             <div>
                 <PieChart width={150} height={180} onMouseEnter={this.onPieEnter}>
-                    <Pie
-                    data={dataFB} 
-                    cx={65} 
-                    cy={83} 
-                    labelLine={false}
-                    label={renderCustomizedLabel}
-                    outerRadius={60} 
-                    fill="#8884d8"
-                    >
-                        {
-                        dataFB.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                  <Pie
+                  data={dataFB} 
+                  cx={75} 
+                  cy={75} 
+                  labelLine={false}
+                  label={renderCustomizedLabel}
+                  outerRadius={60} 
+                  fill="#8884d8"
+                  dataKey="value"
+                  >
+                    {
+                      dataFB.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]}/>)
                     }
-                    </Pie>
+                  </Pie>
                 </PieChart>
-                {/* <div id="faceboook"></div>
-                <div id="twitter"></div>
-                <div id="blog"></div>
-                <div id="detik"></div> */}
+                <div className="detailSentimen">
+                  <p>Local</p>
+                  <h1>356</h1>
+                  <img width="30" src="https://vignette.wikia.nocookie.net/simpsons/images/1/11/Twitter_bird_icon.png/revision/latest?cb=20111228065136" />
+                </div>
+                <div className="clear"></div>
             </div>
         );
     }

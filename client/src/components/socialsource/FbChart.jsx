@@ -6,7 +6,7 @@ const dataFB = [
     {name: 'Neutral', value: 100},
     {name: 'Negatif', value: 250}
 ];
-const COLORS = ['blue', 'grey', 'green'];
+const COLORS = ['#6cb4ce', '#a5a5a5', '#c45d5d'];
 const RADIAN = Math.PI / 180;
 const renderCustomizedLabel = ({cx, cy, midAngle, innerRadius, outerRadius, percent, index}) => {
     const radius = innerRadius + (outerRadius - innerRadius) * 0.5;
@@ -27,22 +27,27 @@ class FbChart extends Component {
                 <PieChart width={150} height={180} onMouseEnter={this.onPieEnter}>
                     <Pie
                     data={dataFB} 
-                    cx={80} 
-                    cy={83} 
+                    cx={75} 
+                    cy={75} 
                     labelLine={false}
                     label={renderCustomizedLabel}
                     outerRadius={60} 
                     fill="#8884d8"
+                    dataKey="value"
                     >
                         {
-                        dataFB.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                        dataFB.map((entry, index) => <Cell key={index} fill={COLORS[index % COLORS.length]}/>)
                     }
                     </Pie>
                 </PieChart>
-                {/* <div id="faceboook"></div>
-                <div id="twitter"></div>
-                <div id="blog"></div>
-                <div id="detik"></div> */}
+                <div className="detailSentimen">
+                  <p>Global</p>
+                  <h1>427</h1>
+                  <div className="">
+                    <img width="35" src="http://pngimg.com/uploads/facebook_logos/facebook_logos_PNG19753.png" />
+                  </div>
+                </div>
+                <div className="clear"></div>
             </div>
         );
     }

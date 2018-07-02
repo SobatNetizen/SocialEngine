@@ -8,6 +8,7 @@ import { bindActionCreators } from 'redux'
 import { getUser } from '../store/user/getUser.action'
 
 import ChartGoogleTrend from '../components/ChartGoogleTrend';
+import SocialChart from '../components/SentimentAnalysist';
 import SentimenChart from '../components/socialsource/SentimenChart';
 import RegionChart from '../components/RegionChart';
 import TagChart from '../components/TagChart';
@@ -151,7 +152,7 @@ class HomePage extends Component {
                                         fontSize: 12,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
-                                        Sentimen Analyist Local (Twitter and News)</CardTitle>
+                                        Sentimen Analyist</CardTitle>
                                     <CardTitle style={{ 
                                         textAlign: 'right', 
                                         width: '50%',
@@ -161,39 +162,36 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
-                                <SentimenChart/>
-                                <TwitterChart />
-                                <NewsChart />
-                                
-                            {/* <div className="sentimenBigWrap">
                                 <div className="sentimenWrap">
-                                    <SentimenChart />
-                                    <SocialChart />
+                                <div className="legend">
+                                    <ul>
+                                        <li>
+                                            <div className="boxsmall positifColor"></div>
+                                            <p>Positif</p>
+                                        </li>
+                                        <li>
+                                            <div className="boxsmall neutralColor"></div>
+                                            <p>Neutral</p>
+                                        </li>
+                                        <li>
+                                            <div className="boxsmall negatifColor"></div>
+                                            <p>Negatif</p>
+                                        </li>
+                                        <div className="clear"></div>
+                                    </ul>
                                 </div>
-                            </div> */}
-                            </CardBody>
-                        </Card>
-                        <Card style={{ marginBottom: 15 }}>
-                            <Row>
-                                <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
-                                        style={{ 
-                                        textAlign: 'left',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'left',
-                                        fontWeight: 'bold' }}>
-                                        Sentimen Analyist Global (Facebook Only)</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
-                                </Col>
-                            </Row>
-                            <CardBody style={{ paddingTop: 0 }}>
-                                <FbChart />
+                                <ul>
+                                    <li>
+                                        <TwitterChart />
+                                    </li>
+                                    <li>
+                                        <NewsChart />
+                                    </li>
+                                    <li>
+                                        <FbChart />
+                                    </li>
+                                </ul>
+                                </div>
                             </CardBody>
                         </Card>
                     </Col>

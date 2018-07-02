@@ -13,7 +13,7 @@ class SentimenChart extends Component {
     render() {
         return (
             <div className="sentimenChart">
-                <PieChart margin={0} width={300} height={130} onMouseEnter={this.onPieEnter}>
+                <PieChart width={300} height={130} onMouseEnter={this.onPieEnter}>
                     <Pie
                     data={dataSentimen} 
                     cx={140}
@@ -24,9 +24,10 @@ class SentimenChart extends Component {
                     outerRadius={120}
                     fill="#8884d8"
                     paddingAngle={5}
+                    dataKey="value"
                     >
                         {
-                        dataSentimen.map((entry, index) => <Cell fill={COLORS[index % COLORS.length]}/>)
+                        dataSentimen.map((entry, index) => <Cell key={index} key={index} fill={COLORS[index % COLORS.length]}/>)
                         }
                     </Pie>
                 </PieChart>
