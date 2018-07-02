@@ -79,6 +79,23 @@ module.exports = {
 
     },
 
+    getUser (req, res, next) {
+        let { id } = req.decoded
+
+        User.findById(id)
+            .then(user => {
+                res.status(200).json({
+                    message: 'Berhasil masuk',
+                    user: {
+                        id: user._id,
+                        companyname: user.companyname,
+                        email: user.email,
+                        keywords: user.keywords
+                    }
+                })
+            }).catch(next)
+    },
+
     changePassword (req, res, next) {
         let { id } = req.decoded
         let hash = bcrypt.hashSync(req.body.password, 10)

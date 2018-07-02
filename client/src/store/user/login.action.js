@@ -22,14 +22,14 @@ export const login = (email, password) => {
 }
 
 const loginSuccess = (payload) => ({
-  type: 'LOAD_LOGIN_SUCCESS',
+  type: 'LOAD_USER_SUCCESS',
   payload
 })
 
 const loginLoading = () => ({
-  type: 'LOAD_LOGIN_LOADING'
+  type: 'LOAD_USER_LOADING'
 })
 
 const loginFailed = () => ({
-  type: 'LOAD_LOGIN_FAILED'
+  type: 'LOAD_USER_FAILED'
 })
