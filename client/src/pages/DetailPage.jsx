@@ -1,10 +1,19 @@
 import React, { Component } from 'react';
 import { Container, Row, Table, Col } from 'reactstrap';
 
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { getUser } from '../store/user/getUser.action'
+
 import '../assets/css/Detail.css';
 
 
 class DetailPage extends Component {
+    componentDidMount () {
+        this.props.getUser()
+        // console.log('check props', this.props)
+      }
+
     render() {
         return (
             <div style={{ marginTop:70, backgroundColor: 'white', height: '91vh', textAlign: 'left' }}>
@@ -179,4 +188,15 @@ class DetailPage extends Component {
     }
 }
 
-export default DetailPage;
+const mapDispatchToProps = ( dispatch ) => {
+    return bindActionCreators({ getUser }, dispatch)
+  }
+  
+  const mapStateToProps = (state) => {
+    console.log('from test state', state)
+    return {
+        datahistory: state.user.history
+    }
+  }
+  
+  export default connect( mapStateToProps, mapDispatchToProps )( DetailPage )

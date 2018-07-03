@@ -33,7 +33,7 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={LoginPage} />
             <Route path="/index" component={IndexPage} />
-            <Route path="/home" component={HomePage} />
+            <Route path="/home/:id" component={HomePage} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/profile" component={ProfilePage} />
             <Route path="/analytic" component={AnalyticPage} />

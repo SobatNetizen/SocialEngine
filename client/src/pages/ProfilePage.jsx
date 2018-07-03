@@ -3,6 +3,10 @@ import React, { Component } from 'react';
 import { Container, Row, Col, 
     Button, } from 'reactstrap';
 
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { getUser } from '../store/user/getUser.action'
+
 import '../assets/css/Dash.css';
 
 
@@ -12,6 +16,11 @@ class ProfilePage extends Component {
         this.state = {
             status: false
         }
+    }    
+    
+    componentDidMount () {
+        this.props.getUser()
+        // console.log(this.state)
     }
 
     changeStatus () {
@@ -79,21 +88,30 @@ class ProfilePage extends Component {
                                 borderRadius: 10
                             }}>
                                 <h3 style={{ marginBottom: 50 }} className="h3-margin-0"><b>Profile</b></h3>
-                                <table className="text-left">
-                                    <tbody>
-                                        <tr>
-                                            <td><b>Company Name</b></td>
-                                            <td><b>:</b></td>
-                                            <td></td>
-                                        </tr>
-                                        <tr>
-                                            <td><b>Email</b></td>
-                                            <td><b>:</b></td>
-                                            <td></td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                                <Button color="" type="submit" style={{backgroundColor: '#9D3862', width:'100%', marginTop: 10, color: 'white'}} onClick={ () => this.changeStatus() }>Change Password</Button>
+                                {
+                                    this.props.dataUser.loading === false ?
+                                    <table className="text-left">
+                                        <tbody>
+                                            <tr>
+                                                <td><b>Company Name</b></td>
+                                                <td><b>:</b></td>
+                                                <td>{  this.props.dataUser.user.companyname }</td>
+                                            </tr>
+                                            <tr>
+                                                <td><b>Email</b></td>
+                                                <td><b>:</b></td>
+                                                <td>{ this.props.dataUser.user.email }</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>    
+                                    :
+                                    <img src={require('../assets/image/loading_icon.gif')} />
+                                }
+                                
+                                
+
+
+                                {/* <Button color="" type="submit" style={{backgroundColor: '#9D3862', width:'100%', marginTop: 10, color: 'white'}} onClick={ () => this.changeStatus() }>Change Password</Button>
                                 {
                                     this.state.status === true ?                                    
                                         <div>
@@ -117,7 +135,7 @@ class ProfilePage extends Component {
                                         </div>
                                     :
                                     <div></div>
-                                }
+                                } */}
                             </Col>
                         </Row>
 
@@ -128,4 +146,15 @@ class ProfilePage extends Component {
     }
 }
 
-export default ProfilePage;
+const mapDispatchToProps = ( dispatch ) => {
+    return bindActionCreators({ getUser }, dispatch)
+}
+
+const mapStateToProps = (state) => {
+    console.log('from test state', state)
+    return {
+        dataUser: state.user
+    }
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( ProfilePage )

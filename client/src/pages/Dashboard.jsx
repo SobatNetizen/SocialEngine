@@ -1,8 +1,13 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import axios from 'axios';
+import { Route, Link } from "react-router-dom";
+import { connect } from 'react-redux'
+import { bindActionCreators } from 'redux'
+import { getUser } from '../store/user/getUser.action'
 
 import '../assets/css/Dash.css';
+import HomePage from './HomePage';
 
 class HomePanel extends Component {
     constructor() {
@@ -25,6 +30,11 @@ class HomePanel extends Component {
       }
     }
 
+    componentDidMount () {
+      this.props.getUser()
+      // console.log('check props', this.props)
+    }
+
     getKeywords() {
       this.setState({
         status: 'keywords',
@@ -44,8 +54,9 @@ class HomePanel extends Component {
     }
 
     setKeywordToShow(key) {
+      console.log('????', key)
       this.setState({
-        keywordToShow: key
+        keywordToShow: key[0].keyword
       })
       // console.log('oi', this.state.keywordToShow)
     }
@@ -104,11 +115,18 @@ class HomePanel extends Component {
       console.log('check state', this.state)
     }
 
+    sentToDV(result) {
+      let dataId = result._id
+      console.log('===?', dataId)
+    }
+
+
     render() {
         const token = localStorage.getItem('token')
         if(token==null){
             this.props.history.push({ pathname: '/index' })
         }
+        // console.log("ini--------> ", this.props.datahistory)
         return (
           <div>
             <Row style={{ paddingTop: 70, backgroundColor: 'white' }} />
@@ -126,19 +144,23 @@ class HomePanel extends Component {
                   >
                     {
                       this.state.statusKeyword === 'show' ?
-                      <div>
-                        <ul className="ul-margin-bottom">
-                          {
-                            this.state.keywords.map((keyword, index) => (
-                              <li
-                                className="cursor animated fadeInDown"
-                                onClick={() => this.setKeywordToShow(keyword.keyword) }
-                                key={index+keyword}
-                              >{keyword.keyword}</li>
-                            ))
-                          }
-                        </ul>
-                      </div>
+                        this.props.datahistory.length > 0 ?
+                        <div>
+                          <ul className="ul-margin-bottom">
+                            {
+                              this.props.datahistory.map((keyword, index) => (
+                                <li 
+                                  className="cursor animated fadeInDown"
+                                  style={{ marginTop: 10, marginBottom: 10 }}
+                                  onClick={() => this.setKeywordToShow(keyword) }
+                                  key={index+keyword}
+                                >{keyword[0].keyword}</li>
+                              ))
+                            }
+                          </ul>
+                        </div>
+                        :
+                        <div>Loading...</div>
                       :
                       <div></div>
                     }
@@ -188,18 +210,29 @@ class HomePanel extends Component {
                       </Row>
                     </div>
                     {
-                      this.state.keywords.map((keyword, index) => (
-                        this.state.keywordToShow === keyword.keyword ?
+                      this.props.datahistory.map((keyword, index) => (
+                        this.state.keywordToShow === keyword[0].keyword ?
                         <div key={index} className="animated fadeIn">
                           <hr />
                           <div
                             className="text-result-heading"
-                          >Social Engine Result For <b>'{keyword.keyword}'</b></div>
+                          >Social Engine Result For <b>'{keyword[0].keyword}'</b></div>
                           <ul>
                             {
-                              keyword.results.map((result, index) => (
-                                <li key={result+index} >{result}</li>
-                              ))
+                              keyword.map((result, index) => {
+                                // console.log('check date', )
+                                let dateToShow = new Date(result.createdAt)
+                                // let arrDate = dateToShow.split(' ')
+                                // let dateString = `${arrDate[0]}, ${arrDate[2]} ${arrDate[1]} ${arrDate[3]}: ${arrDate[4]} ${arrDate[5]} ${arrDate[6]}`
+                                let options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                                let dateString = dateToShow.toLocaleDateString('id-ID', options)
+                                console.log('test date', dateToShow, typeof dateToShow)
+                                return <Link to={`/home/${result._id}`} key={index} ><li 
+                                  className="cursor"
+                                  style={{margin: 10}}
+                                  onClick={() => this.sentToDV(result) }   
+                                >{ dateString } - { result._id }</li></Link>
+                              })
                             }
                           </ul>
                         </div>
@@ -243,4 +276,15 @@ class HomePanel extends Component {
     }
 }
 
-export default HomePanel;
+const mapDispatchToProps = ( dispatch ) => {
+  return bindActionCreators({ getUser }, dispatch)
+}
+
+const mapStateToProps = (state) => {
+  console.log('from test state', state)
+  return {
+      datahistory: state.user.history
+  }
+}
+
+export default connect( mapStateToProps, mapDispatchToProps )( HomePanel )
