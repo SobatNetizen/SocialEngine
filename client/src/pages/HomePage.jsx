@@ -38,8 +38,9 @@ class HomePage extends Component {
             queryTag: null,
             regionChart: null,
             sentimenTwitterChart: null,
-            sentimenFacebookChart: null,
             sentimenNewsChart: null,
+            sentimenFacebookChart: null,
+            ageChart: null,
             genderChart: null,
         }
     }
@@ -49,112 +50,214 @@ class HomePage extends Component {
     }
 
     componentWillMount () {
-        axios.get(`http://localhost:3001/users/history/5b3a0ed0def5fa09fc5bf707`)
+        axios.get(`http://localhost:3001/users/history/${this.props.match.params.id}`)
           .then(response => {
-            //   let key = 
-              console.log(response.data.history)
-              this.setState({googleChartLine: [{ id: response.data.history.keyword, color: '#ccc', data: response.data.history.result[3].google[0][0].data }]})
-            //   console.log('Data Google Chart Line', response.data.history.result[3].google[0][0].data)
-            //  
-            let dtquery = response.data.history.result[3].google[2].topList
-              let newDtQuery = []
-              for (let i = 0; i < dtquery.length; i++) {
-                let newObj = {
-                    value: dtquery[i].query,
-                    count: dtquery[i].value
-                }
-                newDtQuery.push(newObj)
-              }
-              this.setState({queryChart: newDtQuery})
+            console.log('DATA=', response.data.history)
+            console.log('HAHAHA', response.data.history.result[3].google[0][0].data)
 
-              let dtTag = response.data.history.result[3].google[3].topList
-              let newDtTag = []
-              for (let i = 0; i < dtTag.length; i++) {
-                let newObj = {
-                    value: dtTag[i].topic.title,
-                    count: dtTag[i].value
-                }
-                newDtTag.push(newObj)
-                
+            // 1. GoogleChart
+            this.setState({googleChartLine: [{ id: response.data.history.keyword, color: '#ccc', data: response.data.history.result[3].google[0][0].data }]})
+            // console.log('Data Google Chart Line', response.data.history.result[3].google[0][0].data)
+            
+            // 2. QueryChart
+            let dtquery = response.data.history.result[3].google[2].topList
+            let newDtQuery = []
+            for (let i = 0; i < dtquery.length; i++) {
+              let newObj = {
+                value: dtquery[i].query,
+                count: dtquery[i].value
               }
-              this.setState({queryTag: newDtTag})
+              newDtQuery.push(newObj)
+            }
+            this.setState({queryChart: newDtQuery})
+
+            // 3. TagCHart
+            let dtTag = response.data.history.result[3].google[3].topList
+            let newDtTag = []
+            for (let i = 0; i < dtTag.length; i++) {
+              let newObj = {
+                value: dtTag[i].topic.title,
+                count: dtTag[i].value
+              }
+              newDtTag.push(newObj)
+            }
+            this.setState({queryTag: newDtTag})
             //   console.log('Data Query Chart', response.data.history.result[3].google[2].topList)
             //   console.log('Data Tag Chart', response.data.history.result[3].google[3].topList)
             //   console.log('Data Region Chart', response.data.history.result[3].google[1])
 
-              // twitter process sentimen
-              let positifTwitter = response.data.history.result[0].twitter[0].length
-              let neutralTwitter = response.data.history.result[0].twitter[1].length
-              let negatifTwitter = response.data.history.result[0].twitter[2].length
-              let allTwitter = positifTwitter + neutralTwitter + negatifTwitter
+            // 4. SentimenChart Twitter
+            let positifTwitter = response.data.history.result[0].twitter[0].length
+            let neutralTwitter = response.data.history.result[0].twitter[1].length
+            let negatifTwitter = response.data.history.result[0].twitter[2].length
+            let allTwitter = positifTwitter + neutralTwitter + negatifTwitter
             //   console.log('Data Sentimen Twitter', `Pos-${positifTwitter}, Neu-${neutralTwitter}, Neg-${negatifTwitter}, SUM(${allTwitter})`)
-              let newObjTwitter = [
-                  { name: 'Positif', value: positifTwitter },
-                  { name: 'Neutral', value: neutralTwitter },
-                  { name: 'Negatif', value: negatifTwitter }
-              ]
-              this.setState({sentimenTwitterChart: newObjTwitter})
+            let newObjTwitter = [
+              { name: 'Positif', value: positifTwitter },
+              { name: 'Neutral', value: neutralTwitter },
+              { name: 'Negatif', value: negatifTwitter }
+            ]
+            this.setState({sentimenTwitterChart: newObjTwitter})
 
-              // facebook process Sentimen
-              let positifFacebook = response.data.history.result[1].facebook[0].length
-              let neutralFacebook = response.data.history.result[1].facebook[1].length
-              let negatifFacebook = response.data.history.result[1].facebook[2].length
-              let allFacebook = positifFacebook + neutralFacebook + negatifFacebook
+            // 5. SentimenChart Facebook
+            let positifFacebook = response.data.history.result[1].facebook[0].length
+            let neutralFacebook = response.data.history.result[1].facebook[1].length
+            let negatifFacebook = response.data.history.result[1].facebook[2].length
+            let allFacebook = positifFacebook + neutralFacebook + negatifFacebook
             //   console.log('Data Sentimen Twitter', `Pos-${positifFacebook}, Neu-${neutralFacebook}, Neg-${negatifFacebook}, SUM(${allFacebook})`)
-              let newObjFacebook = [
-                { name: 'Positif', value: positifFacebook },
-                { name: 'Neutral', value: neutralFacebook },
-                { name: 'Negatif', value: negatifFacebook }
-              ]
-              this.setState({sentimenFacebookChart: newObjFacebook})
+            let newObjFacebook = [
+              { name: 'Positif', value: positifFacebook },
+              { name: 'Neutral', value: neutralFacebook },
+              { name: 'Negatif', value: negatifFacebook }
+            ]
+            this.setState({sentimenFacebookChart: newObjFacebook})
 
-              //news process Sentimen
-              let positifNews = response.data.history.result[2].news[0].length
-              let neutralNews = response.data.history.result[2].news[1].length
-              let negatifNews = response.data.history.result[2].news[2].length
-              let allNews = positifNews + neutralNews + negatifNews
+            // 6. SentimenChart News
+            let positifNews = response.data.history.result[2].news[0].length
+            let neutralNews = response.data.history.result[2].news[1].length
+            let negatifNews = response.data.history.result[2].news[2].length
+            let allNews = positifNews + neutralNews + negatifNews
             //   console.log('Data Sentimen News', `Pos-${positifNews}, Neu-${neutralNews}, Neg-${negatifNews}, SUM(${allNews})`)
-              let newObjNews = [
-                { name: 'Positif', value: positifNews },
-                { name: 'Neutral', value: neutralNews },
-                { name: 'Negatif', value: negatifNews }
-              ]
-              this.setState({sentimenNewsChart: newObjNews})
+            let newObjNews = [
+              { name: 'Positif', value: positifNews },
+              { name: 'Neutral', value: neutralNews },
+              { name: 'Negatif', value: negatifNews }
+            ]
+            this.setState({sentimenNewsChart: newObjNews})
 
-              // region chart
-              this.setState({regionChart: response.data.history.result[3].google[1]})
+            // 7. RegionChart
+            this.setState({regionChart: response.data.history.result[3].google[1]})
 
-              // proses gender chart
-              let negatifFB = response.data.history.result[1].facebook[0]
-              let positifFB = response.data.history.result[1].facebook[1]
-              let neutralFB = response.data.history.result[1].facebook[2]
-              let maleCount = 0;
-              let femaleCount = 0;
-              let unknownCount = 0;
-              function pushToArray(value) {
-                for (let i = 0; i < value.length; i++) {
-                    if (value[i].detail.gender == 'Male') {
-                        maleCount++
-                    } else if (value[i].detail.gender == 'Female') {
-                        femaleCount++
-                    } else {
-                        unknownCount++
-                    }
+            // 8. GenderChart
+            let negatifFB = response.data.history.result[1].facebook[0]
+            let positifFB = response.data.history.result[1].facebook[1]
+            let neutralFB = response.data.history.result[1].facebook[2]
+            let maleCount = 0;
+            let femaleCount = 0;
+            let unknownCount = 0;
+            
+            function pushToArray(value) {
+              for (let i = 0; i < value.length; i++) {
+                if (value[i].detail.gender == 'Male') {
+                  maleCount++
+                } else if (value[i].detail.gender == 'Female') {
+                  femaleCount++
+                } else {
+                  unknownCount++
                 }
               }
-              pushToArray(negatifFB)
-              pushToArray(positifFB)
-              pushToArray(neutralFB)
+            }
+            pushToArray(negatifFB)
+            pushToArray(positifFB)
+            pushToArray(neutralFB)
+            let objGender = [
+              {name: 'male', value: maleCount },
+              {name: 'female', value: femaleCount },
+              {name: 'unknown', value: unknownCount }
+            ]
+            this.setState({genderChart: objGender})
 
+            // AgeChart
+            console.log('For AGE ==>', response.data.history.result[1])
+            // let objAge = [
+            //     {
+            //         name: '< 20',
+            //         Male: 0,
+            //         Female: 0,
+            //         Unknown: 0
+            //     }
+            // ]
 
-              let objGender = [
-                  {name: 'male', value: maleCount },
-                  {name: 'female', value: femaleCount },
-                  {name: 'unknown', value: unknownCount }
-              ]
-              this.setState({genderChart: objGender})
-              
-              console.log('negatif FB ===', negatifFB)
+            let dataAgeNegatif = response.data.history.result[1].facebook[0]
+            let dataAgePositif = response.data.history.result[1].facebook[1]
+            let dataAgeNeutral = response.data.history.result[1].facebook[2]
+            console.log('Dari data AGE', dataAgeNegatif)
+            function checkAge(data) {
+                let datarange20 = {
+                    name:"< 20", Male: 0, Female: 0, Unknown: 0
+                }
+                let datarange30 = {
+                    name: "< 30", Male: 0, Female: 0, Unknown: 0
+                }
+                let datarange40 = {
+                    name: "< 40", Male: 0, Female: 0, Unknown: 0
+                }
+                let datarange50 = {
+                    name: "< 50", Male: 0, Female: 0, Unknown: 0
+                }
+                let datarangediatas50 = {
+                    name: "> 50", Male: 0, Female: 0, Unknown: 0
+                }
+                let datarangeunknown = {
+                    name: "Unknown", Male: 0, Female: 0, Unknown: 0
+                }
+
+                for (let i = 0; i < data.length; i++) {
+                    console.log('AKAKAK', data[i].detail.age)
+                    if (data[i].detail.age < 20) {
+                        if (data[i].detail.gender == 'Male') {
+                            datarange20.Male++
+                        } else if (data[i].detail.gender == 'Female') {
+                            datarange20.Female++
+                        } else {
+                            datarange20.Unknown++
+                        }
+                    } else if(data[i].detail.age < 30) {
+                        if (data[i].detail.gender == 'Male') {
+                            datarange30.Male++
+                        } else if (data[i].detail.gender == 'Female') {
+                            datarange30.Female++
+                        } else {
+                            datarange30.Unknown++
+                        }
+                    } else if(data[i].detail.age < 40) {
+                        if (data[i].detail.gender == 'Male') {
+                            datarange40.Male++
+                        } else if (data[i].detail.gender == 'Female') {
+                            datarange40.Female++
+                        } else {
+                            datarange40.Unknown++
+                        }
+                    } else if(data[i].detail.age < 50) {
+                        if (data[i].detail.gender == 'Male') {
+                            datarange50.Male++
+                        } else if (data[i].detail.gender == 'Female') {
+                            datarange50.Female++
+                        } else {
+                            datarange50.Unknown++
+                        }
+                    } else if(data[i].detail.age > 50) {
+                        if (data[i].detail.gender == 'Male') {
+                            datarangediatas50.Male++
+                        } else if (data[i].detail.gender == 'Female') {
+                            datarangediatas50.Female++
+                        } else {
+                            datarangediatas50.Unknown++
+                        }
+                    } else {
+                        if (data[i].detail.gender == 'Male') {
+                            datarangeunknown.Male++
+                        } else if (data[i].detail.gender == 'Female') {
+                            datarangeunknown.Female++
+                        } else {
+                            datarangeunknown.Unknown++
+                        }
+                    }
+                }
+                let newDataAge = []
+                newDataAge.push(datarange20)
+                newDataAge.push(datarange30)
+                newDataAge.push(datarange40)
+                newDataAge.push(datarange50)
+                newDataAge.push(datarangediatas50)
+                newDataAge.push(datarangeunknown)
+
+                this.setState({ageChart: newDataAge})
+            }
+
+            checkAge(dataAgeNegatif)
+            checkAge(dataAgePositif)
+            checkAge(dataAgeNeutral)
 
           })
           .catch(err => {
@@ -374,7 +477,12 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
-                                <AgeChart />
+                                {
+                                    this.state.ageChart ?
+                                    <AgeChart agechart={this.state.ageChart} />
+                                    :
+                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                }
                             </CardBody>
                         </Card>
                     </Col>
