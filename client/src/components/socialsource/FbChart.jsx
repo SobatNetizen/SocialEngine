@@ -26,12 +26,12 @@ class FbChart extends Component {
             <div>
                 <PieChart width={150} height={180} onMouseEnter={this.onPieEnter}>
                     <Pie
-                    data={dataFB} 
-                    cx={75} 
-                    cy={75} 
+                    data={dataFB}
+                    cx={65}
+                    cy={75}
                     labelLine={false}
                     label={renderCustomizedLabel}
-                    outerRadius={60} 
+                    outerRadius={60}
                     fill="#8884d8"
                     dataKey="value"
                     >
