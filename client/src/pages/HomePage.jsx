@@ -3,6 +3,11 @@ import { Container, Row, Col,
     Card, CardBody, CardTitle
 } from 'reactstrap';
 
+import '../assets/css/Dash.css';
+import { Link, 
+    // Redirect 
+} from 'react-router-dom';
+
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getUser } from '../store/user/getUser.action'
@@ -27,6 +32,7 @@ import GenderChart from '../components/GenderChart';
 class HomePage extends Component {
     componentDidMount () {
         this.props.getUser()
+        console.log('check match', this.props)
     }
 
     componentWillMount () {
@@ -77,6 +83,10 @@ class HomePage extends Component {
         }
         return (
             <Container fluid style={{ marginTop: 70, marginBottom: 60 }}>
+                <div className="nav-settings">
+                    <Link to={`/detail/${this.props.match.params.id}`} className="nav-link">Detail Page</Link>
+                </div>                                
+
                 <Row style={{ marginBottom: 15 }}>
                     <Col sm="12">
                         <Card>

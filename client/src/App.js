@@ -33,12 +33,12 @@ class App extends Component {
           <Switch>
             <Route exact path="/" component={LoginPage} />
             <Route path="/index" component={IndexPage} />
-            <Route path="/home" component={HomePage} />
+            <Route path="/home/:id" component={HomePage} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/profile" component={ProfilePage} />
             <Route path="/analytic" component={AnalyticPage} />
             <Route path="/story" component={StoryPage} />
-            <Route path="/detail" component={DetailPage} />
+            <Route path="/detail/:id" component={DetailPage} />
             <Route path="/dashboard" component={Dasboard} />
             <Route path="*" component={ NotFound } />
           </Switch>
