@@ -8,7 +8,8 @@ const {
   changePassword,
   addKeyword,
   getUser,
-  history
+  history,
+  getHistoryById
 } = require('../controllers/user.controller')
 const { 
   authentication,
@@ -23,5 +24,6 @@ router.put('/', updateUser)
 router.put('/keyword', authentication, authorisation, addKeyword)
 router.put('/pass', changePassword)
 router.delete('/' , deleteUser)
+router.get('/history/:id', getHistoryById)
 
 module.exports = router

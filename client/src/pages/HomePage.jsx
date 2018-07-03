@@ -18,13 +18,51 @@ import FbChart from '../components/socialsource/FbChart';
 import TwitterChart from '../components/socialsource/TwitterChart';
 import NewsChart from '../components/socialsource/NewsChart';
 
+import axios from 'axios'
+
 // demography
 import AgeChart from '../components/AgeChart';
 import GenderChart from '../components/GenderChart';
 
 class HomePage extends Component {
     componentDidMount () {
-        // this.props.getUser()
+        this.props.getUser()
+    }
+
+    componentWillMount () {
+        axios.get(`http://localhost:3001/users/history/5b3a0ed0def5fa09fc5bf707`)
+          .then(response => {
+              console.log(response.data.history)
+              console.log('Data Google Chart Line', response.data.history.result[3].google[0][0].data)
+              console.log('Data Query Chart', response.data.history.result[3].google[2].topList)
+              console.log('Data Tag Chart', response.data.history.result[3].google[3].topList)
+              console.log('Data Region Chart', response.data.history.result[3].google[1])
+
+              // twitter process sentimen
+              let positifTwitter = response.data.history.result[0].twitter[0].length
+              let neutralTwitter = response.data.history.result[0].twitter[1].length
+              let negatifTwitter = response.data.history.result[0].twitter[2].length
+              let allTwitter = positifTwitter + neutralTwitter + negatifTwitter
+              console.log('Data Sentimen Twitter', `Pos-${positifTwitter}, Neu-${neutralTwitter}, Neg-${negatifTwitter}, SUM(${allTwitter})`)
+
+              // facebook process Sentimen
+              let positifFacebook = response.data.history.result[1].facebook[0].length
+              let neutralFacebook = response.data.history.result[1].facebook[1].length
+              let negatifFacebook = response.data.history.result[1].facebook[2].length
+              let allFacebook = positifFacebook + neutralFacebook + negatifFacebook
+              console.log('Data Sentimen Twitter', `Pos-${positifFacebook}, Neu-${neutralFacebook}, Neg-${negatifFacebook}, SUM(${allFacebook})`)
+              // facebook process Sentimen
+            //   let positifFacebook = response.data.history.result[1].facebook[0].length
+            //   let neutralFacebook = response.data.history.result[1].facebook[1].length
+            //   let negatifFacebook = response.data.history.result[1].facebook[2].length
+            //   let allFacebook = positifFacebook + neutralFacebook + negatifFacebook
+            //   console.log('Data Sentimen Twitter', `Pos-${positifFacebook}, Neu-${neutralFacebook}, Neg-${negatifFacebook}, SUM(${allFacebook})`)
+
+
+          })
+          .catch(err => {
+              console.log(err)
+          })
     }
 
     // componentDidMount () {

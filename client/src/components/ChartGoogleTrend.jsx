@@ -3,6 +3,7 @@ import { ResponsiveLine } from '@nivo/line';
 import dataJSON from './googletrend.json'
 
 class ChartGoogleTrend extends Component {
+
     render() {
         return (
             <div className="googleTrendChart">
