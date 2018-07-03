@@ -4,21 +4,30 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'rec
 class AgeChart extends Component {
     constructor (props) {
         super(props)
-        this.state = {
-            data: [
-                {name: '< 20', Male: 75, Female: 25, Unknown: 5},
-                {name: '< 30', Male: 35, Female: 15, Unknown: 50},
-                {name: '< 40', Male: 25, Female: 10, Unknown: 65},
-                {name: '< 50', Male: 60, Female: 8, Unknown: 32},
-                {name: '> 50', Male: 45, Female: 13, Unknown: 42},
-                {name: 'Unknown', Male: 45, Female: 13, Unknown: 42},
-            ]
+        this.state = 
+        {
+            kuy: [
+                {name: '< 20', Male: this.props.agechart[0].Male, Female: 0, Unknown: 0},
+                {name: '< 30', Male: 1, Female: 0, Unknown: 0},
+                {name: '< 40', Male: 0, Female: 0, Unknown: 0},
+                {name: '< 50', Male: 0, Female: 0, Unknown: 0},
+                {name: '> 50', Male: 0, Female: 0, Unknown: 0},
+                {name: 'Unknown', Male: 7, Female: 5, Unknown: 7},
+            ],
+            testing: this.props.agechart
         }
     }
+    // componentWillMount(){
+    //     this.setState({
+    //         kuy: this.props.agechart
+    //     })
+    // }
 	render () {
+        console.log('XXXX', this.props.agechart)
   	return (
+        
         <div className="BarChart">
-            <BarChart width={680} height={400} data={this.state.data}
+            <BarChart width={680} height={370} data={this.state.kuy}
                 margin={{top: 10, right: 30, left: 10, bottom: 5}}>
                 <CartesianGrid strokeDasharray="3 3"/>
                 <XAxis dataKey="name"/>
