@@ -4,6 +4,7 @@ import { Container, Row, Col,
 } from 'reactstrap';
 
 import '../assets/css/Dash.css';
+import '../assets/css/Detail.css';
 import { Link, 
     // Redirect 
 } from 'react-router-dom';
@@ -171,6 +172,16 @@ class HomePage extends Component {
             <Container fluid style={{ marginTop: 70, marginBottom: 60 }}>
                 <div className="nav-settings">
                     <Link to={`/detail/${this.props.match.params.id}`} className="nav-link">Detail Page</Link>
+                </div>
+                <div className="summary-highlight">
+                    <div><span className="header-text">SUMMARY HIGHLIGHTS</span></div>
+                    <div className="text-line"><span className="span-bold">1. Google Trends: </span>Numbers represent search interest relative to the highest point on the chart for Indonesia on weekly basis. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. Likewise a score of 0 means the term was less than 1% as popular as the peak.</div>
+                    <div className="text-line"><span className="span-bold">2. Google Query Chart: </span>The most popular search queries. Scoring is on a relative scale where a value of 100 is the most commonly searched query, 50 is a query searched half as often, and a value of 0 is a query searched for less than 1% as often as the most popular query.</div>
+                    <div className="text-line"><span className="span-bold">3. Google Topic Chart: </span>The most popular topics. Scoring is on a relative scale where a value of 100 is the most commonly searched topic, a value of 50 is a topic searched half as often, and a value of 0 is a topic searched for less than 1% as often as the most popular topic.</div>
+                    <div className="text-line"><span className="span-bold">4. Google Region Chart: </span>Numbers represent search term which location your term was most popular during the specified time frame. Values are calculated on a scale from 0 to 100, where 100 is the location with the most popularity as a fraction of total searches in that location, a value of 50 indicates a location which is half as popular, and a value of 0 indicates a location where the term was less than 1% as popular as the peak.</div>
+                    <div className="text-line"><span className="span-bold">5. Sentiment Analysis: </span>Percentage represent number of sentiment based on our social engine's algorithm from mined data from respective social media and news portal. </div>
+                    <div className="text-line"><span className="span-bold">6. Facebook Demography - Age: </span>Numbers represent data demography based on mined data from facebook's official website that is laid out on each age category and gender. </div>
+                    <div className="text-line"><span className="span-bold">7. Facebook Demography - Gender: </span>Numbers represent data demography based on mined data from facebook's official website that is laid out on each gender. </div>
                 </div>                                
 
                 <Row style={{ marginBottom: 15 }}>
