@@ -26,7 +26,7 @@ class FbChart extends Component {
             <div>
                 <PieChart width={150} height={180} onMouseEnter={this.onPieEnter}>
                     <Pie
-                    data={dataFB}
+                    data={this.props.facebookchart}
                     cx={65}
                     cy={75}
                     labelLine={false}
@@ -42,7 +42,7 @@ class FbChart extends Component {
                 </PieChart>
                 <div className="detailSentimen">
                   <p>Global</p>
-                  <h1>427</h1>
+                  <h1>{this.props.facebookchart[0].value+this.props.facebookchart[1].value+this.props.facebookchart[2].value}</h1>
                   <div className="">
                     <img width="35" src="http://pngimg.com/uploads/facebook_logos/facebook_logos_PNG19753.png" />
                   </div>

@@ -26,7 +26,7 @@ class NewsChart extends Component {
             <div>
                 <PieChart width={150} height={180} onMouseEnter={this.onPieEnter}>
                     <Pie
-                    data={dataFB}
+                    data={this.props.newschart}
                     cx={65}
                     cy={75}
                     labelLine={false}
@@ -42,7 +42,7 @@ class NewsChart extends Component {
                 </PieChart>
                 <div className="detailSentimen">
                   <p>Local</p>
-                  <h1>275</h1>
+                  <h1>{this.props.newschart[0].value+this.props.newschart[1].value+this.props.newschart[2].value}</h1>
                   <div className="logo">
                     <img width="25" className="marginRightLogo" src="https://images-na.ssl-images-amazon.com/images/I/61OVLPJ14tL.png" />
                     <img width="25" className="marginRightLogo" src="http://www.4androidapk.net/data/programs/images/liputan6-berita-indonesia_3553.png" />

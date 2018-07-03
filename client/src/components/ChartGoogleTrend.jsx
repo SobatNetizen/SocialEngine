@@ -3,12 +3,16 @@ import { ResponsiveLine } from '@nivo/line';
 import dataJSON from './googletrend.json'
 
 class ChartGoogleTrend extends Component {
+    constructor(props) {
+        super(props)
+    }
 
     render() {
+        console.log('===>', this.props)
         return (
             <div className="googleTrendChart">
                 <ResponsiveLine
-                    data={dataJSON}
+                    data={this.props.chartline}
                     margin={{
                         "top": 20,
                         "right": 10,

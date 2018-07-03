@@ -30,6 +30,19 @@ import AgeChart from '../components/AgeChart';
 import GenderChart from '../components/GenderChart';
 
 class HomePage extends Component {
+    constructor(props) {
+        super(props)
+        this.state = {
+            googleChartLine : null,
+            queryChart: null,
+            queryTag: null,
+            regionChart: null,
+            sentimenTwitterChart: null,
+            sentimenFacebookChart: null,
+            sentimenNewsChart: null,
+            genderChart: null,
+        }
+    }
     componentDidMount () {
         this.props.getUser()
         console.log('check match', this.props)
@@ -38,43 +51,116 @@ class HomePage extends Component {
     componentWillMount () {
         axios.get(`http://localhost:3001/users/history/5b3a0ed0def5fa09fc5bf707`)
           .then(response => {
+            //   let key = 
               console.log(response.data.history)
-              console.log('Data Google Chart Line', response.data.history.result[3].google[0][0].data)
-              console.log('Data Query Chart', response.data.history.result[3].google[2].topList)
-              console.log('Data Tag Chart', response.data.history.result[3].google[3].topList)
-              console.log('Data Region Chart', response.data.history.result[3].google[1])
+              this.setState({googleChartLine: [{ id: response.data.history.keyword, color: '#ccc', data: response.data.history.result[3].google[0][0].data }]})
+            //   console.log('Data Google Chart Line', response.data.history.result[3].google[0][0].data)
+            //  
+            let dtquery = response.data.history.result[3].google[2].topList
+              let newDtQuery = []
+              for (let i = 0; i < dtquery.length; i++) {
+                let newObj = {
+                    value: dtquery[i].query,
+                    count: dtquery[i].value
+                }
+                newDtQuery.push(newObj)
+              }
+              this.setState({queryChart: newDtQuery})
+
+              let dtTag = response.data.history.result[3].google[3].topList
+              let newDtTag = []
+              for (let i = 0; i < dtTag.length; i++) {
+                let newObj = {
+                    value: dtTag[i].topic.title,
+                    count: dtTag[i].value
+                }
+                newDtTag.push(newObj)
+                
+              }
+              this.setState({queryTag: newDtTag})
+            //   console.log('Data Query Chart', response.data.history.result[3].google[2].topList)
+            //   console.log('Data Tag Chart', response.data.history.result[3].google[3].topList)
+            //   console.log('Data Region Chart', response.data.history.result[3].google[1])
 
               // twitter process sentimen
               let positifTwitter = response.data.history.result[0].twitter[0].length
               let neutralTwitter = response.data.history.result[0].twitter[1].length
               let negatifTwitter = response.data.history.result[0].twitter[2].length
               let allTwitter = positifTwitter + neutralTwitter + negatifTwitter
-              console.log('Data Sentimen Twitter', `Pos-${positifTwitter}, Neu-${neutralTwitter}, Neg-${negatifTwitter}, SUM(${allTwitter})`)
+            //   console.log('Data Sentimen Twitter', `Pos-${positifTwitter}, Neu-${neutralTwitter}, Neg-${negatifTwitter}, SUM(${allTwitter})`)
+              let newObjTwitter = [
+                  { name: 'Positif', value: positifTwitter },
+                  { name: 'Neutral', value: neutralTwitter },
+                  { name: 'Negatif', value: negatifTwitter }
+              ]
+              this.setState({sentimenTwitterChart: newObjTwitter})
 
               // facebook process Sentimen
               let positifFacebook = response.data.history.result[1].facebook[0].length
               let neutralFacebook = response.data.history.result[1].facebook[1].length
               let negatifFacebook = response.data.history.result[1].facebook[2].length
               let allFacebook = positifFacebook + neutralFacebook + negatifFacebook
-              console.log('Data Sentimen Twitter', `Pos-${positifFacebook}, Neu-${neutralFacebook}, Neg-${negatifFacebook}, SUM(${allFacebook})`)
-              // facebook process Sentimen
-            //   let positifFacebook = response.data.history.result[1].facebook[0].length
-            //   let neutralFacebook = response.data.history.result[1].facebook[1].length
-            //   let negatifFacebook = response.data.history.result[1].facebook[2].length
-            //   let allFacebook = positifFacebook + neutralFacebook + negatifFacebook
             //   console.log('Data Sentimen Twitter', `Pos-${positifFacebook}, Neu-${neutralFacebook}, Neg-${negatifFacebook}, SUM(${allFacebook})`)
+              let newObjFacebook = [
+                { name: 'Positif', value: positifFacebook },
+                { name: 'Neutral', value: neutralFacebook },
+                { name: 'Negatif', value: negatifFacebook }
+              ]
+              this.setState({sentimenFacebookChart: newObjFacebook})
 
+              //news process Sentimen
+              let positifNews = response.data.history.result[2].news[0].length
+              let neutralNews = response.data.history.result[2].news[1].length
+              let negatifNews = response.data.history.result[2].news[2].length
+              let allNews = positifNews + neutralNews + negatifNews
+            //   console.log('Data Sentimen News', `Pos-${positifNews}, Neu-${neutralNews}, Neg-${negatifNews}, SUM(${allNews})`)
+              let newObjNews = [
+                { name: 'Positif', value: positifNews },
+                { name: 'Neutral', value: neutralNews },
+                { name: 'Negatif', value: negatifNews }
+              ]
+              this.setState({sentimenNewsChart: newObjNews})
+
+              // region chart
+              this.setState({regionChart: response.data.history.result[3].google[1]})
+
+              // proses gender chart
+              let negatifFB = response.data.history.result[1].facebook[0]
+              let positifFB = response.data.history.result[1].facebook[1]
+              let neutralFB = response.data.history.result[1].facebook[2]
+              let maleCount = 0;
+              let femaleCount = 0;
+              let unknownCount = 0;
+              function pushToArray(value) {
+                for (let i = 0; i < value.length; i++) {
+                    if (value[i].detail.gender == 'Male') {
+                        maleCount++
+                    } else if (value[i].detail.gender == 'Female') {
+                        femaleCount++
+                    } else {
+                        unknownCount++
+                    }
+                }
+              }
+              pushToArray(negatifFB)
+              pushToArray(positifFB)
+              pushToArray(neutralFB)
+
+
+              let objGender = [
+                  {name: 'male', value: maleCount },
+                  {name: 'female', value: femaleCount },
+                  {name: 'unknown', value: unknownCount }
+              ]
+              this.setState({genderChart: objGender})
+              
+              console.log('negatif FB ===', negatifFB)
 
           })
           .catch(err => {
               console.log(err)
           })
     }
-
-    // componentDidMount () {
-    //     this.props.getHistory()
-    //     console.log('did')
-    // }
 
     render() {
         const token = localStorage.getItem('token')
@@ -109,8 +195,12 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
-                                {/* <SocialChart /> */}
-                                <ChartGoogleTrend />
+                                {
+                                    (this.state.googleChartLine) ? 
+                                    <ChartGoogleTrend chartline={this.state.googleChartLine} />
+                                    :
+                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                }
                             </CardBody>
                         </Card>
                     </Col>
@@ -138,7 +228,13 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0, marginTop: 10  }}>
-                                <QueryChart />
+                                {
+                                    (this.state.queryChart) ?
+                                    <QueryChart chartquery={this.state.queryChart} />
+                                    :
+                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                }
+                                
                             </CardBody>
                         </Card>
                         <Card tyle={{ maxHeight: 255, minHeight: 255 }}>
@@ -161,7 +257,12 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0, marginTop: 10 }}>
-                                <TagChart />
+                                {
+                                    this.state.queryTag ?
+                                    <TagChart querytag={this.state.queryTag} />
+                                    :
+                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                }
                             </CardBody>
                         </Card>
                     </Col>
@@ -186,7 +287,12 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0, paddingRight: 15 }}>
-                                <RegionChart />
+                                {
+                                    (this.state.regionChart) ?
+                                    <RegionChart regionchart={this.state.regionChart} />
+                                    :
+                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                }
                             </CardBody>
                         </Card>
                     </Col>
@@ -217,13 +323,30 @@ class HomePage extends Component {
                               <Col sm="12" >
                                 <Row className="RowSentimen">
                                   <Col sm="4" className="sentimenChart">
-                                    <TwitterChart />
+                                    {
+                                        this.state.sentimenTwitterChart ?
+                                        <TwitterChart twitterchart={this.state.sentimenTwitterChart} />
+                                        :
+                                        <img src={require('../assets/image/loading_icon.gif')}/>
+                                    }
+                                    
                                   </Col>
                                   <Col sm="4" className="sentimenChart">
-                                    <NewsChart />
+                                    {
+                                        this.state.sentimenNewsChart ?
+                                        <NewsChart newschart={this.state.sentimenNewsChart} />
+                                        :
+                                        <img src={require('../assets/image/loading_icon.gif')}/>
+                                    }
                                   </Col>
                                   <Col sm="4" className="sentimenChart">
-                                    <FbChart />
+                                    {
+                                        this.state.sentimenFacebookChart ?
+                                        <FbChart facebookchart={this.state.sentimenFacebookChart} />
+                                        :
+                                        <img src={require('../assets/image/loading_icon.gif')}/>
+                                    }
+                                    
                                   </Col>
                                 </Row>
                               </Col>
@@ -278,7 +401,12 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
-                                <GenderChart />
+                                {
+                                    this.state.genderChart ?
+                                    <GenderChart genderchart={this.state.genderChart} />
+                                    :
+                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                }
                             </CardBody>
                         </Card>
                     </Col>

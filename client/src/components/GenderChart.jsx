@@ -14,11 +14,14 @@ class GenderChart extends Component {
     }
 
     percentage = (value) => {
-        let sum = this.state.data[0].value + this.state.data[1].value + this.state.data[2].value
+        let sum = this.props.genderchart[0].value + this.props.genderchart[1].value + this.props.genderchart[2].value
         return Math.round((value/sum)*100) + ' %'
     }
 
 	render () {
+        const {
+            genderchart
+        } = this.props
   	return (
         <div className="BarChart">
             <ul>
@@ -26,24 +29,24 @@ class GenderChart extends Component {
                     <div className="imgGender">
                         <img src={require('../assets/img/standing-up-man-.png')} />
                     </div>
-                    <h1>{ this.percentage(this.state.data[0].value)}</h1>
-                    <p>{this.state.data[0].value}</p>
+                    <h1>{ this.percentage(genderchart[0].value)}</h1>
+                    <p>{genderchart[0].value}</p>
                     <h3>Male</h3>
                 </li>
                 <li className="bgb">
                     <div className="imgGender">
                         <img src={require('../assets/img/woman-standing-up.png')} />
                     </div>
-                    <h1>{ this.percentage(this.state.data[1].value)}</h1>
-                    <p>{this.state.data[1].value}</p>
+                    <h1>{ this.percentage(genderchart[1].value)}</h1>
+                    <p>{genderchart[1].value}</p>
                     <h3>Female</h3>
                 </li>
                 <li className="bgc">
                     <div className="imgGender">
                         <img src={require('../assets/img/standing-up-man-.png')} />
                     </div>
-                    <h1>{ this.percentage(this.state.data[2].value)}</h1>
-                    <p>{this.state.data[2].value}</p>
+                    <h1>{ this.percentage(genderchart[2].value)}</h1>
+                    <p>{genderchart[2].value}</p>
                     <h3>Unknown</h3>
                 </li>
                 <div className="clear"></div>
