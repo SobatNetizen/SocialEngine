@@ -43,7 +43,7 @@ class FbChart extends Component {
                 <div className="detailSentimen">
                   <p>Local</p>
                   <h1>{this.props.twitterchart[0].value+this.props.twitterchart[1].value+this.props.twitterchart[2].value}</h1>
-                  <img width="30" src="https://vignette.wikia.nocookie.net/simpsons/images/1/11/Twitter_bird_icon.png/revision/latest?cb=20111228065136" />
+                  <img width="30" src="https://vignette.wikia.nocookie.net/simpsons/images/1/11/Twitter_bird_icon.png/revision/latest?cb=20111228065136" alt='twitter'/>
                 </div>
                 <div className="clear"></div>
             </div>

@@ -43,7 +43,7 @@ class LoginPage extends Component {
                         padding: 30,
                         borderRadius: 10,
                     }}>
-                        <img className="img-logo-radar" src={require('../assets/image/radar-logo.jpg')} />
+                        <img className="img-logo-radar" src={require('../assets/image/radar-logo.jpg')} alt='logo'/>
                     </Col>
                     <Col sm="5" style={{
                         // marginTop: 200,

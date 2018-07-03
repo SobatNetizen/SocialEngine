@@ -198,3 +198,29 @@
   /* background: yellow; */
   padding-right: 10px;
 }
+
+.ul-margin-bottom > li:hover {
+  background-color: #9d3862
+}
+.indukSentimen {
+  position: relative;
+}
+.legendWillSmith{
+  width: 100%;
+  color: #fff;
+  font-weight: bold;
+  position: absolute;
+  top: 145px;
+  left: 135px;
+}
+
+.legendWillSmith > ul > li {
+  font-size: 12px;
+  float: left;
+  padding: 5px 7px;
+  margin-left: 10px;
+}
+
+.lg1 { background: #6cb4ce; }
+.lg2 { background: #a5a5a5; }
+.lg3 { background: #c45d5d; }

@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
-import { Route, Link } from "react-router-dom";
 
 import '../../assets/css/Detail.css';
 

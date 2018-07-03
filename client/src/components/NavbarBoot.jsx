@@ -45,7 +45,7 @@ class NavbarBoot extends Component {
         const token = localStorage.getItem('token')
         return (
             <div>
-                <Navbar className="fixed-top" color="" light expand="md">
+                <Navbar className="fixed-top" color="" light expand="md" style={{ backgroundColor: '#fff' }}>
                     <Link to="/index" className="navbar-brand">R a d a r</Link>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>

@@ -1,13 +1,12 @@
 import React, { Component } from 'react';
 import { Row, Col } from 'reactstrap';
 import axios from 'axios';
-import { Route, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import { getUser } from '../store/user/getUser.action'
 
 import '../assets/css/Dash.css';
-import HomePage from './HomePage';
 
 class HomePanel extends Component {
     constructor() {
@@ -92,7 +91,7 @@ class HomePanel extends Component {
         keyword: this.state.inputKeyword
       }
 
-      axios.put('http://localhost:3001/users/keyword', input, config)
+      axios.put('http://35.240.159.235/users/keyword', input, config)
       .then(response => {
         console.log(response)
         this.setState({
@@ -117,7 +116,7 @@ class HomePanel extends Component {
 
     sentToDV(result) {
       let dataId = result._id
-      console.log('===?', dataId)
+      //console.log('===?', dataId)
     }
 
 
@@ -126,7 +125,13 @@ class HomePanel extends Component {
         if(token==null){
             this.props.history.push({ pathname: '/index' })
         }
-        console.log("ini--------> ", this.props.datahistory)
+        const { datahistory } = this.props
+        let result = []
+        for(let i= 0; i< datahistory.length;i++){
+          if(datahistory[i].length > 0 ){
+            result.push(datahistory[i])
+          }
+        }
         return (
           <div>
             <Row style={{ paddingTop: 70, backgroundColor: 'white' }} />
@@ -136,6 +141,7 @@ class HomePanel extends Component {
                   <div
                     className="sidenav-panel"
                     onClick={ () => this.getKeywords()}
+                    style={{ color: '#fff' }}
                   >
                     Saved Keywords
                   </div>
@@ -144,14 +150,14 @@ class HomePanel extends Component {
                   >
                     {
                       this.state.statusKeyword === 'show' ?
-                        this.props.datahistory.length > 0 ?
+                        result.length > 0 ?
                         <div>
                           <ul className="ul-margin-bottom">
                             {
-                              this.props.datahistory.map((keyword, index) => (
+                              result.map((keyword, index) => (
                                 <li 
                                   className="cursor animated fadeInDown"
-                                  style={{ marginTop: 10, marginBottom: 10 }}
+                                  style={{ marginTop: 25, marginBottom: 10, color: 'white' }}
                                   onClick={() => this.setKeywordToShow(keyword) }
                                   key={index+keyword}
                                 >{keyword[0].keyword}</li>
@@ -160,7 +166,7 @@ class HomePanel extends Component {
                           </ul>
                         </div>
                         :
-                        <div>Loading...</div>
+                        <div style={{ color: 'white' }}>Loading...</div>
                       :
                       <div></div>
                     }
@@ -210,8 +216,8 @@ class HomePanel extends Component {
                       </Row>
                     </div>
                     { 
-                      this.props.datahistory ?
-                      this.props.datahistory.map((keyword, index) => (
+                      result ?
+                      result.map((keyword, index) => (
                         this.state.keywordToShow === keyword[0].keyword ?
                         <div key={index} className="animated fadeIn">
                           <hr />
@@ -249,7 +255,7 @@ class HomePanel extends Component {
                     <div
                       className="loading-text"
                     >
-                      <img src={require('../assets/image/loading_icon.gif')} />
+                      <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                     </div>
                     <div
                       className="loading-text"

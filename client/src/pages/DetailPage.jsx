@@ -21,7 +21,7 @@ class DetailPage extends Component {
       }
   
     componentWillMount () {
-        axios.get(`http://localhost:3001/users/history/${this.props.match.params.id}`)
+        axios.get(`http://35.240.159.235/users/history/${this.props.match.params.id}`)
         .then(response =>{
             console.log('Get response detail page', response)
             this.setState({
@@ -64,9 +64,9 @@ class DetailPage extends Component {
                 <Col style={{ backgroundColor: 'white', minHeight: '100%', verticalAlign:'top'}}>
                 <div style={{ fontSize:40,textAlign:'right' }}><i>{this.state.keyword}</i></div>
                 {
-                    this.state.response == 'loading' ?
+                    this.state.response === 'loading' ?
                     <div>
-                        <img className="center-image" src={require('../assets/image/loading_icon.gif')} />
+                        <img className="center-image" src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                     </div>
                     :
                     <Row style={{ alignItems: 'flex-start'}} className="animated fadeIn">

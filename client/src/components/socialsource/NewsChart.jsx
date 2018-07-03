@@ -44,9 +44,9 @@ class NewsChart extends Component {
                   <p>Local</p>
                   <h1>{this.props.newschart[0].value+this.props.newschart[1].value+this.props.newschart[2].value}</h1>
                   <div className="logo">
-                    <img width="25" className="marginRightLogo" src="https://images-na.ssl-images-amazon.com/images/I/61OVLPJ14tL.png" />
-                    <img width="25" className="marginRightLogo" src="http://www.4androidapk.net/data/programs/images/liputan6-berita-indonesia_3553.png" />
-                    <img width="25" className="marginRightLogo" src="https://cdn1.iconfinder.com/data/icons/metro-ui-dock-icon-set--icons-by-dakirby/512/CNN.png" />
+                    <img width="25" className="marginRightLogo" src="https://images-na.ssl-images-amazon.com/images/I/61OVLPJ14tL.png" alt='indo'/>
+                    <img width="25" className="marginRightLogo" src="http://www.4androidapk.net/data/programs/images/liputan6-berita-indonesia_3553.png" alt='indo'/>
+                    <img width="25" className="marginRightLogo" src="https://cdn1.iconfinder.com/data/icons/metro-ui-dock-icon-set--icons-by-dakirby/512/CNN.png" alt='indo'/>
                   </div>
                 </div>
                 <div className="clear"></div>

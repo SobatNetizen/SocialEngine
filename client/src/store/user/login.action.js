@@ -4,7 +4,7 @@ import swal from 'sweetalert';
 export const login = (email, password, history) => {
   return dispatch => {
     dispatch(loginLoading())
-    axios.post('http://localhost:3001/users/login',{ email, password })
+    axios.post('http://35.240.159.235/users/login',{ email, password })
     .then(result => {
         localStorage.setItem('token', result.headers.token)
         swal('Success', result.data.message, 'success')
@@ -15,7 +15,7 @@ export const login = (email, password, history) => {
     .catch(err =>{
         dispatch(loginFailed())
         swal('Info', 
-        err.message=='Request failed with status code 400' ?
+        err.message==='Request failed with status code 400' ?
         'Please input with correct email and password' : err.message
         , 'info')
     })

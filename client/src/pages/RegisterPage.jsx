@@ -29,7 +29,7 @@ class RegisterPage extends Component {
         let companyname = self.state.companyname
         let email = self.state.email
         let password = self.state.password
-        axios.post('http://localhost:3001/users/register',{ companyname, email, password })
+        axios.post('http://35.240.159.235/users/register',{ companyname, email, password })
         .then(result => {
             localStorage.setItem('token', result.headers.token)
             swal('Success', result.data.message, 'success')
@@ -57,7 +57,7 @@ class RegisterPage extends Component {
                         padding: 30,
                         borderRadius: 10,
                     }}>
-                        <img className="img-logo-radar" src={require('../assets/image/radar-logo.jpg')} />
+                        <img className="img-logo-radar" src={require('../assets/image/radar-logo.jpg')} alt='logo'/>
                     </Col>
                     <Col sm="5" style={{
                         // marginTop: 50,
