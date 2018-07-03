@@ -87,7 +87,7 @@ class HomePanel extends Component {
         this.setState({
           statusSent: true
         })
-  
+
       })
       .catch(err => {
         console.log('ERROR: dashboard add keyword')
@@ -102,7 +102,7 @@ class HomePanel extends Component {
         [name]: value
       })
       console.log('check state', this.state)
-    }  
+    }
 
     render() {
         const token = localStorage.getItem('token')
@@ -115,7 +115,7 @@ class HomePanel extends Component {
             <Row>
               <Col sm="2" className="no-padding-left-right">
                 <div className="sidenav">
-                  <div 
+                  <div
                     className="sidenav-panel"
                     onClick={ () => this.getKeywords()}
                   >
@@ -130,7 +130,7 @@ class HomePanel extends Component {
                         <ul className="ul-margin-bottom">
                           {
                             this.state.keywords.map((keyword, index) => (
-                              <li 
+                              <li
                                 className="cursor animated fadeInDown"
                                 onClick={() => this.setKeywordToShow(keyword.keyword) }
                                 key={index+keyword}
@@ -143,7 +143,7 @@ class HomePanel extends Component {
                       <div></div>
                     }
                   </div>
-                  {/* <div 
+                  {/* <div
                     className="sidenav-panel"
                     onClick={ () => this.getHistory()}
                   >
@@ -173,14 +173,14 @@ class HomePanel extends Component {
                       <Row
                         className="row"
                       >
-                        <input 
-                          className="input-keyword" 
-                          name="inputKeyword" 
-                          type="text" 
+                        <input
+                          className="input-keyword"
+                          name="inputKeyword"
+                          type="text"
                           onChange={ (e) => this.handleChanges(e) }
                           onKeyPress={this.handleKeyPress}
                         />
-                        <i 
+                        <i
                           className="medium material-icons cursor add-icon"
                           onClick={ () => this.addButton() }
                         >add_circle_outline

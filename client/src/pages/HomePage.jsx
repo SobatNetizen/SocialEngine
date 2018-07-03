@@ -26,7 +26,7 @@ class HomePage extends Component {
     componentDidMount () {
         // this.props.getUser()
     }
-    
+
     // componentDidMount () {
     //     this.props.getHistory()
     //     console.log('did')
@@ -44,16 +44,16 @@ class HomePage extends Component {
                         <Card>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
-                                        style={{ 
+                                    <CardTitle
+                                        style={{
                                         textAlign: 'left',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
                                         Google Trends</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
+                                    <CardTitle style={{
+                                        textAlign: 'right',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'right',
@@ -73,16 +73,16 @@ class HomePage extends Component {
                         <Card style={{ marginBottom: 15, maxHeight: 255, minHeight: 255 }}>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30}}>
-                                    <CardTitle 
-                                        style={{ 
+                                    <CardTitle
+                                        style={{
                                         textAlign: 'left',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
                                         Query Chart</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
+                                    <CardTitle style={{
+                                        textAlign: 'right',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'right',
@@ -96,16 +96,16 @@ class HomePage extends Component {
                         <Card tyle={{ maxHeight: 255, minHeight: 255 }}>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
-                                        style={{ 
+                                    <CardTitle
+                                        style={{
                                         textAlign: 'left',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
                                         Tag Chart</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
+                                    <CardTitle style={{
+                                        textAlign: 'right',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'right',
@@ -121,7 +121,7 @@ class HomePage extends Component {
                         <Card>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
+                                    <CardTitle
                                         style={{
                                         textAlign: 'left',
                                         width: '50%',
@@ -129,8 +129,8 @@ class HomePage extends Component {
                                         float: 'left',
                                         fontWeight: 'bold' }}>
                                         Region Chart</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
+                                    <CardTitle style={{
+                                        textAlign: 'right',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'right',
@@ -142,23 +142,23 @@ class HomePage extends Component {
                             </CardBody>
                         </Card>
                     </Col>
-                </Row> 
-                
+                </Row>
+
                 <Row style={{ marginTop: 15 }}>
                     <Col sm="5">
                         <Card style={{ marginBottom: 15}}>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
-                                        style={{ 
+                                    <CardTitle
+                                        style={{
                                         textAlign: 'left',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
                                         Sentimen Analyist</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
+                                    <CardTitle style={{
+                                        textAlign: 'right',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'right',
@@ -166,36 +166,19 @@ class HomePage extends Component {
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
-                                <div className="sentimenWrap">
-                                <div className="legend">
-                                    <ul>
-                                        <li>
-                                            <div className="boxsmall positifColor"></div>
-                                            <p>Positif</p>
-                                        </li>
-                                        <li>
-                                            <div className="boxsmall neutralColor"></div>
-                                            <p>Neutral</p>
-                                        </li>
-                                        <li>
-                                            <div className="boxsmall negatifColor"></div>
-                                            <p>Negatif</p>
-                                        </li>
-                                        <div className="clear"></div>
-                                    </ul>
-                                </div>
-                                <ul>
-                                    <li>
-                                        <TwitterChart />
-                                    </li>
-                                    <li>
-                                        <NewsChart />
-                                    </li>
-                                    <li>
-                                        <FbChart />
-                                    </li>
-                                </ul>
-                                </div>
+                              <Col sm="12" >
+                                <Row className="RowSentimen">
+                                  <Col sm="4" className="sentimenChart">
+                                    <TwitterChart />
+                                  </Col>
+                                  <Col sm="4" className="sentimenChart">
+                                    <NewsChart />
+                                  </Col>
+                                  <Col sm="4" className="sentimenChart">
+                                    <FbChart />
+                                  </Col>
+                                </Row>
+                              </Col>
                             </CardBody>
                         </Card>
                     </Col>
@@ -203,16 +186,16 @@ class HomePage extends Component {
                         <Card style={{ marginBottom: 15 }}>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
-                                        style={{ 
+                                    <CardTitle
+                                        style={{
                                         textAlign: 'left',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
                                         Age Chart</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
+                                    <CardTitle style={{
+                                        textAlign: 'right',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'right',
@@ -230,16 +213,16 @@ class HomePage extends Component {
                         <Card>
                             <Row>
                                 <Col sm="12" style={{ paddingTop: 20, paddingLeft: 30, paddingRight: 30 }}>
-                                    <CardTitle 
-                                        style={{ 
+                                    <CardTitle
+                                        style={{
                                         textAlign: 'left',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
                                         Gender Chart</CardTitle>
-                                    <CardTitle style={{ 
-                                        textAlign: 'right', 
+                                    <CardTitle style={{
+                                        textAlign: 'right',
                                         width: '50%',
                                         fontSize: 12,
                                         float: 'right',
