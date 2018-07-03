@@ -23,6 +23,19 @@ module.exports = {
         }
     },
 
+    async getHistoryById (req , res ){
+
+        try{
+            let history = await History.findById(req.params.id)
+            res.status(200).json({
+                history
+            })
+        }   
+        catch(err){
+            console.log(err)
+        }
+    },
+
     async registerUser (req, res, next) {        
         try {
             let user = await User.create(req.body)        
