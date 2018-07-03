@@ -49,7 +49,7 @@ class HomePage extends Component {
     }
 
     componentWillMount () {
-        axios.get(`http://localhost:3001/users/history/5b3a0ed0def5fa09fc5bf707`)
+        axios.get(`http://localhost:3001/users/history/${this.props.match.params.id}`)
           .then(response => {
             //   let key = 
               console.log(response.data.history)
