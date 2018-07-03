@@ -47,12 +47,18 @@
   padding-right: 10px;
   text-align: justify;
   font-size: 14px;
+  word-break:break-all;
 }
 
 .source {
   margin-top: 5px;
   font-size: 12px;
   font-style: italic;
+  word-break:break-all;
+}
+
+.text-right {
+  text-align: right;
 }
 
 .border-facebook {
@@ -122,4 +128,29 @@
   color: #9D3862;
   /* text-decoration: underline; */
   /* text-decoration-color: #9D3862; */
+}
+
+
+.good-text{
+  font-size: 55px;
+  color: green;
+  font-weight: bold;
+  text-align: right;
+  font-style: italic;
+}
+
+.neutral-text{
+  font-size: 55px;
+  color: darkgrey;
+  font-weight: bold;
+  text-align: right;
+  font-style: italic;
+}
+
+.bad-text {
+  font-size: 55px;
+  color: red;
+  font-weight: bold;
+  text-align: right;
+  font-style: italic;
 }
