@@ -1,5 +1,9 @@
 import React, { Component } from 'react';
-import { Container, Row, Table, Col } from 'reactstrap';
+import { Row, Col } from 'reactstrap';
+import axios from 'axios';
+import DetailFB from '../components/detail/detailFb'
+import DetailTwitter from '../components/detail/detailTwitter'
+import DetailNews from '../components/detail/detailNews'
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -9,64 +13,185 @@ import '../assets/css/Detail.css';
 
 
 class DetailPage extends Component {
+    constructor() {
+        super()
+        this.state = {
+            response: 'loading',
+        }
+      }
+  
+    componentWillMount () {
+        axios.get(`http://localhost:3001/users/history/${this.props.match.params.id}`)
+        .then(response =>{
+            console.log('Get response detail page', response)
+            this.setState({
+                response: response
+            })
+            let data = response.data.history;
+            this.setState({keyword: data.keyword})
+            let results = data.result
+            let resultsTwitter = results[0].twitter
+            this.setState({resultsTwitterNegative: resultsTwitter[0]})
+            this.setState({resultsTwitterPositive: resultsTwitter[1]})
+            this.setState({resultsTwitterNeutral: resultsTwitter[2]})
+            let resultsFb = results[1].facebook
+            this.setState({resultsFbNegative: resultsFb[0]})
+            this.setState({resultsFbPositive: resultsFb[1]})
+            this.setState({resultsFbNeutral: resultsFb[2]})
+            let resultsNews = results[2].news
+            this.setState({resultsNewsNegative: resultsNews[0]})
+            this.setState({resultsNewsPositive: resultsNews[1]})
+            this.setState({resultsNewsNeutral: resultsNews[2]})
+        })
+        .catch(err => {
+            console.log('ERROR: detail page', err)
+        })
+
+        if (this.state.response !== 'loading') {
+            // console.log('oi', data.keyword)
+        }
+    }
+
     componentDidMount () {
         this.props.getUser()
         // console.log('check props', this.props)
       }
 
     render() {
+        console.log('check state detail---->?', this.state)
         return (
-            <div style={{ marginTop:70, backgroundColor: 'white', height: '91vh', textAlign: 'left' }}>
-                <Row>
-                    <Col sm="4" className="border-check">
-                        <div className="border-good">
-                            <div className="border-facebook">
-                                <Row>
-                                    <Col sm="6">
-                                        <div className="name">Austin Shippey</div>
-                                    </Col>
-                                    <Col sm="6">
-                                        <div className="color-facebook">Facebook</div>
-                                    </Col>
-                                </Row>
-                                <div className="post">"Most people askimg me why samsung is better than huawei? Here this is my answer..... Samsung is better than Huawei in many ways first and foremost is Samsung‘s experience in making top notch products...."</div>
-                                <div className="source">Source: https://www.facebook.com/prashan.madhusankha/posts/1537393656365203</div>
+            <div style={{ marginTop:70,textAlign: 'left' }}>
+                <Col style={{ backgroundColor: 'white', minHeight: '100%', verticalAlign:'top'}}>
+                <div style={{ fontSize:40,textAlign:'right' }}><i>{this.state.keyword}</i></div>
+                {
+                    this.state.response == 'loading' ?
+                    <div>
+                        <img className="center-image" src={require('../assets/image/loading_icon.gif')} />
+                    </div>
+                    :
+                    <Row>
+                        <Col sm="4" className="border-check">
+                            <div className="border-good">
+                            { 
+                                (this.state.resultsFbPositive) ?
+                                    this.state.resultsFbPositive.length > 0 ?
+                                        this.state.resultsFbPositive.map((resultFb, index) => (
+                                            <DetailFB key={resultFb+index} data={resultFb}/>
+                                        ))
+                                    :
+                                    <div className="border-facebook">No Data Shown</div>
+                                :
+                                <div>Loading...</div>
+                            }
+                            { 
+                                (this.state.resultsTwitterPositive) ?
+                                    this.state.resultsTwitterPositive.length > 0 ?
+                                        this.state.resultsTwitterPositive.map((resultTw, index) => (
+                                            <DetailTwitter key={resultTw+index} data={resultTw}/>
+                                        ))
+                                    :
+                                    <div className="border-twitter">No Data Shown</div>
+                                :
+                                <div>Loading...</div>
+                            }
+                            { 
+                                (this.state.resultsNewsPositive) ?
+                                    this.state.resultsNewsPositive.length > 0 ?
+                                        this.state.resultsNewsPositive.map((resultNews, index) => (
+                                            <DetailNews key={resultNews+index} data={resultNews}/>
+                                        ))
+                                    :
+                                    <div className="border-news">No Data Shown</div>
+                                :
+                                <div>Loading...</div>
+                            }
                             </div>
-                        </div>
-                    </Col>
-                    <Col sm="4" className="border-check">
-                        <div className="border-neutral">
-                            <div className="border-twitter">
-                                <Row>
-                                    <Col sm="6">
-                                        <div className="name">Austin Shippey</div>
-                                    </Col>
-                                    <Col sm="6">
-                                        <div className="color-twitter">Twitter</div>
-                                    </Col>
-                                </Row>
-                                <div className="post">"Most people askimg me why samsung is better than huawei? Here this is my answer..... Samsung is better than Huawei in many ways first and foremost is Samsung‘s experience in making top notch products...."</div>
-                                <div className="source">Source: https://www.facebook.com/prashan.madhusankha/posts/1537393656365203</div>
+                        </Col>
+                        <Col sm="4" className="border-check">
+                            <div className="border-neutral">
+                            { 
+                                (this.state.resultsFbNeutral) ?
+                                    this.state.resultsFbNeutral.length > 0 ?
+                                        this.state.resultsFbNeutral.map((resultFb, index) => (
+                                            <DetailFB key={resultFb+index} data={resultFb}/>
+                                        ))
+                                    :
+                                    <div className="border-facebook">No Data Shown</div>
+                                :
+                                <div>Loading...</div>
+                            }
+                            { 
+                                (this.state.resultsTwitterNeutral) ?
+                                    this.state.resultsTwitterNeutral.length > 0 ?
+                                        this.state.resultsTwitterNeutral.map((resultTw, index) => (
+                                            <DetailTwitter key={resultTw+index} data={resultTw}/>
+                                        ))
+                                    :
+                                    <div className="border-twitter">No Data Shown</div>
+                                :
+                                <div>Loading...</div>
+                            }
+                            { 
+                                (this.state.resultsNewsNeutral) ?
+                                    this.state.resultsNewsNeutral.length > 0 ?
+                                        this.state.resultsNewsNeutral.map((resultNews, index) => (
+                                            <DetailNews key={resultNews+index} data={resultNews}/>
+                                        ))
+                                    :
+                                    <div className="border-news">No Data Shown</div>
+                                :
+                                <div>Loading...</div>
+                            }
                             </div>
-                        </div>
-                    </Col>
-                    <Col sm="4" className="border-check">
-                        <div className="border-bad">
-                        <div className="border-news">
-                                <Row>
-                                    <Col sm="6">
-                                        <div className="name">Austin Shippey</div>
-                                    </Col>
-                                    <Col sm="6">
-                                        <div className="color-news">News</div>
-                                    </Col>
-                                </Row>
-                                <div className="post">"Most people askimg me why samsung is better than huawei? Here this is my answer..... Samsung is better than Huawei in many ways first and foremost is Samsung‘s experience in making top notch products...."</div>
-                                <div className="source">Source: https://www.facebook.com/prashan.madhusankha/posts/1537393656365203</div>
+                        </Col>
+                        <Col sm="4" className="border-check">
+                            <div className="border-bad">
+                                { 
+                                    (this.state.resultsFbNegative) ?
+                                        this.state.resultsFbNegative.length > 0 ?
+                                            this.state.resultsFbNegative.map((resultFb, index) => {
+                                                // let obj = {
+                                                //     detail: {
+                                                //         profileName: 'Unknown',
+                                                //         opinion: resultFb,
+                                                //         opinionUrl: 'Unknown'
+                                                //     }
+                                                // }
+                                                return <DetailFB key={resultFb+index} data={resultFb}/>
+                                            })
+                                        :
+                                        <div className="border-facebook">No Data Shown</div>
+                                    :
+                                    <div>Loading...</div>
+                                }
+                                { 
+                                    (this.state.resultsTwitterNegative) ?
+                                        this.state.resultsTwitterNegative.length > 0 ?
+                                            this.state.resultsTwitterNegative.map((resultTw, index) => (
+                                                <DetailTwitter key={resultTw+index} data={resultTw}/>
+                                            ))
+                                        :
+                                        <div className="border-twitter">No Data Shown</div>
+                                    :
+                                    <div>Loading...</div>
+                                }
+                                { 
+                                    (this.state.resultsNewsNegative) ?
+                                        this.state.resultsNewsNegative.length > 0 ?
+                                            this.state.resultsNewsNegative.map((resultNews, index) => (
+                                                <DetailNews key={resultNews+index} data={resultNews}/>
+                                            ))
+                                        :
+                                        <div className="border-news">No Data Shown</div>
+                                    :
+                                    <div>Loading...</div>
+                                }
                             </div>
-                        </div>
-                    </Col>
-                </Row>
+                        </Col>
+                    </Row>
+                }
+                </Col>
+             
             </div>
             // <Container>
             //     <Row style={{ 

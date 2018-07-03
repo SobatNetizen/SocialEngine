@@ -38,7 +38,7 @@ class App extends Component {
             <Route path="/profile" component={ProfilePage} />
             <Route path="/analytic" component={AnalyticPage} />
             <Route path="/story" component={StoryPage} />
-            <Route path="/detail" component={DetailPage} />
+            <Route path="/detail/:id" component={DetailPage} />
             <Route path="/dashboard" component={Dasboard} />
             <Route path="*" component={ NotFound } />
           </Switch>

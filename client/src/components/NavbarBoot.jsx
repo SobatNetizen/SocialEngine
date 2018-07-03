@@ -55,11 +55,11 @@ class NavbarBoot extends Component {
                                 <NavItem>
                                     <Link to="/index" className="nav-link nav-settings">About</Link>
                                 </NavItem>
-                                <NavItem>
+                                {/* <NavItem>
                                     <div className="nav-settings">
                                         <Link to="/detail" className="nav-link">Detail Page</Link>
                                     </div>                                
-                                </NavItem>
+                                </NavItem> */}
                                 <NavItem>
                                     <div className="nav-settings">
                                         <Link to="/dashboard" className="nav-link" >Dashboard</Link>
