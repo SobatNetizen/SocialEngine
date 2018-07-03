@@ -1,5 +1,17 @@
 const cron = require('cron');
 const axios = require('axios');
+const nodemailer = require('nodemailer')
+
+const nodeEmail = process.env.FBEMAIL
+const pass = process.env.FBPASSWORD
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: `${nodeEmail}`,
+    pass: `${pass}`
+  }
+});
 
 var analysisNews = new cron.CronJob({
   cronTime: '01 * * * *',
@@ -21,16 +33,31 @@ var analysisNews = new cron.CronJob({
     axios.post('http://localhost:3001/translate/google',{ userId, keyword, idHistory })
     .then(result => {
         console.log(result.data.info)
+
+        let mailOptions = {
+          from: `${nodeEmail}`,
+          to: `${user.email}`,
+          subject: 'Radar Social Media Analysis has been Completed',
+          text: 'Radar Social Media Analysis has been Completed \n you can check it out now!'
+        };
+
+        transporter.sendMail(mailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        })
     })
     .catch(err => {
         console.log(err)
     })
-     
+
   },
   start: false,
   timeZone: 'Asia/Jakarta'
 });
 
 analysisNews.start(); // job 1 started
- 
+
 console.log('analysis news status', analysisNews.running); // job1 status true
