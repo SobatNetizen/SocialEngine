@@ -2,11 +2,22 @@ const User = require('../models/user.model')
 const History = require('../models/history.model')
 const jwt = require('jsonwebtoken')
 const bcrypt = require('bcryptjs')
+const nodemailer = require('nodemailer')
 
 const secret = process.env.SECRET
+const nodeEmail = process.env.FBEMAIL
+const pass = process.env.FBPASSWORD
+
+var transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: `${nodeEmail}`,
+    pass: `${pass}`
+  }
+});
 
 module.exports = {
-    
+
     async history (req , res ){
         const {
             keyword
@@ -17,7 +28,7 @@ module.exports = {
             res.status(200).json({
                 history
             })
-        }   
+        }
         catch(err){
             console.log(err)
         }
@@ -30,23 +41,38 @@ module.exports = {
             res.status(200).json({
                 history
             })
-        }   
+        }
         catch(err){
             console.log(err)
         }
     },
 
-    async registerUser (req, res, next) {        
+    async registerUser (req, res, next) {
         try {
-            let user = await User.create(req.body)        
+            let user = await User.create(req.body)
             let token = jwt.sign({ id: user._id }, secret)
-            
+
+            let mailOptions = {
+              from: `${nodeEmail}`,
+              to: `${user.email}`,
+              subject: 'Thank you for signing up!',
+              text: 'Thank you for signing up to Radar Social \n Hope you have a pleasant experience! \n \n Best Regards!'
+            };
+
+            transporter.sendMail(mailOptions, function(error, info){
+              if (error) {
+                console.log(error);
+              } else {
+                console.log('Email sent: ' + info.response);
+              }
+            })
+
             delete user.password
 
             res.header({
                 'Access-Control-Expose-Headers': 'token',
                 token
-            })            
+            })
             res.status(200).json({
                 message: 'Berhasil membuat admin baru',
                 user: {
@@ -57,7 +83,7 @@ module.exports = {
         } catch(err){
             next(err)
         }
-        
+
     },
 
     async loginUser (req, res, next) {
@@ -65,8 +91,8 @@ module.exports = {
 
         try {
             let user = await User.findOne({email})
-                        .populate('twitter').populate('facebook').populate('news').populate('google')   
-                    
+                        .populate('twitter').populate('facebook').populate('news').populate('google')
+
             if (!user || !bcrypt.compareSync(password, user.password)) {
 
                 throw ({status: 400, message: 'Email/password salah'})
@@ -76,7 +102,7 @@ module.exports = {
                 res.header({
                     'Access-Control-Expose-Headers': 'token',
                     token
-                })                
+                })
                 res.status(200).json({
                     message: 'Berhasil masuk',
                     user: {
@@ -84,8 +110,8 @@ module.exports = {
                         companyname: user.companyname,
                         email: user.email,
                         keywords: user.keywords,
-                        twitter: user.twitter,              
-                        facebook: user.facebook,                            
+                        twitter: user.twitter,
+                        facebook: user.facebook,
                         news: user.news,
                         google: user.google
                     }
@@ -135,7 +161,7 @@ module.exports = {
     changePassword (req, res, next) {
         let { id } = req.decoded
         let hash = bcrypt.hashSync(req.body.password, 10)
-        
+
         User.findOneAndUpdate({_id: id}, {password: hash})
         .then(() => {
             res.status(200).send('Berhasil ganti password')
@@ -168,7 +194,7 @@ module.exports = {
     //         })
     //     }).catch(next)
     // },
-    
+
     addKeyword (req, res, next) {
         let { id } = req.decoded
         // console.log('oi', req.decoded, req.body)
