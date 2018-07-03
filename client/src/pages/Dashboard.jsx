@@ -126,7 +126,7 @@ class HomePanel extends Component {
         if(token==null){
             this.props.history.push({ pathname: '/index' })
         }
-        // console.log("ini--------> ", this.props.datahistory)
+        console.log("ini--------> ", this.props.datahistory)
         return (
           <div>
             <Row style={{ paddingTop: 70, backgroundColor: 'white' }} />
@@ -209,7 +209,8 @@ class HomePanel extends Component {
                         </i>
                       </Row>
                     </div>
-                    {
+                    { 
+                      this.props.datahistory ?
                       this.props.datahistory.map((keyword, index) => (
                         this.state.keywordToShow === keyword[0].keyword ?
                         <div key={index} className="animated fadeIn">
@@ -239,7 +240,9 @@ class HomePanel extends Component {
                         :
                         <div key={index}></div>
                         ))
-                      }
+                      :
+                      <div></div>
+                    }
                   </div>
                   :
                   <div className="loading-icon animated fadeIn">

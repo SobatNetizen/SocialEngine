@@ -38,7 +38,7 @@ var analysisNews = new cron.CronJob({
           from: `${nodeEmail}`,
           to: `${user.email}`,
           subject: 'Radar Social Media Analysis has been Completed',
-          text: 'Radar Social Media Analysis has been Completed \n you can check it out now!'
+          text: 'Radar Social Media Analysis has been Completed \n You can check it out now! \n http://www.radarsocial.co'
         };
 
         transporter.sendMail(mailOptions, function(error, info){

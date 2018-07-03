@@ -40,6 +40,7 @@ class RegionChart extends Component {
                 options={this.state.option}
                 graph_id="GeoChart"
                 mapsApiKey="AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY"
+                // mapsApiKey="AIzaSyBHDGhjakMOWfMaX85Z85KANWcRpLfUjuw"
                 legend_toggle/>
         );
     }
