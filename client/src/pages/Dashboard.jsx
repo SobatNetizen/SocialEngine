@@ -144,7 +144,7 @@ class HomePanel extends Component {
                   >
                     {
                       this.state.statusKeyword === 'show' ?
-                        this.props.datahistory.length > 0 ?
+                        this.props.datahistory.length > 1 ?
                         <div>
                           <ul className="ul-margin-bottom">
                             {
@@ -210,7 +210,7 @@ class HomePanel extends Component {
                       </Row>
                     </div>
                     { 
-                      this.props.datahistory ?
+                      this.props.datahistory.length > 1 ?
                       this.props.datahistory.map((keyword, index) => (
                         this.state.keywordToShow === keyword[0].keyword ?
                         <div key={index} className="animated fadeIn">
