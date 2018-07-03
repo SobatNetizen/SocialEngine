@@ -132,7 +132,8 @@ module.exports = {
         const {
             id,
             userId,
-            keyword
+            keyword,
+            idHistory
         } = req.body
 
         FacebookScrape.findById(id)
@@ -202,7 +203,7 @@ module.exports = {
                                     checksentiment(resultTranslate[ID])
                                 }
                                 else{
-                                    History.findOneAndUpdate({keyword},
+                                    History.findOneAndUpdate({_id: idHistory},
                                         { $push: { result: {
                                             'facebook': [
                                                 negative,
@@ -258,7 +259,8 @@ module.exports = {
         const {
             id,
             userId,
-            keyword
+            keyword,
+            idHistory
         } = req.body
 
         NewsScrape.findById(id)
@@ -326,7 +328,7 @@ module.exports = {
                                     checksentiment(resultTranslate[ID])
                                 }
                                 else{
-                                    History.findOneAndUpdate({keyword},
+                                    History.findOneAndUpdate({_id: idHistory},
                                         { $push: { result: {
                                             'news': [
                                                 negative,
@@ -360,6 +362,7 @@ module.exports = {
         const {
             userId,
             keyword,
+            idHistory
         } = req.body
         const geocode = 'ID'
 
@@ -369,7 +372,7 @@ module.exports = {
             let queries = await axios.post('http://localhost:3001/google/queries', { keyword, geocode })
             let topics = await axios.post('http://localhost:3001/google/topics', { keyword, geocode })
             
-            History.findOneAndUpdate({keyword},
+            History.findOneAndUpdate({_id: idHistory},
                 { $push: { result: {
                     'google': [
                         time.data.result,

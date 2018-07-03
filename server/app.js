@@ -11,7 +11,7 @@ const cors = require('cors')
 
 let admin = process.env.DBUSER;
 let password = process.env.DBPASSWORD;
- 
+
 mongoose.connect(`mongodb://${admin}:${password}@ds217921.mlab.com:17921/sobat-server`, () => {
   console.log('Connedted to DB mLab sobat-netizen :3')
 });

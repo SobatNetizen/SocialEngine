@@ -4,11 +4,16 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors');
+const mongoose = require('mongoose');
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var storeRouter = require('./routes/store');
 
 var app = express();
+
+mongoose.connect('mongodb://localhost/sobatnetizen', () => {
+    console.log('Connedted to DB mLab sobat-netizen :3')
+});
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

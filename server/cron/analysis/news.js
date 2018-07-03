@@ -2,24 +2,26 @@ const cron = require('cron');
 const axios = require('axios');
 
 var analysisNews = new cron.CronJob({
-  cronTime: '05 * * * *',
+  cronTime: '51 * * * *',
   onTick: function() {
     console.log('time for cron job running')
 
-    let id = '5b39ace3f8a81632c7aade10'
-    let userId = '5b34aa41b31c366a122df79f'
-    let idHistory = '5b3a0903bb417d046e6dbc0c'
-    let keyword = 'samsung'
-
-    // let id = '5b39ad57f8a81632c7aade11'
+    // let id = '5b3af94531ed6846946611a1'
     // let userId = '5b34aa41b31c366a122df79f'
+    // let idHistory = '5b3afe06c330d24e6e46e419'
+    // let keyword = 'samsung'
+
+    // let id = '5b3afa8e061ea2488386e204'
+    // let userId = '5b34aa41b31c366a122df79f'
+    // let idHistory = '5b3aff49e4f3204fd2aede91'
     // let keyword = 'iphone'
 
-    // let id = '5b39ad83f8a81632c7aade12'
-    // let userId = '5b34aa41b31c366a122df79f'
-    // let keyword = 'asus'
+    let id = '5b3afac7061ea2488386e205'
+    let userId = '5b34aa41b31c366a122df79f'
+    let idHistory = '5b3affa514228d504ccd4055'
+    let keyword = 'asus'
 
-    axios.post('http://localhost:3001/translate/news',{ id , userId, keyword })
+    axios.post('http://localhost:3001/translate/news',{ id , userId, keyword, idHistory })
     .then(result => {
         console.log(result.data.info)
     })
