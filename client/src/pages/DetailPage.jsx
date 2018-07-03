@@ -60,7 +60,7 @@ class DetailPage extends Component {
     render() {
         console.log('check state detail---->?', this.state)
         return (
-            <div style={{ marginTop:70,textAlign: 'left' }}>
+            <div style={{ marginTop:70,textAlign: 'left' }} className="animated fadeIn">
                 <Col style={{ backgroundColor: 'white', minHeight: '100%', verticalAlign:'top'}}>
                 <div style={{ fontSize:40,textAlign:'right' }}><i>{this.state.keyword}</i></div>
                 {
@@ -69,9 +69,10 @@ class DetailPage extends Component {
                         <img className="center-image" src={require('../assets/image/loading_icon.gif')} />
                     </div>
                     :
-                    <Row>
+                    <Row style={{ alignItems: 'flex-start'}} className="animated fadeIn">
                         <Col sm="4" className="border-check">
                             <div className="border-good">
+                            <div className="good-text">POSITIVE</div>
                             { 
                                 (this.state.resultsFbPositive) ?
                                     this.state.resultsFbPositive.length > 0 ?
@@ -79,7 +80,16 @@ class DetailPage extends Component {
                                             <DetailFB key={resultFb+index} data={resultFb}/>
                                         ))
                                     :
-                                    <div className="border-facebook">No Data Shown</div>
+                                    <div className="border-facebook">
+                                        <Row>
+                                            <Col sm="6">
+                                                <div className="name">No Data Shown</div>
+                                            </Col>
+                                            <Col sm="6">
+                                                <div className="color-facebook">Facebook</div>
+                                            </Col>
+                                        </Row>
+                                    </div>
                                 :
                                 <div>Loading...</div>
                             }
@@ -90,7 +100,16 @@ class DetailPage extends Component {
                                             <DetailTwitter key={resultTw+index} data={resultTw}/>
                                         ))
                                     :
-                                    <div className="border-twitter">No Data Shown</div>
+                                    <div className="border-twitter">
+                                        <Row>
+                                            <Col sm="6">
+                                                <div className="name">No Data Shown</div>
+                                            </Col>
+                                            <Col sm="6">
+                                                <div className="color-twitter">Twitter</div>
+                                            </Col>
+                                        </Row>
+                                    </div>
                                 :
                                 <div>Loading...</div>
                             }
@@ -101,14 +120,23 @@ class DetailPage extends Component {
                                             <DetailNews key={resultNews+index} data={resultNews}/>
                                         ))
                                     :
-                                    <div className="border-news">No Data Shown</div>
-                                :
+                                    <div className="border-news">
+                                        <Row>
+                                            <Col sm="6">
+                                                <div className="name">No Data Shown</div>
+                                            </Col>
+                                            <Col sm="6">
+                                                <div className="color-news">News</div>
+                                            </Col>
+                                        </Row>
+                                    </div>                                :
                                 <div>Loading...</div>
                             }
                             </div>
                         </Col>
                         <Col sm="4" className="border-check">
                             <div className="border-neutral">
+                            <div className="neutral-text">NEUTRAL</div>
                             { 
                                 (this.state.resultsFbNeutral) ?
                                     this.state.resultsFbNeutral.length > 0 ?
@@ -116,7 +144,16 @@ class DetailPage extends Component {
                                             <DetailFB key={resultFb+index} data={resultFb}/>
                                         ))
                                     :
-                                    <div className="border-facebook">No Data Shown</div>
+                                    <div className="border-facebook">
+                                        <Row>
+                                            <Col sm="6">
+                                                <div className="name">No Data Shown</div>
+                                            </Col>
+                                            <Col sm="6">
+                                                <div className="color-facebook">Facebook</div>
+                                            </Col>
+                                        </Row>
+                                    </div>
                                 :
                                 <div>Loading...</div>
                             }
@@ -127,7 +164,16 @@ class DetailPage extends Component {
                                             <DetailTwitter key={resultTw+index} data={resultTw}/>
                                         ))
                                     :
-                                    <div className="border-twitter">No Data Shown</div>
+                                    <div className="border-twitter">
+                                        <Row>
+                                            <Col sm="6">
+                                                <div className="name">No Data Shown</div>
+                                            </Col>
+                                            <Col sm="6">
+                                                <div className="color-twitter">Twitter</div>
+                                            </Col>
+                                        </Row>
+                                    </div>
                                 :
                                 <div>Loading...</div>
                             }
@@ -138,7 +184,16 @@ class DetailPage extends Component {
                                             <DetailNews key={resultNews+index} data={resultNews}/>
                                         ))
                                     :
-                                    <div className="border-news">No Data Shown</div>
+                                    <div className="border-news">
+                                        <Row>
+                                            <Col sm="6">
+                                                <div className="name">No Data Shown</div>
+                                            </Col>
+                                            <Col sm="6">
+                                                <div className="color-news">News</div>
+                                            </Col>
+                                        </Row>
+                                    </div>
                                 :
                                 <div>Loading...</div>
                             }
@@ -146,22 +201,24 @@ class DetailPage extends Component {
                         </Col>
                         <Col sm="4" className="border-check">
                             <div className="border-bad">
+                            <div className="bad-text">NEGATIVE</div>
                                 { 
                                     (this.state.resultsFbNegative) ?
                                         this.state.resultsFbNegative.length > 0 ?
                                             this.state.resultsFbNegative.map((resultFb, index) => {
-                                                // let obj = {
-                                                //     detail: {
-                                                //         profileName: 'Unknown',
-                                                //         opinion: resultFb,
-                                                //         opinionUrl: 'Unknown'
-                                                //     }
-                                                // }
                                                 return <DetailFB key={resultFb+index} data={resultFb}/>
                                             })
                                         :
-                                        <div className="border-facebook">No Data Shown</div>
-                                    :
+                                        <div className="border-facebook">
+                                            <Row>
+                                                <Col sm="6">
+                                                    <div className="name">No Data Shown</div>
+                                                </Col>
+                                                <Col sm="6">
+                                                    <div className="color-facebook">Facebook</div>
+                                                </Col>
+                                            </Row>
+                                        </div>                                    :
                                     <div>Loading...</div>
                                 }
                                 { 
@@ -171,7 +228,16 @@ class DetailPage extends Component {
                                                 <DetailTwitter key={resultTw+index} data={resultTw}/>
                                             ))
                                         :
-                                        <div className="border-twitter">No Data Shown</div>
+                                        <div className="border-twitter">
+                                            <Row>
+                                                <Col sm="6">
+                                                    <div className="name">No Data Shown</div>
+                                                </Col>
+                                                <Col sm="6">
+                                                    <div className="color-twitter">Twitter</div>
+                                                </Col>
+                                            </Row>
+                                        </div>                                    
                                     :
                                     <div>Loading...</div>
                                 }
@@ -182,7 +248,16 @@ class DetailPage extends Component {
                                                 <DetailNews key={resultNews+index} data={resultNews}/>
                                             ))
                                         :
-                                        <div className="border-news">No Data Shown</div>
+                                        <div className="border-news">
+                                            <Row>
+                                                <Col sm="6">
+                                                    <div className="name">No Data Shown</div>
+                                                </Col>
+                                                <Col sm="6">
+                                                    <div className="color-news">News</div>
+                                                </Col>
+                                            </Row>
+                                        </div>                                    
                                     :
                                     <div>Loading...</div>
                                 }
