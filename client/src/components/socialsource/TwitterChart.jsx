@@ -26,7 +26,7 @@ class FbChart extends Component {
             <div>
                 <PieChart width={150} height={180} onMouseEnter={this.onPieEnter}>
                   <Pie
-                  data={dataFB}
+                  data={this.props.twitterchart}
                   cx={65}
                   cy={75}
                   labelLine={false}
@@ -42,7 +42,7 @@ class FbChart extends Component {
                 </PieChart>
                 <div className="detailSentimen">
                   <p>Local</p>
-                  <h1>356</h1>
+                  <h1>{this.props.twitterchart[0].value+this.props.twitterchart[1].value+this.props.twitterchart[2].value}</h1>
                   <img width="30" src="https://vignette.wikia.nocookie.net/simpsons/images/1/11/Twitter_bird_icon.png/revision/latest?cb=20111228065136" />
                 </div>
                 <div className="clear"></div>

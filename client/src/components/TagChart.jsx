@@ -41,7 +41,7 @@ class cloudChart extends Component {
       <TagCloud minSize={10}
         maxSize={30}
         shuffle	={true}
-        tags={this.state.data}
+        tags={this.props.querytag}
         onClick={tag => alert(`'${tag.count}' was selected!`)} />
     )
   }
