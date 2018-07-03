@@ -1,4 +1,5 @@
 require('dotenv').config()
+const Translate = require('yandex-translate-api')(process.env.APITRANSLATE)
 const User = require('../models/user.model')
 const puppeteer = require('puppeteer');
 const CODE = require('./URLCode');
@@ -10,6 +11,13 @@ const Facebook = require('../models/facebook.model')
 const FacebookScrape = require('../models/scrape/facebook.model')
 const News = require('../models/news.model')
 const NewsScrape = require('../models/scrape/news.model')
+
+const NaturalLanguageUnderstandingV1 = require('watson-developer-cloud/natural-language-understanding/v1.js')
+const natural_language_understanding = new NaturalLanguageUnderstandingV1({
+  'username': process.env.USERNAMEWATSON,
+  'password': process.env.PASSWORDWATSON,
+  'version': '2018-03-16'
+})
 
 function changeValue(value) {
   let newValue = '';
@@ -142,7 +150,7 @@ async function scrapeInfiniteScrollItems(
   page,
   extractItems,
   itemTargetCount,
-  scrollDelay = 5000,
+  scrollDelay = 10,
 ) {
   let items = [];
   try {
@@ -179,7 +187,7 @@ module.exports = {
     await page.goto(`https://twitter.com/search?l=&q=${wordToSearch}%20near%3A%22Indonesia%22%20within%3A15mi&src=typd`);
 
     // obtain profile names including '@'
-    const profiles = await scrapeInfiniteScrollItems(page, extractTweetProfile, 100);
+    const profiles = await scrapeInfiniteScrollItems(page, extractTweetProfile, 50);
     // console.log(profiles)
     
     // excluding '@' from profiles' name
@@ -224,7 +232,7 @@ module.exports = {
     let saveTwitter = new TwitterScrape({ 
       profile: allProfiles,
       keyword,
-      idUser: userId
+      userId: idUser
     })
     saveTwitter.save(function(err, response) {
         User.findByIdAndUpdate(idUser, {
@@ -286,7 +294,7 @@ module.exports = {
     await page.waitFor(2*1000);
   
     // Scroll and extract items from the page.
-    const items = await scrapeInfiniteScrollItems(page, extractItemsFB, 50);
+    const items = await scrapeInfiniteScrollItems(page, extractItemsFB, 20);
     let joinItem = items.join('$%@')
     // Save extracted items to a file.
     //console.log(items)
@@ -366,10 +374,15 @@ module.exports = {
   },
 
   async fbScrapeProfile (req, res, next) {
-  
+    
+    const {
+      idUser,
+      keyword
+    } = req.body
+
     // Set up browser and page.
     const browser = await puppeteer.launch({
-      headless: false,
+      headless: true,
       args: ['--no-sandbox', '--disable-setuid-sandbox'],
     });
     const page = await browser.newPage();
@@ -611,7 +624,7 @@ module.exports = {
       } = req.body
 
       const browser = await puppeteer.launch({
-        headless: false
+        headless: true
       });
       const page = await browser.newPage();
       await page.evaluate('navigator.userAgent');
