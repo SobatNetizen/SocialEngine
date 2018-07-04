@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 class GenderChart extends Component {
     constructor (props) {
@@ -27,27 +26,27 @@ class GenderChart extends Component {
             <ul>
                 <li className="bga">
                     <div className="imgGender">
-                        <img src={require('../assets/img/standing-up-man-.png')} />
+                        <img src={require('../assets/img/standing-up-man-.png')} alt='loading'/>
                     </div>
                     <h1>{ this.percentage(genderchart[0].value)}</h1>
                     <p>{genderchart[0].value}</p>
-                    <h3>Male</h3>
+                    <h3 style={{ color: '#fff', fontWeight: 'bold' }}>Male</h3>
                 </li>
                 <li className="bgb">
                     <div className="imgGender">
-                        <img src={require('../assets/img/woman-standing-up.png')} />
+                        <img src={require('../assets/img/woman-standing-up.png')} alt='load'/>
                     </div>
                     <h1>{ this.percentage(genderchart[1].value)}</h1>
                     <p>{genderchart[1].value}</p>
-                    <h3>Female</h3>
+                    <h3 style={{ color: '#fff', fontWeight: 'bold' }}>Female</h3>
                 </li>
                 <li className="bgc">
                     <div className="imgGender">
-                        <img src={require('../assets/img/standing-up-man-.png')} />
+                        <img src={require('../assets/img/standing-up-man-.png')} alt='loadin'/>
                     </div>
                     <h1>{ this.percentage(genderchart[2].value)}</h1>
                     <p>{genderchart[2].value}</p>
-                    <h3>Unknown</h3>
+                    <h3 style={{ color: '#fff', fontWeight: 'bold' }}>Unknown</h3>
                 </li>
                 <div className="clear"></div>
             </ul>

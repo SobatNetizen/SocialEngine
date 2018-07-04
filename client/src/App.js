@@ -13,7 +13,7 @@ import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import ProfilePage from './pages/ProfilePage';
 import AnalyticPage from './pages/AnalyticPage';
-import StoryPage from './pages/StoryPage';
+// import StoryPage from './pages/StoryPage';
 import DetailPage from './pages/DetailPage';
 import Dasboard from './pages/Dashboard';
 import IndexPage from './pages/IndexPage';
@@ -31,13 +31,13 @@ class App extends Component {
         <div className="App">
           <AuthButton />
           <Switch>
-            <Route exact path="/" component={LoginPage} />
-            <Route path="/index" component={IndexPage} />
+            <Route exact path="/" component={IndexPage} />
+            <Route path="/login" component={LoginPage} />
             <Route path="/home/:id" component={HomePage} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/profile" component={ProfilePage} />
             <Route path="/analytic" component={AnalyticPage} />
-            <Route path="/story" component={StoryPage} />
+            {/* <Route path="/story" component={StoryPage} /> */}
             <Route path="/detail/:id" component={DetailPage} />
             <Route path="/dashboard" component={Dasboard} />
             <Route path="*" component={ NotFound } />

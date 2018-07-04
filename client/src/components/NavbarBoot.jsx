@@ -38,22 +38,22 @@ class NavbarBoot extends Component {
     handleLogout = (event) => {
         event.preventDefault()
         localStorage.removeItem('token')
-        this.props.buttonLogout.push({ pathname: '/index' })
+        this.props.buttonLogout.push({ pathname: '/' })
     }
 
     render() {
         const token = localStorage.getItem('token')
         return (
             <div>
-                <Navbar className="fixed-top" color="" light expand="md">
-                    <Link to="/index" className="navbar-brand">R a d a r</Link>
+                <Navbar className="fixed-top" color="" light expand="md" style={{ backgroundColor: '#fff' }}>
+                    <Link to="/" className="navbar-brand">R a d a r</Link>
                     <NavbarToggler onClick={this.toggle} />
                     <Collapse isOpen={this.state.isOpen} navbar>
                         {
                             token ?
                             <Nav navbar>
                                 <NavItem>
-                                    <Link to="/index" className="nav-link nav-settings">About</Link>
+                                    <Link to="/" className="nav-link nav-settings">About</Link>
                                 </NavItem>
                                 {/* <NavItem>
                                     <div className="nav-settings">
@@ -69,10 +69,10 @@ class NavbarBoot extends Component {
                             :
                             <Nav navbar>
                                 <NavItem>
-                                    <Link to="/index" className="nav-link nav-settings">About</Link>
+                                    <Link to="/" className="nav-link nav-settings">About</Link>
                                 </NavItem>
                                 <NavItem>
-                                    <Link to="/" className="nav-link nav-settings">Login</Link>
+                                    <Link to="/login" className="nav-link nav-settings">Login</Link>
                                 </NavItem>
                                 <NavItem>
                                     <Link to="/register" className="nav-link  nav-settings">Register</Link>

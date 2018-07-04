@@ -5,7 +5,7 @@ export const getUser = () => {
   return dispatch => {
     let token = localStorage.getItem('token')
     dispatch(getUserLoading())
-    axios.get('http://localhost:3001/users/getuser', { headers: { token }})
+    axios.get('http://35.240.159.235/users/getuser', { headers: { token }})
     .then( async result => {
       // localStorage.setItem('token', result.headers.token)
       // this.props.history.push({ pathname: '/home' })
@@ -15,22 +15,22 @@ export const getUser = () => {
       let histories = []
 
       for (let i = 0; i < result.data.user.keywords.length; i++) {
-        await axios.post('http://localhost:3001/users/gethistory', { keyword: result.data.user.keywords[i] } ,{ headers: { token }})
+        await axios.post('http://35.240.159.235/users/gethistory', { keyword: result.data.user.keywords[i] } ,{ headers: { token }})
         .then(history => {
-          console.log(i)
+          //console.log(i)
           histories.push(history.data.history)
         })
         .catch(error => {
           console.log(error)
         })
       }
-      console.log(histories)
+      //console.log(histories)
       dispatch(getHistory(histories))
     })
     .catch(err =>{
       dispatch(getUserFailed())
       swal('info', 
-      err.message=='Request failed with status code 400' ?
+      err.message==='Request failed with status code 400' ?
       'Tolong isi kolom email dan password' : err.message
       , 'info')
     })

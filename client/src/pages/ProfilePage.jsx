@@ -1,7 +1,5 @@
 import React, { Component } from 'react';
-// import { Container, Row, Col, CardImg } from 'reactstrap';
-import { Container, Row, Col, 
-    Button, } from 'reactstrap';
+import { Container, Row, Col } from 'reactstrap';
 
 import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
@@ -79,7 +77,7 @@ class ProfilePage extends Component {
                                 padding: 30,
                                 borderRadius: 10,
                             }}>
-                                <img className="img-logo-radar" src={require('../assets/image/radar-logo.jpg')} />
+                                <img className="img-logo-radar" src={require('../assets/image/radar-logo.jpg')} alt='logo'/>
                             </Col>
                             <Col sm="5" style={{
                                 // marginTop: 50,
@@ -105,7 +103,7 @@ class ProfilePage extends Component {
                                         </tbody>
                                     </table>    
                                     :
-                                    <img src={require('../assets/image/loading_icon.gif')} />
+                                    <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                 }
                                 
                                 

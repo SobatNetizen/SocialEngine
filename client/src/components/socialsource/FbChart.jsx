@@ -44,7 +44,7 @@ class FbChart extends Component {
                   <p>Global</p>
                   <h1>{this.props.facebookchart[0].value+this.props.facebookchart[1].value+this.props.facebookchart[2].value}</h1>
                   <div className="">
-                    <img width="35" src="http://pngimg.com/uploads/facebook_logos/facebook_logos_PNG19753.png" />
+                    <img width="35" src="http://pngimg.com/uploads/facebook_logos/facebook_logos_PNG19753.png" alt='fb'/>
                   </div>
                 </div>
                 <div className="clear"></div>

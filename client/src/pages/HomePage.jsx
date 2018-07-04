@@ -14,7 +14,7 @@ import { bindActionCreators } from 'redux'
 import { getUser } from '../store/user/getUser.action'
 
 import ChartGoogleTrend from '../components/ChartGoogleTrend';
-import SocialChart from '../components/SentimentAnalysist';
+//import SocialChart from '../components/SentimentAnalysist';
 import RegionChart from '../components/RegionChart';
 import TagChart from '../components/TagChart';
 import QueryChart from '../components/QueryChart';
@@ -47,18 +47,14 @@ class HomePage extends Component {
     }
     componentDidMount () {
         this.props.getUser()
-        console.log('check match', this.props)
     }
 
     componentWillMount () {
-        axios.get(`http://localhost:3001/users/history/${this.props.match.params.id}`)
+        axios.get(`http://35.240.159.235/users/history/${this.props.match.params.id}`)
           .then(response => {
-            console.log('DATA=', response.data.history)
-            console.log('HAHAHA', response.data.history.result[3].google[0][0].data)
 
             // 1. GoogleChart
             this.setState({googleChartLine: [{ id: response.data.history.keyword, color: '#ccc', data: response.data.history.result[3].google[0][0].data }]})
-            // console.log('Data Google Chart Line', response.data.history.result[3].google[0][0].data)
             
             // 2. QueryChart
             let dtquery = response.data.history.result[3].google[2].topList
@@ -83,16 +79,13 @@ class HomePage extends Component {
               newDtTag.push(newObj)
             }
             this.setState({queryTag: newDtTag})
-            //   console.log('Data Query Chart', response.data.history.result[3].google[2].topList)
-            //   console.log('Data Tag Chart', response.data.history.result[3].google[3].topList)
-            //   console.log('Data Region Chart', response.data.history.result[3].google[1])
 
             // 4. SentimenChart Twitter
             let positifTwitter = response.data.history.result[0].twitter[0].length
             let neutralTwitter = response.data.history.result[0].twitter[1].length
             let negatifTwitter = response.data.history.result[0].twitter[2].length
-            let allTwitter = positifTwitter + neutralTwitter + negatifTwitter
-            //   console.log('Data Sentimen Twitter', `Pos-${positifTwitter}, Neu-${neutralTwitter}, Neg-${negatifTwitter}, SUM(${allTwitter})`)
+            //let allTwitter = positifTwitter + neutralTwitter + negatifTwitter
+           
             let newObjTwitter = [
               { name: 'Positif', value: positifTwitter },
               { name: 'Neutral', value: neutralTwitter },
@@ -104,8 +97,8 @@ class HomePage extends Component {
             let positifFacebook = response.data.history.result[1].facebook[0].length
             let neutralFacebook = response.data.history.result[1].facebook[1].length
             let negatifFacebook = response.data.history.result[1].facebook[2].length
-            let allFacebook = positifFacebook + neutralFacebook + negatifFacebook
-            //   console.log('Data Sentimen Twitter', `Pos-${positifFacebook}, Neu-${neutralFacebook}, Neg-${negatifFacebook}, SUM(${allFacebook})`)
+            //let allFacebook = positifFacebook + neutralFacebook + negatifFacebook
+           
             let newObjFacebook = [
               { name: 'Positif', value: positifFacebook },
               { name: 'Neutral', value: neutralFacebook },
@@ -117,8 +110,8 @@ class HomePage extends Component {
             let positifNews = response.data.history.result[2].news[0].length
             let neutralNews = response.data.history.result[2].news[1].length
             let negatifNews = response.data.history.result[2].news[2].length
-            let allNews = positifNews + neutralNews + negatifNews
-            //   console.log('Data Sentimen News', `Pos-${positifNews}, Neu-${neutralNews}, Neg-${negatifNews}, SUM(${allNews})`)
+            //let allNews = positifNews + neutralNews + negatifNews
+            
             let newObjNews = [
               { name: 'Positif', value: positifNews },
               { name: 'Neutral', value: neutralNews },
@@ -139,9 +132,9 @@ class HomePage extends Component {
             
             function pushToArray(value) {
               for (let i = 0; i < value.length; i++) {
-                if (value[i].detail.gender == 'Male') {
+                if (value[i].detail.gender ==='Male') {
                   maleCount++
-                } else if (value[i].detail.gender == 'Female') {
+                } else if (value[i].detail.gender ==='Female') {
                   femaleCount++
                 } else {
                   unknownCount++
@@ -158,107 +151,97 @@ class HomePage extends Component {
             ]
             this.setState({genderChart: objGender})
 
-            // AgeChart
-            console.log('For AGE ==>', response.data.history.result[1])
-            // let objAge = [
-            //     {
-            //         name: '< 20',
-            //         Male: 0,
-            //         Female: 0,
-            //         Unknown: 0
-            //     }
-            // ]
-
             let dataAgeNegatif = response.data.history.result[1].facebook[0]
             let dataAgePositif = response.data.history.result[1].facebook[1]
             let dataAgeNeutral = response.data.history.result[1].facebook[2]
-            console.log('Dari data AGE', dataAgeNegatif)
+            
+            let datarange20 = {
+                name:"< 20", Male: 0, Female: 0, Unknown: 0
+            }
+            let datarange30 = {
+                name: "< 30", Male: 0, Female: 0, Unknown: 0
+            }
+            let datarange40 = {
+                name: "< 40", Male: 0, Female: 0, Unknown: 0
+            }
+            let datarange50 = {
+                name: "< 50", Male: 0, Female: 0, Unknown: 0
+            }
+            let datarangediatas50 = {
+                name: "> 50", Male: 0, Female: 0, Unknown: 0
+            }
+            let datarangeunknown = {
+                name: "Unknown", Male: 0, Female: 0, Unknown: 0
+            }
+
             function checkAge(data) {
-                let datarange20 = {
-                    name:"< 20", Male: 0, Female: 0, Unknown: 0
-                }
-                let datarange30 = {
-                    name: "< 30", Male: 0, Female: 0, Unknown: 0
-                }
-                let datarange40 = {
-                    name: "< 40", Male: 0, Female: 0, Unknown: 0
-                }
-                let datarange50 = {
-                    name: "< 50", Male: 0, Female: 0, Unknown: 0
-                }
-                let datarangediatas50 = {
-                    name: "> 50", Male: 0, Female: 0, Unknown: 0
-                }
-                let datarangeunknown = {
-                    name: "Unknown", Male: 0, Female: 0, Unknown: 0
-                }
 
                 for (let i = 0; i < data.length; i++) {
-                    console.log('AKAKAK', data[i].detail.age)
                     if (data[i].detail.age < 20) {
-                        if (data[i].detail.gender == 'Male') {
+                        if (data[i].detail.gender ==='Male') {
                             datarange20.Male++
-                        } else if (data[i].detail.gender == 'Female') {
+                        } else if (data[i].detail.gender ==='Female') {
                             datarange20.Female++
                         } else {
                             datarange20.Unknown++
                         }
                     } else if(data[i].detail.age < 30) {
-                        if (data[i].detail.gender == 'Male') {
+                        if (data[i].detail.gender ==='Male') {
                             datarange30.Male++
-                        } else if (data[i].detail.gender == 'Female') {
+                        } else if (data[i].detail.gender ==='Female') {
                             datarange30.Female++
                         } else {
                             datarange30.Unknown++
                         }
                     } else if(data[i].detail.age < 40) {
-                        if (data[i].detail.gender == 'Male') {
+                        if (data[i].detail.gender ==='Male') {
                             datarange40.Male++
-                        } else if (data[i].detail.gender == 'Female') {
+                        } else if (data[i].detail.gender ==='Female') {
                             datarange40.Female++
                         } else {
                             datarange40.Unknown++
                         }
                     } else if(data[i].detail.age < 50) {
-                        if (data[i].detail.gender == 'Male') {
+                        if (data[i].detail.gender ==='Male') {
                             datarange50.Male++
-                        } else if (data[i].detail.gender == 'Female') {
+                        } else if (data[i].detail.gender ==='Female') {
                             datarange50.Female++
                         } else {
                             datarange50.Unknown++
                         }
                     } else if(data[i].detail.age > 50) {
-                        if (data[i].detail.gender == 'Male') {
+                        if (data[i].detail.gender ==='Male') {
                             datarangediatas50.Male++
-                        } else if (data[i].detail.gender == 'Female') {
+                        } else if (data[i].detail.gender ==='Female') {
                             datarangediatas50.Female++
                         } else {
                             datarangediatas50.Unknown++
                         }
                     } else {
-                        if (data[i].detail.gender == 'Male') {
+                        if (data[i].detail.gender ==='Male') {
                             datarangeunknown.Male++
-                        } else if (data[i].detail.gender == 'Female') {
+                        } else if (data[i].detail.gender ==='Female') {
                             datarangeunknown.Female++
                         } else {
                             datarangeunknown.Unknown++
                         }
                     }
                 }
-                let newDataAge = []
-                newDataAge.push(datarange20)
-                newDataAge.push(datarange30)
-                newDataAge.push(datarange40)
-                newDataAge.push(datarange50)
-                newDataAge.push(datarangediatas50)
-                newDataAge.push(datarangeunknown)
-
-                this.setState({ageChart: newDataAge})
             }
 
             checkAge(dataAgeNegatif)
             checkAge(dataAgePositif)
             checkAge(dataAgeNeutral)
+
+            let newDataAge = []
+            newDataAge.push(datarange20)
+            newDataAge.push(datarange30)
+            newDataAge.push(datarange40)
+            newDataAge.push(datarange50)
+            newDataAge.push(datarangediatas50)
+            newDataAge.push(datarangeunknown)
+
+            this.setState({ageChart: newDataAge})
 
           })
           .catch(err => {
@@ -272,10 +255,7 @@ class HomePage extends Component {
             this.props.history.push({ pathname: '/' })
         }
         return (
-            <Container fluid style={{ marginTop: 70, marginBottom: 60 }}>
-                <div className="nav-settings">
-                    <Link to={`/detail/${this.props.match.params.id}`} className="nav-link">Detail Page</Link>
-                </div>
+            <Container fluid style={{ marginTop: 85, marginBottom: 65 }}>
                 <div className="summary-highlight">
                     <div><span className="header-text">SUMMARY HIGHLIGHTS</span></div>
                     <div className="text-line"><span className="span-bold">1. Google Trends: </span>Numbers represent search interest relative to the highest point on the chart for Indonesia on weekly basis. A value of 100 is the peak popularity for the term. A value of 50 means that the term is half as popular. Likewise a score of 0 means the term was less than 1% as popular as the peak.</div>
@@ -296,16 +276,10 @@ class HomePage extends Component {
                                         style={{
                                         textAlign: 'left',
                                         width: '50%',
-                                        fontSize: 12,
+                                        fontSize: 18,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
-                                        Google Trends</CardTitle>
-                                    <CardTitle style={{
-                                        textAlign: 'right',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                        1. Google Trends</CardTitle>
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
@@ -313,7 +287,7 @@ class HomePage extends Component {
                                     (this.state.googleChartLine) ? 
                                     <ChartGoogleTrend chartline={this.state.googleChartLine} />
                                     :
-                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                    <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                 }
                             </CardBody>
                         </Card>
@@ -329,16 +303,10 @@ class HomePage extends Component {
                                         style={{
                                         textAlign: 'left',
                                         width: '50%',
-                                        fontSize: 12,
+                                        fontSize: 18,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
-                                        Query Chart</CardTitle>
-                                    <CardTitle style={{
-                                        textAlign: 'right',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                        2. Google Query Chart</CardTitle>
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0, marginTop: 10  }}>
@@ -346,7 +314,7 @@ class HomePage extends Component {
                                     (this.state.queryChart) ?
                                     <QueryChart chartquery={this.state.queryChart} />
                                     :
-                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                    <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                 }
                                 
                             </CardBody>
@@ -358,16 +326,10 @@ class HomePage extends Component {
                                         style={{
                                         textAlign: 'left',
                                         width: '50%',
-                                        fontSize: 12,
+                                        fontSize: 18,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
-                                        Tag Chart</CardTitle>
-                                    <CardTitle style={{
-                                        textAlign: 'right',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                        3. Google Topic Chart</CardTitle>
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0, marginTop: 10 }}>
@@ -375,7 +337,7 @@ class HomePage extends Component {
                                     this.state.queryTag ?
                                     <TagChart querytag={this.state.queryTag} />
                                     :
-                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                    <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                 }
                             </CardBody>
                         </Card>
@@ -388,16 +350,10 @@ class HomePage extends Component {
                                         style={{
                                         textAlign: 'left',
                                         width: '50%',
-                                        fontSize: 12,
+                                        fontSize: 18,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
-                                        Region Chart</CardTitle>
-                                    <CardTitle style={{
-                                        textAlign: 'right',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                        4. Google Region Chart</CardTitle>
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0, paddingRight: 15 }}>
@@ -405,7 +361,7 @@ class HomePage extends Component {
                                     (this.state.regionChart) ?
                                     <RegionChart regionchart={this.state.regionChart} />
                                     :
-                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                    <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                 }
                             </CardBody>
                         </Card>
@@ -421,27 +377,29 @@ class HomePage extends Component {
                                         style={{
                                         textAlign: 'left',
                                         width: '50%',
-                                        fontSize: 12,
+                                        fontSize: 18,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
-                                        Sentimen Analyist</CardTitle>
-                                    <CardTitle style={{
-                                        textAlign: 'right',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                        5. Sentiment Analysis</CardTitle>
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
-                              <Col sm="12" >
+                              <Col sm="12" className="indukSentimen">
+                                <div className='legendWillSmith'>
+                                    <ul>
+                                        <li className="lg1">Positif</li>
+                                        <li className="lg2">Netral</li>
+                                        <li className="lg3">Negatif</li>
+                                        <div className="clear"></div>
+                                    </ul>
+                                </div>
                                 <Row className="RowSentimen">
                                   <Col sm="4" className="sentimenChart">
                                     {
                                         this.state.sentimenTwitterChart ?
                                         <TwitterChart twitterchart={this.state.sentimenTwitterChart} />
                                         :
-                                        <img src={require('../assets/image/loading_icon.gif')}/>
+                                        <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                     }
                                     
                                   </Col>
@@ -450,7 +408,7 @@ class HomePage extends Component {
                                         this.state.sentimenNewsChart ?
                                         <NewsChart newschart={this.state.sentimenNewsChart} />
                                         :
-                                        <img src={require('../assets/image/loading_icon.gif')}/>
+                                        <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                     }
                                   </Col>
                                   <Col sm="4" className="sentimenChart">
@@ -458,12 +416,15 @@ class HomePage extends Component {
                                         this.state.sentimenFacebookChart ?
                                         <FbChart facebookchart={this.state.sentimenFacebookChart} />
                                         :
-                                        <img src={require('../assets/image/loading_icon.gif')}/>
+                                        <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                     }
                                     
                                   </Col>
                                 </Row>
                               </Col>
+                              <div className="nav-settings">
+                                <Link to={`/detail/${this.props.match.params.id}`} className="nav-link">Detail Page</Link>
+                              </div>
                             </CardBody>
                         </Card>
                     </Col>
@@ -475,16 +436,10 @@ class HomePage extends Component {
                                         style={{
                                         textAlign: 'left',
                                         width: '50%',
-                                        fontSize: 12,
+                                        fontSize: 18,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
-                                        Age Chart</CardTitle>
-                                    <CardTitle style={{
-                                        textAlign: 'right',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                        6. Facebook Demography - Age</CardTitle>
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
@@ -492,7 +447,7 @@ class HomePage extends Component {
                                     this.state.ageChart ?
                                     <AgeChart agechart={this.state.ageChart} />
                                     :
-                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                    <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                 }
                             </CardBody>
                         </Card>
@@ -507,16 +462,10 @@ class HomePage extends Component {
                                         style={{
                                         textAlign: 'left',
                                         width: '50%',
-                                        fontSize: 12,
+                                        fontSize: 18,
                                         float: 'left',
                                         fontWeight: 'bold' }}>
-                                        Gender Chart</CardTitle>
-                                    <CardTitle style={{
-                                        textAlign: 'right',
-                                        width: '50%',
-                                        fontSize: 12,
-                                        float: 'right',
-                                        fontWeight: 'bold' }}>25 MAR : 30 MAY</CardTitle>
+                                        7. Facebook Demography - Gender</CardTitle>
                                 </Col>
                             </Row>
                             <CardBody style={{ paddingTop: 0 }}>
@@ -524,7 +473,7 @@ class HomePage extends Component {
                                     this.state.genderChart ?
                                     <GenderChart genderchart={this.state.genderChart} />
                                     :
-                                    <img src={require('../assets/image/loading_icon.gif')}/>
+                                    <img src={require('../assets/image/loading_icon.gif')} alt='loading'/>
                                 }
                             </CardBody>
                         </Card>
