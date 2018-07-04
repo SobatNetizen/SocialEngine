@@ -39,8 +39,8 @@ class RegionChart extends Component {
                 columns={columns}
                 options={this.state.option}
                 graph_id="GeoChart"
-                mapsApiKey="AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY"
-                // mapsApiKey="AIzaSyBHDGhjakMOWfMaX85Z85KANWcRpLfUjuw"
+                // mapsApiKey="AIzaSyD-9tSrke72PouQMnMX-a7eZSW0jkFMBWY"
+                mapsApiKey="AIzaSyBeZrQapaupm8RVZVKzE8U7udz4i2tus5A"
                 legend_toggle/>
         );
     }
