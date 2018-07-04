@@ -31,8 +31,8 @@ class App extends Component {
         <div className="App">
           <AuthButton />
           <Switch>
-            <Route exact path="/" component={LoginPage} />
-            <Route path="/index" component={IndexPage} />
+            <Route exact path="/" component={IndexPage} />
+            <Route path="/login" component={LoginPage} />
             <Route path="/home/:id" component={HomePage} />
             <Route path="/register" component={RegisterPage} />
             <Route path="/profile" component={ProfilePage} />
