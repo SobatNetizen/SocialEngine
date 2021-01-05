@@ -6,7 +6,7 @@
     "@nivo/bar": "^0.42.1",
     "@nivo/circle-packing": "^0.42.1",
     "@nivo/line": "^0.42.1",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bootstrap": "^4.1.1",
     "c3": "^0.6.2",
     "prop-types": "^15.6.2",
