@@ -65,7 +65,7 @@
     "karma-coverage-istanbul-reporter": "^2.0.0",
     "karma-jasmine": "^1.1.0",
     "karma-spec-reporter": "0.0.32",
-    "node-sass": "^4.8.3",
+    "node-sass": "^7.0.0",
     "node-static": "^0.7.9",
     "nodemon": "^1.11.0",
     "rollup": "^0.60.0",
